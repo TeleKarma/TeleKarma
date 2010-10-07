@@ -129,6 +129,8 @@ void MyProcess::Main() {
 	MyManager manager = MyManager();
 	// [Tom] TODO: Research why the NAT type is important.
 	PSTUNClient::NatTypes nat = manager.SetSTUNServer(STUN_SERVER_ADDRESS);
+	std::cout << "NAT type: " << nat << std::endl;
+
 	MyPCSSEndPoint * soundEp = new MyPCSSEndPoint(manager);
 	std::cout << "Sound output:" << std::endl;
 	std::cout << "===================================================================" << std::endl;
