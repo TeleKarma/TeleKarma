@@ -1,2 +1,41 @@
-Initial setup:
-git clone git@github.com:TeleKarma/TeleKarma.git
+Suggested work flow:
+
+1. Create a new branch:
+git branch new_branch
+
+2. Switch to the new branch:
+git checkout new_branch
+
+3. Edit code:
+vim code.cxx
+
+4. Commit changes:
+git commit -a
+
+or
+
+git commit code.cxx
+
+5. If you want to keep editing goto step 3.
+
+6. If you are ready to push your changes to the server goto step 7.
+
+7. Switch back to the master branch:
+git checkout master
+
+8. Update your master branch:
+git pull origin master
+
+9. Switch to your new branch:
+git checkout new_branch
+
+10. Update your new branch:
+git rebase master
+make merge changes if necessary
+
+11. Pull your new branch into your local master:
+git checkout master
+git pull . new_branch
+
+12. Push your changes to the server:
+git push origin master:master
