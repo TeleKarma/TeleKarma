@@ -1,163 +1,179 @@
 #include <opal/manager.h>
 #include <opal/pcss.h>
 #include <sip/sipep.h>
+#include <iostream>
 
-class MyPCSSEndPoint : public OpalPCSSEndPoint
-{
+class MyPCSSEndPoint : public OpalPCSSEndPoint {
 	PCLASSINFO(MyPCSSEndPoint, OpalPCSSEndPoint);
 	public:
 		MyPCSSEndPoint(OpalManager & manager);
+		virtual ~MyPCSSEndPoint();
 		virtual PBoolean OnShowIncoming(const OpalPCSSConnection & connection);
 		virtual PBoolean OnShowOutgoing(const OpalPCSSConnection & connection);
 };
 
-MyPCSSEndPoint::MyPCSSEndPoint(OpalManager & manager) : OpalPCSSEndPoint(manager)
-{
+MyPCSSEndPoint::MyPCSSEndPoint(OpalManager & manager) : OpalPCSSEndPoint(manager) {
+	cout << "MyPCSSEndPoint constructed." << endl;
+}
+MyPCSSEndPoint::~MyPCSSEndPoint() {
+	cout << "MyPCSSEndPoint destroyed." << endl;
+	PThread::Sleep(100);
 }
 
-PBoolean MyPCSSEndPoint::OnShowIncoming(const OpalPCSSConnection & connection)
-{
+PBoolean MyPCSSEndPoint::OnShowIncoming(const OpalPCSSConnection & connection) {
 	return PTrue;
 }
 
-PBoolean MyPCSSEndPoint::OnShowOutgoing(const OpalPCSSConnection & connection)
-{
+PBoolean MyPCSSEndPoint::OnShowOutgoing(const OpalPCSSConnection & connection) {
 	return PTrue;
 }
 
-class MySIPEndPoint : public SIPEndPoint
-{
+class MySIPEndPoint : public SIPEndPoint {
 	PCLASSINFO(MySIPEndPoint, SIPEndPoint);
 	public:
 		MySIPEndPoint(OpalManager & manager);
+		virtual ~MySIPEndPoint();
 		void OnRegistrationStatus(const RegistrationStatus & status);
 };
 
-MySIPEndPoint::MySIPEndPoint(OpalManager & manager)
-	: SIPEndPoint(manager)
-{
-
+MySIPEndPoint::MySIPEndPoint(OpalManager & manager) : SIPEndPoint(manager) {
+	cout << "MySIPEndPoint constructed." << endl;
 }
 
-void MySIPEndPoint::OnRegistrationStatus(const RegistrationStatus & status)
-{
-	cout << "New SIP Endpoint status is " << 
-			SIP_PDU::GetStatusCodeDescription(status.m_reason) << "\n";
+MySIPEndPoint::~MySIPEndPoint() {
+	cout << "MySIPEndPoint destroyed." << endl;
+	PThread::Sleep(100);
+}
+
+void MySIPEndPoint::OnRegistrationStatus(const RegistrationStatus & status) {
+	std::cout << "   *** New SIP Endpoint status is " << SIP_PDU::GetStatusCodeDescription(status.m_reason) << std::endl;
 	SIPEndPoint::OnRegistrationStatus(status);
 }
 
-class MyManager: public OpalManager
-{
+class MyManager : public OpalManager {
 	PCLASSINFO(MyManager, OpalManager);
 	public:
 		MyManager();
+		~MyManager();
 		void OnConnected(OpalConnection & connection);
 		void OnAlerting(OpalConnection & connection);
 		void OnNewConnection(OpalConnection & connection);
 		void OnReleased(OpalConnection & connection);
 };
 
-MyManager::MyManager()
-	: OpalManager()
-{
+MyManager::MyManager(): OpalManager() {
+	cout << "MyManager created." << endl;
 }
 
-void MyManager::OnConnected(OpalConnection & connection)
-{
-	printf("%s\n", __func__);
+MyManager::~MyManager() {
+	cout << "MyManager destroyed." << endl;
+	PThread::Sleep(100);
+}
+
+void MyManager::OnConnected(OpalConnection & connection) {
+	std::cout << "   *** MyManager.OnConnected()" << std::endl;
 	OpalManager::OnConnected(connection);
 }
 
-void MyManager::OnAlerting(OpalConnection & connection)
-{
-	printf("%s\n", __func__);
+void MyManager::OnAlerting(OpalConnection & connection) {
+	std::cout << "   *** MyManager.OnAlerting()" << std::endl;
 	OpalManager::OnAlerting(connection);
 }
 
-void MyManager::OnNewConnection(OpalConnection & connection)
-{
-	printf("%s\n", __func__);
+void MyManager::OnNewConnection(OpalConnection & connection) {
+	std::cout << "   *** MyManager.OnNetConnection()" << std::endl;
 	OpalManager::OnNewConnection(connection);
 }
 
-void MyManager::OnReleased(OpalConnection & connection)
-{
-	printf("%s\n", __func__);
+void MyManager::OnReleased(OpalConnection & connection) {
+	std::cout << "   *** MyManager.OnReleased()" << std::endl;
 	OpalManager::OnReleased(connection);
 }
 
-class MyProcess: public PProcess
-{
+class MyProcess: public PProcess {
 	//This macro defines some necessary functions
 	//See: http://www.opalvoip.org/docs/ptlib-v2_8/d6/d1e/object_8h.html
 	PCLASSINFO(MyProcess, PProcess);
 	public:
 		MyProcess();
-
 		void Main();
 };
 
+MyProcess::MyProcess() : PProcess("Test") { }
 
-MyProcess::MyProcess()
-	: PProcess("Test")
-{
-}
-
-/* This macro:
+/* PCREATE_PROCESS macro:
  * 1. Defines the main() function.
  * 2. Creates an instance of MyProcess.
  * 3. Calls instance->PreInitialise() which is inherited from PProcess.
  * 4. Calls instance->InternalMain() which id inherited from PPrcoess
- * 	4 a) instance->InternalMain() calls instance->Main() which we define.
+ *    instance->InternalMain() calls instance->Main() which we define.
  */
 PCREATE_PROCESS(MyProcess)
 
-void MyProcess::Main()
-{
+void MyProcess::Main() {
 	PString aor;
-	PString USER;
+	PString REGISTRAR_ADDRESS = "ekiga.net";
+	PString STUN_SERVER_ADDRESS = "stun.ekiga.net";
+	PString USER_NAME;
 	PString PASSWORD;
-	if (USER.GetLength() == 0 || PASSWORD.GetLength() == 0) {
-		cout << "Please set your username and password in the code.\n";
+	PString SIP_ADDRESS = "sip:500@ekiga.net";
+	//PString SIP_ADDRESS = "sip:*0131800xxxxxxx@ekiga.net";
+
+	if (USER_NAME.GetLength() == 0 || PASSWORD.GetLength() == 0) {
+		std::cout << "Please set your username and password in the code." << std::endl;
 		return;
 	}
+
 	PTrace::Initialise(5, "log");
 
 	MyManager manager = MyManager();
-	//TODO: Research why the NAT type is important.
-	PSTUNClient::NatTypes nat = manager.SetSTUNServer("stun.ekiga.net");
-	MyPCSSEndPoint soundEp = MyPCSSEndPoint(manager);
-	cout << "Sound output = " << soundEp.GetSoundChannelPlayDevice() << "\n";
-	cout << "Media formats = " << soundEp.GetMediaFormats() << "\n";
-	cout << "Registered formats = " << OpalMediaFormat::GetAllRegisteredMediaFormats() << "\n";
+	// [Tom] TODO: Research why the NAT type is important.
+	PSTUNClient::NatTypes nat = manager.SetSTUNServer(STUN_SERVER_ADDRESS);
+	MyPCSSEndPoint * soundEp = new MyPCSSEndPoint(manager);
+	std::cout << "Sound output:" << std::endl;
+	std::cout << "===================================================================" << std::endl;
+	std::cout << soundEp->GetSoundChannelPlayDevice() << std::endl << std::endl;
+	std::cout << "Media formats:" << std::endl;
+	std::cout << "===================================================================" << std::endl;
+	std::cout << soundEp->GetMediaFormats() << std::endl << std::endl;
+	std::cout << "Registered formats:" << std::endl;
+	std::cout << "===================================================================" << std::endl;
+	std::cout << OpalMediaFormat::GetAllRegisteredMediaFormats() << std::endl << std::endl;
 
-	MySIPEndPoint endPoint = MySIPEndPoint(manager);
-	endPoint.SetDefaultLocalPartyName(USER);
-	endPoint.StartListeners(endPoint.GetDefaultListeners());
+	MySIPEndPoint * endPoint = new MySIPEndPoint(manager);
+	endPoint->SetDefaultLocalPartyName(USER_NAME);
+	endPoint->StartListeners(endPoint->GetDefaultListeners());
 	SIPRegister::Params params;
-	params.m_registrarAddress = "ekiga.net";
-	params.m_addressOfRecord = USER;
+	params.m_registrarAddress = REGISTRAR_ADDRESS;
+	params.m_addressOfRecord = USER_NAME;
 	params.m_password = PASSWORD;
-	cout << "Registering with " << params.m_registrarAddress <<
-					" this may take a while...\n";
-	endPoint.Register(params, aor);
-	cout << "timeout in ..." << flush;
+	std::cout << "Registering with " << params.m_registrarAddress << "; this may take a while..." << std::endl;
+	endPoint->Register(params, aor);
+
 	int i;
 	for(i = 20; i > 0; i--) {
-		if (endPoint.IsRegistered(aor)) {
+		if (endPoint->IsRegistered(aor)) {
 			break;
 		}
-		cout << i << " " << flush;
-		sleep(1);
+		PThread::Sleep(1000);
 	}
+
 	if (i > 0) {
-			cout << "Succeeded aor=" << aor << "\n";
-			cout << "Calling...\n";
-			PSafePtr<OpalCall> call = manager.SetUpCall("pc:*", "sip:500@ekiga.net");
-			while(!call);
-			call->StartRecording("test.wav");
-			while(1);
+		std::cout << "Registration succeeded; aor=" << aor << std::endl;
+		std::cout << "Calling..." << std::endl;
+		PSafePtr<OpalCall> call = manager.SetUpCall("pc:*", SIP_ADDRESS);
+		while(!call);
+		call->StartRecording("test.wav");
+		std::cout << "Connection will automatically terminate after 15 seconds..." << std::endl;
+		PThread::Sleep(15*1000);
+		call->StopRecording();
+		std::cout << "Connection automatically terminated by design." << std::endl;
+		call->Clear();
+		endPoint->Unregister(aor);
+		while(endPoint->IsRegistered(aor));
+		// [MV] maybe more to the exit/cleanup than this...
 	} else {
-		cout << "Failed\n";
+		std::cout << "Registration attempt timed out." << std::endl;
 	}
+	std::cout << "Proof of concept main execution complete." << std::endl;
 }
