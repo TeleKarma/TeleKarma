@@ -251,59 +251,9 @@ void TkOpalManager::OnClearedCall(OpalCall & call) {
 		currentCallToken.MakeEmpty();
 	else if (heldCallToken == call.GetToken())
 		heldCallToken.MakeEmpty();
-	/*
-	PString remoteName = '"' + call.GetPartyB() + '"';
-	switch (call.GetCallEndReason()) {
-	case OpalConnection::EndedByRemoteUser :
-		cout << remoteName << " has cleared the call";
-	break;
-	case OpalConnection::EndedByCallerAbort :
-		cout << remoteName << " has stopped calling";
-	break;
-	case OpalConnection::EndedByRefusal :
-		cout << remoteName << " did not accept your call";
-	break;
-	case OpalConnection::EndedByNoAnswer :
-		cout << remoteName << " did not answer your call";
-	break;
-	case OpalConnection::EndedByTransportFail :
-		cout << "Call with " << remoteName << " ended abnormally";
-	break;
-	case OpalConnection::EndedByCapabilityExchange :
-		cout << "Could not find common codec with " << remoteName;
-	break;
-	case OpalConnection::EndedByNoAccept :
-		cout << "Did not accept incoming call from " << remoteName;
-	break;
-	case OpalConnection::EndedByAnswerDenied :
-		cout << "Refused incoming call from " << remoteName;
-	break;
-	case OpalConnection::EndedByNoUser :
-		cout << "Gatekeeper or registrar could not find user " << remoteName;
-	break;
-	case OpalConnection::EndedByNoBandwidth :
-		cout << "Call to " << remoteName << " aborted, insufficient bandwidth.";
-	break;
-	case OpalConnection::EndedByUnreachable :
-		cout << remoteName << " could not be reached.";
-	break;
-	case OpalConnection::EndedByNoEndPoint :
-		cout << "No phone running for " << remoteName;
-	break;
-	case OpalConnection::EndedByHostOffline :
-		cout << remoteName << " is not online.";
-	break;
-	case OpalConnection::EndedByConnectFail :
-		cout << "Transport error calling " << remoteName;
-	break;
-	default :
-		cout << "Call with " << remoteName << " completed";
-	}
-	PTime now;
-	cout << ", on " << now.AsString("w h:mma") << ". Duration "
-		 << setprecision(0) << setw(5) << (now - call.GetStartTime())
-		 << "s." << endl;
-	*/
+	PString remoteName = call.GetPartyB();
+	cout << "Call with " << remoteName << " has ended because "
+						<< call.GetCallEndReasonText();
 	OpalManager::OnClearedCall(call);
 }
 
