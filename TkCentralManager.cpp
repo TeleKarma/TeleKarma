@@ -9,7 +9,9 @@
 #include <ptlib.h>
 #include <opal/buildopts.h>
 #include <string.h>
+#ifndef __LINUX__
 #include <conio.h>
+#endif
 
 #include "TkCentralManager.h"
 //#include "TkCommandLineView.h"
@@ -81,7 +83,11 @@ void TkCentralManager::Main() {
 			--a;
 			passwd = passwd.Left(a);
 		}
+#ifdef __LINUX__
+		c = getchar();
+#else
 		c = getch();
+#endif
 		// break the tight loop
 		PThread::Sleep(1);
 	}

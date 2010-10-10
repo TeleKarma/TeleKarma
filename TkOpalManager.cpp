@@ -19,10 +19,11 @@ TkOpalManager::TkOpalManager(const PString & stunAddr, const PString & user) {
 
 	///////////////////////////////////////
 	// Disable video
-
+	// TODO: Configuring opal with --disable-video should make these calls unnecessary.
+#ifndef DISABLE_VIDEO
 	SetAutoStartReceiveVideo(false);
 	SetAutoStartTransmitVideo(false);
-
+#endif
 	///////////////////////////////////////
 	// STUN Server
 
@@ -58,9 +59,10 @@ TkOpalManager::TkOpalManager(const PString & stunAddr, const PString & user) {
 
 	PTRACE(3, "Sound output device: \"" << pcssEP->GetSoundChannelPlayDevice() << "\"");
 	PTRACE(3, "Sound  input device: \"" << pcssEP->GetSoundChannelRecordDevice() << "\"");
+#ifndef DISABLE_VIDEO
 	PTRACE(3, "Video output device: \"" << GetVideoOutputDevice().deviceName << "\"");
 	PTRACE(3, "Video  input device: \"" << GetVideoInputDevice().deviceName << '"');
-
+#endif
 	///////////////////////////////////////
 	// SIP protocol handler
 
