@@ -28,30 +28,11 @@ TkOpalManager::TkOpalManager(const PString & stunAddr, const PString & user) {
 	// STUN Server
 
 	SetSTUNServer(stunAddr);
-	if (stun != NULL) {
-		//cout << "STUN type: " << stun->GetNatTypeName() << endl;
-	}
 
 	///////////////////////////////////////
 	// PC Sound System (PCSS) handler
 
 	pcssEP = new TkPCSSEndPoint(*this);
-	//pcssEP->autoAnswer = false;
-
-	/*
-	if (!pcssEP->SetSoundDevice(args, "sound", PSoundChannel::Recorder)) {
-		return PFalse;
-	}
-	if (!pcssEP->SetSoundDevice(args, "sound", PSoundChannel::Player)) {
-		return PFalse;
-	}
-	if (!pcssEP->SetSoundDevice(args, "sound-in", PSoundChannel::Recorder)) {
-		return PFalse;
-	}
-	if (!pcssEP->SetSoundDevice(args, "sound-out", PSoundChannel::Player)) {
-		return PFalse;
-	}
-	*/
 
 	PTRACE(3, "Sound output device: \"" << pcssEP->GetSoundChannelPlayDevice() << "\"");
 	PTRACE(3, "Sound  input device: \"" << pcssEP->GetSoundChannelRecordDevice() << "\"");
@@ -64,30 +45,10 @@ TkOpalManager::TkOpalManager(const PString & stunAddr, const PString & user) {
 
 	sipEP = new TkSIPEndPoint(*this);
 	sipEP->SetSendUserInputMode(OpalConnection::SendUserInputAsTone);
-	//sipEP->SetProxy(args.GetOptionString("sip-proxy"));
 	sipEP->SetDefaultLocalPartyName(user);
 	sipEP->SetRetryTimeouts(10000, 30000);
 	sipEP->StartListeners(sipEP->GetDefaultListeners());
 
-	/*
-
-	///////////////////////////////////////
-	// Video size
-
-	OpalMediaFormat::GetAllRegisteredMediaFormats(allMediaFormats);
-	for (PINDEX i = 0; i < allMediaFormats.GetSize(); i++) {
-		OpalMediaFormat mediaFormat = allMediaFormats[i];
-		if (mediaFormat.GetMediaType() == OpalMediaType::Video()) {
-			unsigned width, height;
-			if (PVideoFrameInfo::ParseSize(sizeStr, width, height)) {
-				mediaFormat.SetOptionInteger(OpalVideoFormat::FrameWidthOption(), width);
-				mediaFormat.SetOptionInteger(OpalVideoFormat::FrameHeightOption(), height);
-			} else {
-				cerr << "Unknown video size \"" << sizeStr << '"' << endl;
-			}
-		}
-	}
-	*/
 }
 
 
@@ -111,7 +72,6 @@ PBoolean TkOpalManager::Register(const PString & registrar, const PString & user
 		params.m_registrarAddress = registrar;
 		params.m_addressOfRecord = user;
 		params.m_password = passwd;
-		//params.m_realm = domain;
 		sipEP->Register(params, aor);
 		for (int i = 80; i > 0; i--) {
 			if (sipEP->IsRegistered(aor)) {
