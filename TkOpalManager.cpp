@@ -32,8 +32,6 @@ TkOpalManager::TkOpalManager(const PString & stunAddr, const PString & user) {
 		//cout << "STUN type: " << stun->GetNatTypeName() << endl;
 	}
 
-	OpalMediaFormatList allMediaFormats;
-
 	///////////////////////////////////////
 	// PC Sound System (PCSS) handler
 
@@ -55,8 +53,6 @@ TkOpalManager::TkOpalManager(const PString & stunAddr, const PString & user) {
 	}
 	*/
 
-	allMediaFormats += pcssEP->GetMediaFormats();
-
 	PTRACE(3, "Sound output device: \"" << pcssEP->GetSoundChannelPlayDevice() << "\"");
 	PTRACE(3, "Sound  input device: \"" << pcssEP->GetSoundChannelRecordDevice() << "\"");
 #ifndef DISABLE_VIDEO
@@ -72,19 +68,6 @@ TkOpalManager::TkOpalManager(const PString & stunAddr, const PString & user) {
 	sipEP->SetDefaultLocalPartyName(user);
 	sipEP->SetRetryTimeouts(10000, 30000);
 	sipEP->StartListeners(sipEP->GetDefaultListeners());
-
-	allMediaFormats = OpalTranscoder::GetPossibleFormats(allMediaFormats); // Add transcoders
-	for (PINDEX i = 0; i < allMediaFormats.GetSize(); i++) {
-	if (!allMediaFormats[i].IsTransportable())
-		allMediaFormats.RemoveAt(i--); // Don't show media formats that are not used over the wire
-	}
-	allMediaFormats.Remove(GetMediaFormatMask());
-	allMediaFormats.Reorder(GetMediaFormatOrder());
-
-	PTRACE(3, "Local endpoint type: " << "pc:*");
-	PTRACE(3, "Codecs removed: " << setfill(',') << GetMediaFormatMask());
-	PTRACE(3, "Codec order: " << GetMediaFormatOrder());
-	PTRACE(3, "Available codecs: " << allMediaFormats << setfill(' '));
 
 	/*
 
