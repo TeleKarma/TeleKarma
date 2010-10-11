@@ -169,24 +169,43 @@ void TkCentralManager::Console() {
 	help << "  q   : Exit" << endl;
 	help << "  ?   : Help" << endl;
 
-	PConsoleChannel console(PConsoleChannel::StandardInput);
 	cout << help << endl;
 	PString recFName;
+	char ch;
+
+#ifdef WIN32
+	bool inputExists;
+#else
+	PConsoleChannel console(PConsoleChannel::StandardInput);
+#endif
+
+	cout << "Command ? " << flush;
+
 	while (true) {
-		cout << "Command ? " << flush;
-		char ch = (char)console.peek();
+#ifdef WIN32
+		// character-by-character processing (non-blocking)
+		inputExists = _kbhit();
+		if (inputExists != 0) {
+			ch = _getch();
+		} else {
+			PThread::Sleep(1);
+			continue;
+		}
+#else
+		// line-by-line processing (blocks!!)
+		ch = (char)console.peek();
 		if (console.eof()) {
 			cout << endl << "Console gone - menu disabled" << endl;
 			return;
 		}
-
 		PString line;
 		console >> line;
 		line = line.LeftTrim();
 		ch = line[0];
 		line = line.Mid(1).Trim();
+#endif
 
-		PTRACE(3, "console in audio test is " << ch);
+		PTRACE(3, "Console user input is " << ch);
 		switch (tolower(ch)) {
 		case 'x' :
 		case 'q' :
@@ -243,10 +262,11 @@ void TkCentralManager::Console() {
 			}
 			break;
 		}
+
+		cout << "Command ? " << flush;
+
 	}
 	
-
-
 }
 
 // End of File ///////////////////////////////////////////////////////////////
