@@ -173,8 +173,9 @@ PBoolean TkOpalManager::SendTone(const char tone) {
 
 
 PBoolean TkOpalManager::StartCall(const PString & dest) {
-	if (!currentCallToken.IsEmpty() || dest.IsEmpty()) {
+	if (!currentCallToken.IsEmpty() || !heldCallToken.IsEmpty() || dest.IsEmpty()) {
 		// cannot call while current call exists
+		// cannot call if there is a call on hold
 		// cannot call without specifying destination
 		return PFalse;
 	} else {
