@@ -174,6 +174,7 @@ void TkCentralManager::Console() {
 	char ch;
 
 	bool inputExists;
+	bool reprintCmdPrompt;
 	PConsoleChannel console(PConsoleChannel::StandardInput);
 	PString line;
 
@@ -203,39 +204,40 @@ void TkCentralManager::Console() {
 #endif
 
 		PTRACE(3, "Console user input is " << ch);
+		reprintCmdPrompt = true;
 		switch (tolower(ch)) {
 		case 'x' :
 		case 'q' :
-			cout << endl;
+			cout << ch << endl;
 			return;
 
 		case '?' :
-			cout << endl << help << endl;
+			cout << ch << endl << help << endl;
 			break;
 
 		case 'z':
 			recFName = "rec";
 			Timestamp::appendTo(recFName);
 			recFName += ".wav";
-			cout << endl << opal->ToggleRecording(recFName) << endl;
+			cout << ch << endl << opal->ToggleRecording(recFName) << endl;
 			break;
 
 		case 'd' :
 			if (opal->EndCurrentCall()) {
-				cout << endl << "Call terminated." << endl;
+				cout << ch << endl << "Call terminated." << endl;
 			} else {
-				cout << endl << "Not connected." << endl;
+				cout << ch << endl << "Not connected." << endl;
 			}
 			break;
 
 		case 'c' :
 			if (opal->HasActiveCall()) {
-				cout << endl << "Disconnect the active call before making another call." << endl;
+				cout << ch << endl << "Disconnect the active call before making another call." << endl;
 			} else if (opal->HasCallHolding()) {
-				cout << endl << "Disconnect the holding call before making another call." << endl;
+				cout << ch << endl << "Disconnect the holding call before making another call." << endl;
 			} else {
 				PString dest = "sip:500@ekiga.net";
-				cout << "Please enter the SIP address to call [" << dest << "]: " << flush;
+				cout << ch << endl << "Please enter the SIP address to call [" << dest << "]: " << flush;
 				console >> line;
 				line = line.Trim();
 				if (!line.IsEmpty()) {
@@ -244,22 +246,23 @@ void TkCentralManager::Console() {
 				cout << "Calling " << dest << "... " << flush;
 				opal->StartCall(dest);
 				cout << "connected." << endl << endl;
+				cout << help << endl;
 			}
 			break;
 
 		case 'r' :
 			if (opal->RetrieveCallOnHold()) {
-				cout << endl << "Call is now active." << endl;
+				cout << ch << endl << "Call is now active." << endl;
 			} else {
-				cout << endl << "Not on hold or holding call lost." << endl;
+				cout << ch << endl << "Not on hold or holding call lost." << endl;
 			}
 			break;
 
 		case 'h':
 			if (opal->HoldCurrentCall()) {
-				cout << endl << "Call placed on hold." << endl;
+				cout << ch << endl << "Call placed on hold." << endl;
 			} else {
-				cout << endl << "Not connected." << endl;
+				cout << ch << endl << "Not connected." << endl;
 			}
 			break;
 
@@ -270,13 +273,16 @@ void TkCentralManager::Console() {
 		default:
 			if (isdigit(ch) || ch == '*' || ch == '#') {
 				opal->SendTone(ch);
-				cout << endl << "Sent DTML tone for '" << ch << "'" << endl;
+				cout << ch << endl << "Sent DTML tone for '" << ch << "'" << endl;
+			} else {
+				reprintCmdPrompt = false;
 			}
 			break;
 		}
-
-		cout << "Command ? " << flush;
-
+		
+		if (reprintCmdPrompt) {
+			cout << "Command ? " << flush;
+		}
 	}
 	
 }
