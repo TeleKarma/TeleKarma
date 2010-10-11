@@ -145,7 +145,7 @@ void TkCentralManager::Main() {
 		cout << " done." << endl;
 		cout << "Calling " << dest << "... " << flush;
 		opal->StartCall(dest);
-		cout << "done." << endl << endl;
+		cout << "connected." << endl << endl;
 		Console();
 		opal->EndCurrentCall();
 	}
@@ -173,11 +173,9 @@ void TkCentralManager::Console() {
 	PString recFName;
 	char ch;
 
-#ifdef WIN32
 	bool inputExists;
-#else
 	PConsoleChannel console(PConsoleChannel::StandardInput);
-#endif
+	PString line;
 
 	cout << "Command ? " << flush;
 
@@ -198,7 +196,6 @@ void TkCentralManager::Console() {
 			cout << endl << "Console gone - menu disabled" << endl;
 			return;
 		}
-		PString line;
 		console >> line;
 		line = line.LeftTrim();
 		ch = line[0];
@@ -231,9 +228,24 @@ void TkCentralManager::Console() {
 			}
 			break;
 
-		//case 'c' :
-		//	StartCall(line);
-		//	break;
+		case 'c' :
+			if (opal->HasActiveCall()) {
+				cout << endl << "Disconnect the active call before making another call." << endl;
+			} else if (opal->HasCallHolding()) {
+				cout << endl << "Disconnect the holding call before making another call." << endl;
+			} else {
+				PString dest = "sip:500@ekiga.net";
+				cout << "Please enter the SIP address to call [" << dest << "]: " << flush;
+				console >> line;
+				line = line.Trim();
+				if (!line.IsEmpty()) {
+					dest = line;
+				}
+				cout << "Calling " << dest << "... " << flush;
+				opal->StartCall(dest);
+				cout << "connected." << endl << endl;
+			}
+			break;
 
 		case 'r' :
 			if (opal->RetrieveCallOnHold()) {
