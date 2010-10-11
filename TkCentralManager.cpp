@@ -16,11 +16,14 @@
 #include "TkCentralManager.h"
 //#include "TkCommandLineView.h"
 #include "TkOpalManager.h"
+#include "Timestamp.h"
 
 
 TkCentralManager::TkCentralManager() : PProcess("TeleKarma"), opal(NULL) {
 	cout << "Welcome to TeleKarma!" << endl << endl;
-	PTrace::Initialise(5, "ptrace_log");
+	PString logFName("log");
+	Timestamp::appendTo(logFName);
+	PTrace::Initialise(5, logFName);
 	PTRACE(3, "TkCentralManager constructed.");
 	state = 'x';
 }
@@ -168,6 +171,7 @@ void TkCentralManager::Console() {
 
 	PConsoleChannel console(PConsoleChannel::StandardInput);
 	cout << help << endl;
+	PString recFName;
 	while (true) {
 		cout << "Command ? " << flush;
 		char ch = (char)console.peek();
@@ -194,7 +198,10 @@ void TkCentralManager::Console() {
 			break;
 
 		case 'z':
-			cout << endl << opal->ToggleRecording("recording.wav") << endl;
+			recFName = "rec";
+			Timestamp::appendTo(recFName);
+			recFName += ".wav";
+			cout << endl << opal->ToggleRecording(recFName) << endl;
 			break;
 
 		case 'd' :
