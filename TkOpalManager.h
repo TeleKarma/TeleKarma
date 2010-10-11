@@ -37,6 +37,10 @@ class TkOpalManager : public OpalManager {
 		virtual PString  ToggleRecording(const PString & fname);
 		virtual PBoolean EndCurrentCall();
 		virtual PBoolean Unregister();
+		/** True if there is a call on hold. */
+		virtual PBoolean HasCallHolding();
+		/** True if there is an active (not holding) call. */
+		virtual PBoolean HasActiveCall();
 
 		virtual void OnEstablishedCall(OpalCall & call);
 		virtual void OnClearedCall(OpalCall & call);

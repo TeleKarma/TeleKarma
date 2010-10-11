@@ -201,6 +201,16 @@ PBoolean TkOpalManager::EndCurrentCall() {
 }
 
 
+PBoolean TkOpalManager::HasCallHolding() {
+	return (heldCallToken.IsEmpty()) ? PFalse : PTrue;
+}
+
+
+PBoolean TkOpalManager::HasActiveCall() {
+	return (currentCallToken.IsEmpty()) ? PFalse : PTrue;
+}
+
+
 void TkOpalManager::OnEstablishedCall(OpalCall & call) {
 	currentCallToken = call.GetToken();
 }
