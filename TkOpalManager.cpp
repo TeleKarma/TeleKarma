@@ -223,8 +223,64 @@ void TkOpalManager::OnClearedCall(OpalCall & call) {
 	else if (heldCallToken == call.GetToken())
 		heldCallToken.MakeEmpty();
 	PString remoteName = call.GetPartyB();
+	bool printTime = true;
+	switch (call.GetCallEndReason()) {
+	case OpalConnection::EndedByRemoteUser :
+		cout << endl << remoteName << " has ended the call";
+		break;
+	case OpalConnection::EndedByCallerAbort :
+		cout << endl << remoteName << " has hung up";
+		break;
+	case OpalConnection::EndedByRefusal :
+		cout << endl << remoteName << " did not accept your call";
+		break;
+	case OpalConnection::EndedByNoAnswer :
+		cout << endl << remoteName << " did not answer your call";
+		break;
+	case OpalConnection::EndedByTransportFail :
+		cout << endl << "Call with " << remoteName << " ended abnormally";
+		break;
+	case OpalConnection::EndedByCapabilityExchange :
+		cout << endl << "Could not find common codec with " << remoteName;
+		break;
+	case OpalConnection::EndedByNoAccept :
+		cout << endl << "Did not accept incoming call from " << remoteName;
+		break;
+	case OpalConnection::EndedByAnswerDenied :
+		cout << endl << "Refused incoming call from " << remoteName;
+		break;
+	case OpalConnection::EndedByNoUser :
+		cout << endl << "Gatekeeper or registrar could not find user " << remoteName;
+		break;
+	case OpalConnection::EndedByNoBandwidth :
+		cout << endl << "Call to " << remoteName << " aborted, insufficient bandwidth";
+		break;
+	case OpalConnection::EndedByUnreachable :
+		cout << endl << remoteName << " could not be reached";
+		break;
+	case OpalConnection::EndedByNoEndPoint :
+		cout << endl << "No phone running for " << remoteName;
+		break;
+	case OpalConnection::EndedByHostOffline :
+		cout << endl << remoteName << " is not online";
+		break;
+	case OpalConnection::EndedByConnectFail :
+		cout << endl << "Transport error calling " << remoteName;
+		break;
+	default :
+		printTime = false;
+		//cout << endl << "Call with " << remoteName << " completed";
+	}
+	if (printTime) {
+		PTime now;
+		cout << ", on " << now.AsString("w h:mma") << ". Duration "
+			<< setprecision(0) << setw(5) << (now - call.GetStartTime())
+			<< "s." << endl;
+	}
+	/* original code - replaced with switch and timestamp above
 	cout << "Call with " << remoteName << " has ended because "
 						<< call.GetCallEndReasonText();
+	*/
 	OpalManager::OnClearedCall(call);
 }
 
