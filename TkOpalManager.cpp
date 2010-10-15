@@ -310,5 +310,10 @@ PBoolean TkOpalManager::OnOpenMediaStream(OpalConnection & connection, OpalMedia
 void TkOpalManager::WaitForHuman() {
 }
 
+void OpalManager::OnUserInputTone(OpalConnection& connection, char tone,
+								int duration)
+{
+	fprintf(stderr, "Tone %d pressed for %d.\n", tone, duration);
+}
 
 // End of File ///////////////////////////////////////////////////////////////
