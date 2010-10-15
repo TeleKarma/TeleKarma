@@ -53,7 +53,10 @@ TkOpalManager::TkOpalManager(const PString & stunAddr, const PString & user) {
 	// IVR endpoint
 	ivrEP = new OpalIVREndPoint(*this);
 	ivrEP->SetDefaultVXML("repeat=1000;file:////home/tstellar/TeleKarma/8k16bitpcm.wav");
-
+	//This route entry creates a connection to an ivr, but nothing can
+	//be heard over the speakers, and it is not clear if the other party
+	//can here the vir recording.
+//	AddRouteEntry("pc:.* = ivr:");
 }
 
 
