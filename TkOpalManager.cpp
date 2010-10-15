@@ -9,13 +9,13 @@
 #include "TkOpalManager.h"
 #include "TkPCSSEndPoint.h"
 #include "TkSIPEndPoint.h"
-
+#include <opal/ivr.h>
 
 TkOpalManager::TkOpalManager(const PString & stunAddr, const PString & user) {
 	pcssEP = NULL;
 	sipEP  = NULL;
 	aor    = NULL;
-
+	ivrEP  = NULL;
 
 	///////////////////////////////////////
 	// Disable video
@@ -48,6 +48,11 @@ TkOpalManager::TkOpalManager(const PString & stunAddr, const PString & user) {
 	sipEP->SetDefaultLocalPartyName(user);
 	sipEP->SetRetryTimeouts(10000, 30000);
 	sipEP->StartListeners(sipEP->GetDefaultListeners());
+
+	///////////////////////////////////////
+	// IVR endpoint
+	ivrEP = new OpalIVREndPoint(*this);
+	ivrEP->SetDefaultVXML("repeat=1000;file:////home/tstellar/TeleKarma/8k16bitpcm.wav");
 
 }
 
@@ -300,6 +305,9 @@ PBoolean TkOpalManager::OnOpenMediaStream(OpalConnection & connection, OpalMedia
 	 		 << (stream.IsSink() ? " to " : " from ")<< prefix);
 
 	return PTrue;
+}
+
+void TkOpalManager::WaitForHuman() {
 }
 
 

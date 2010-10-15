@@ -163,6 +163,7 @@ void TkCentralManager::Console() {
 	help << "  0-9 : send touch tone" << endl;
 	help << "  *,# : send touch tone" << endl;
 	help << "  h   : Put call on hold" << endl;
+	help << "  s   : Put call on hold and start Anti_IVR" << endl;
 	help << "  r   : Retrieve call from hold" << endl;
 	help << "  d   : Disconnect the call" << endl;
 	help << "  z   : Toggle recording" << endl;
@@ -264,7 +265,9 @@ void TkCentralManager::Console() {
 				cout << ch << endl << "Not connected." << endl;
 			}
 			break;
-
+		case 's':
+			opal->WaitForHuman();
+			break;
 		//case 'f' :
 		//	SendTone('x');
 		//	break;
