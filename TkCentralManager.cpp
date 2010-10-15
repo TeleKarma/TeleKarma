@@ -19,7 +19,8 @@
 #include "Timestamp.h"
 
 
-TkCentralManager::TkCentralManager() : PProcess("TeleKarma"), opal(NULL) {
+TkCentralManager::TkCentralManager() : PProcess("TeleKarma"), opal(NULL),
+		console(new PConsoleChannel(PConsoleChannel::StandardInput)) {
 	cout << "Welcome to TeleKarma!" << endl << endl;
 	PString logFName("log");
 	Timestamp::appendTo(logFName);
@@ -33,6 +34,9 @@ TkCentralManager::~TkCentralManager() {
 	if (opal != NULL) {
 		delete opal;
 	}
+	if (console != NULL) {
+		delete console;
+	}
 	cout << "Thank you for using TeleKarma." << endl;
 	PTRACE(3, "TkCentralManager destroyed.");
 }
@@ -40,8 +44,6 @@ TkCentralManager::~TkCentralManager() {
 
 void TkCentralManager::Main() {
 
-	PConsoleChannel * console = new PConsoleChannel(PConsoleChannel::StandardInput);
-	
 	PString registrar = "ekiga.net";
 	PString stunServer = "stun.ekiga.net";
 	PString user = "";
@@ -102,8 +104,6 @@ void TkCentralManager::Main() {
 	if (!line.IsEmpty()) {
 		dest = line;
 	}
-
-	delete console;
 
 	cout << endl;
 	
@@ -175,7 +175,6 @@ void TkCentralManager::Console() {
 
 	bool inputExists;
 	bool reprintCmdPrompt;
-	PConsoleChannel console(PConsoleChannel::StandardInput);
 	PString line;
 
 	cout << "Command ? " << flush;
@@ -192,12 +191,12 @@ void TkCentralManager::Console() {
 		}
 #else
 		// line-by-line processing (blocks!!)
-		ch = (char)console.peek();
-		if (console.eof()) {
+		ch = (char)console->peek();
+		if (console->eof()) {
 			cout << endl << "Console gone - menu disabled" << endl;
 			return;
 		}
-		console >> line;
+		(*console) >> line;
 		line = line.LeftTrim();
 		ch = line[0];
 		line = line.Mid(1).Trim();
@@ -238,7 +237,7 @@ void TkCentralManager::Console() {
 			} else {
 				PString dest = "sip:500@ekiga.net";
 				cout << ch << endl << "Please enter the SIP address to call [" << dest << "]: " << flush;
-				console >> line;
+				(*console) >> line;
 				line = line.Trim();
 				if (!line.IsEmpty()) {
 					dest = line;

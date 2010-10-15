@@ -31,6 +31,7 @@ class TkCentralManager : public PProcess {
 		// use telephony superclass in future...
 		TkOpalManager * opal;
 		//TkView * view;
+		PConsoleChannel * console;
 
 };
 
