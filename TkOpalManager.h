@@ -32,15 +32,11 @@ class TkOpalManager : public OpalManager {
 
 		virtual PBoolean Register(const PString & registrar, const PString & user, const PString & passwd, const PString & domain = "n/a");
 		virtual PBoolean StartCall(const PString & ostr);
-		virtual PBoolean HoldCurrentCall();
-		virtual PBoolean RetrieveCallOnHold();
 		virtual PBoolean SendTone(const char tone);
 		// fix return value later... need tri-state return value
 		virtual PString  ToggleRecording(const PString & fname);
 		virtual PBoolean EndCurrentCall();
 		virtual PBoolean Unregister();
-		/** True if there is a call on hold. */
-		virtual PBoolean HasCallHolding();
 		/** True if there is an active (not holding) call. */
 		virtual PBoolean HasActiveCall();
 
@@ -51,7 +47,7 @@ class TkOpalManager : public OpalManager {
 		void WaitForHuman();
 	protected:
 		PString currentCallToken;
-		PString heldCallToken;
+//		PString heldCallToken;
 		PString aor;
 		TkPCSSEndPoint * pcssEP;
 		SIPEndPoint * sipEP;

@@ -162,9 +162,7 @@ void TkCentralManager::Console() {
 	help << "Select:" << endl;
 	help << "  0-9 : send touch tone" << endl;
 	help << "  *,# : send touch tone" << endl;
-	help << "  h   : Put call on hold" << endl;
 	help << "  s   : Put call on hold and start Anti_IVR" << endl;
-	help << "  r   : Retrieve call from hold" << endl;
 	help << "  d   : Disconnect the call" << endl;
 	help << "  z   : Toggle recording" << endl;
 	help << "  q   : Exit" << endl;
@@ -233,8 +231,6 @@ void TkCentralManager::Console() {
 		case 'c' :
 			if (opal->HasActiveCall()) {
 				cout << ch << endl << "Disconnect the active call before making another call." << endl;
-			} else if (opal->HasCallHolding()) {
-				cout << ch << endl << "Disconnect the holding call before making another call." << endl;
 			} else {
 				PString dest = "sip:500@ekiga.net";
 				cout << ch << endl << "Please enter the SIP address to call [" << dest << "]: " << flush;
@@ -250,21 +246,6 @@ void TkCentralManager::Console() {
 			}
 			break;
 
-		case 'r' :
-			if (opal->RetrieveCallOnHold()) {
-				cout << ch << endl << "Call is now active." << endl;
-			} else {
-				cout << ch << endl << "Not on hold or holding call lost." << endl;
-			}
-			break;
-
-		case 'h':
-			if (opal->HoldCurrentCall()) {
-				cout << ch << endl << "Call placed on hold." << endl;
-			} else {
-				cout << ch << endl << "Not connected." << endl;
-			}
-			break;
 		case 's':
 			opal->WaitForHuman();
 			break;

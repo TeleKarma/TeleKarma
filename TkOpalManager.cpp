@@ -64,10 +64,6 @@ TkOpalManager::~TkOpalManager() {
 	if (!currentCallToken.IsEmpty()) {
 		EndCurrentCall();
 	}
-	if (!heldCallToken.IsEmpty()) {
-		RetrieveCallOnHold();
-		EndCurrentCall();
-	}
 	Unregister();
 }
 
@@ -113,51 +109,6 @@ PString TkOpalManager::ToggleRecording(const PString & fname) {
 	}
 }
 
-
-PBoolean TkOpalManager::HoldCurrentCall() {
-	PBoolean result = PFalse;
-	if (currentCallToken.IsEmpty() && heldCallToken.IsEmpty()) {
-		// no call in progress
-	} else {
-		if (heldCallToken.IsEmpty()) {
-			PSafePtr<OpalCall> call = FindCallWithLock(currentCallToken);
-			if (call == NULL) {
-				// current call disappeared
-			} else if (call->Hold()) {
-				heldCallToken = currentCallToken;
-				currentCallToken.MakeEmpty();
-				result = PTrue;
-			}
-		} else {
-			// there is already a call on hold
-		}
-	}
-	return result;
-}
-
-
-PBoolean TkOpalManager::RetrieveCallOnHold() {
-	PBoolean result = PFalse;
-	if (currentCallToken.IsEmpty() && heldCallToken.IsEmpty()) {
-		// no call in progress
-	} else {
-		if (heldCallToken.IsEmpty()) {
-			// no call on hold
-		} else {
-			PSafePtr<OpalCall> call = FindCallWithLock(heldCallToken);
-			if (call == NULL) {
-				// current call disappeared
-			} else if (call->Retrieve()) {
-				currentCallToken = heldCallToken;
-				heldCallToken.MakeEmpty();
-				result = PTrue;
-			}
-		}
-	}
-	return result;
-}
-
-
 PBoolean TkOpalManager::SendTone(const char tone) {
 	if (currentCallToken.IsEmpty()) {
 		// no call in progress
@@ -181,7 +132,7 @@ PBoolean TkOpalManager::SendTone(const char tone) {
 
 
 PBoolean TkOpalManager::StartCall(const PString & dest) {
-	if (!currentCallToken.IsEmpty() || !heldCallToken.IsEmpty() || dest.IsEmpty()) {
+	if (!currentCallToken.IsEmpty() || dest.IsEmpty()) {
 		// cannot call while current call exists
 		// cannot call if there is a call on hold
 		// cannot call without specifying destination
@@ -194,8 +145,7 @@ PBoolean TkOpalManager::StartCall(const PString & dest) {
 
 /** Disconnect the call currently in progress */
 PBoolean TkOpalManager::EndCurrentCall() {
-	PString & token = currentCallToken.IsEmpty() ? heldCallToken : currentCallToken;
-	PSafePtr<OpalCall> call = FindCallWithLock(token);
+	PSafePtr<OpalCall> call = FindCallWithLock(currentCallToken);
 	if (call == NULL) {
 		// no call in progress
 		return PFalse;
@@ -204,16 +154,9 @@ PBoolean TkOpalManager::EndCurrentCall() {
 			StopRecording(currentCallToken);
 		}
 		call->Clear();
-		token.MakeEmpty();
 		return PTrue;
 	}
 }
-
-
-PBoolean TkOpalManager::HasCallHolding() {
-	return (heldCallToken.IsEmpty()) ? PFalse : PTrue;
-}
-
 
 PBoolean TkOpalManager::HasActiveCall() {
 	return (currentCallToken.IsEmpty()) ? PFalse : PTrue;
@@ -228,8 +171,6 @@ void TkOpalManager::OnEstablishedCall(OpalCall & call) {
 void TkOpalManager::OnClearedCall(OpalCall & call) {
 	if (currentCallToken == call.GetToken())
 		currentCallToken.MakeEmpty();
-	else if (heldCallToken == call.GetToken())
-		heldCallToken.MakeEmpty();
 	PString remoteName = call.GetPartyB();
 	bool printTime = true;
 	switch (call.GetCallEndReason()) {
