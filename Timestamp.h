@@ -20,7 +20,7 @@ class Timestamp {
 		 * Appends a timestamp in "_yyyy.mm.dd_hh.mm.ss" format
 		 * to the argument.
 		 */
-		static void Timestamp::appendTo(PString & str);
+		static void appendTo(PString & str);
 
 };
 
