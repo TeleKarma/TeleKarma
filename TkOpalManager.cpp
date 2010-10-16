@@ -15,7 +15,6 @@ TkOpalManager::TkOpalManager(const PString & stunAddr, const PString & user) {
 	pcssEP = NULL;
 	sipEP  = NULL;
 	aor    = NULL;
-	ivrEP  = NULL;
 
 	///////////////////////////////////////
 	// Disable video
@@ -49,14 +48,6 @@ TkOpalManager::TkOpalManager(const PString & stunAddr, const PString & user) {
 	sipEP->SetRetryTimeouts(10000, 30000);
 	sipEP->StartListeners(sipEP->GetDefaultListeners());
 
-	///////////////////////////////////////
-	// IVR endpoint
-	ivrEP = new OpalIVREndPoint(*this);
-	ivrEP->SetDefaultVXML("repeat=1000;file:////home/tstellar/TeleKarma/8k16bitpcm.wav");
-	//This route entry creates a connection to an ivr, but nothing can
-	//be heard over the speakers, and it is not clear if the other party
-	//can here the vir recording.
-//	AddRouteEntry("pc:.* = ivr:");
 }
 
 
@@ -254,10 +245,69 @@ PBoolean TkOpalManager::OnOpenMediaStream(OpalConnection & connection, OpalMedia
 void TkOpalManager::WaitForHuman() {
 }
 
-void OpalManager::OnUserInputTone(OpalConnection& connection, char tone,
+void TkOpalManager::OnUserInputTone(OpalConnection& connection, char tone,
 								int duration)
 {
 	fprintf(stderr, "Tone %d pressed for %d.\n", tone, duration);
+}
+
+PSafePtr<OpalConnection> TkOpalManager::GetConnection(PSafePtr<OpalCall> call, bool user, PSafetyMode mode)
+{
+	if (call == NULL) 
+		return NULL;
+
+	PSafePtr<OpalConnection> connection = call->GetConnection(0, PSafeReference);
+	while (connection != NULL && connection->IsNetworkConnection() == user)
+		++connection;
+
+	return connection.SetSafetyMode(mode) ? connection : NULL;
+}
+
+void TkOpalManager::SendAudioFile(const PString & path)
+{
+	
+	PTRACE(3, "******************************************************************");
+	PTRACE(3, "******************************************************************");
+	PTRACE(3, "******************************************************************");
+	PTRACE(3, "******************************************************************");
+	PTRACE(3, "******************************************************************");
+	PTRACE(3, "******************************************************************");
+	PTRACE(3, "******************************************************************");
+	PTRACE(3, "******************************************************************");
+	PTRACE(3, "******************************************************************");
+	PTRACE(3, "******************************************************************");
+	PTRACE(3, "******************************************************************");
+	PTRACE(3, "******************************************************************");
+	PTRACE(3, "******************************************************************");
+	PTRACE(3, path);
+
+	PSafePtr<OpalCall> call = FindCallWithLock(currentCallToken);
+	if (call == NULL) {
+		PTRACE(3, "Attempted to send WAV file failed: no active call.");
+		return;
+	}
+
+	PSafePtr<OpalPCSSConnection> connection = PSafePtrCast<OpalConnection, OpalPCSSConnection>(GetConnection(call, true, PSafeReadOnly));
+	if (connection == NULL) {
+		PTRACE(3, "Attempted to send WAV file failed: no pcss connection.");
+		return;
+	}
+
+	PStringStream ivrXML;
+	ivrXML << "ivr:<?xml version=\"1.0\"?>"
+		"<vxml version=\"1.0\">"
+			"<form id=\"PlayFile\">"
+				"<transfer bridge=\"false\" dest=\"pc:*;Auto-Answer=1\">"
+					"<audio src=\"" << PURL(PFilePath(path)) << "\"/>"
+				"</transfer>"
+			"</form>"
+		"</vxml>";
+
+	if (!call->Transfer(ivrXML, connection))
+		PTRACE(3, "Failed to send WAV file.");
+
+	/* TO GO: also play over speakers; use the PSoundChannel classes from PTLib */
+
 }
 
 // End of File ///////////////////////////////////////////////////////////////

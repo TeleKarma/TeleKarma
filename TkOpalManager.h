@@ -13,8 +13,6 @@
 #include <opal/pcss.h>
 #include <sip/sipep.h>
 
-class OpalIVREndPoint;
-
 #ifndef OPAL_PTLIB_AUDIO
 #error Cannot compile without PTLib sound channel support!
 #endif
@@ -44,14 +42,19 @@ class TkOpalManager : public OpalManager {
 		virtual void OnClearedCall(OpalCall & call);
 		virtual PBoolean OnOpenMediaStream(OpalConnection & connection, OpalMediaStream & stream);
 		//virtual void OnUserInputString(OpalConnection & connection,	const PString & value);
+		void TkOpalManager::OnUserInputTone(OpalConnection& connection, char tone, int duration);
 		void WaitForHuman();
+		void SendAudioFile(const PString & path);
+
 	protected:
 		PString currentCallToken;
 //		PString heldCallToken;
 		PString aor;
 		TkPCSSEndPoint * pcssEP;
 		SIPEndPoint * sipEP;
-		OpalIVREndPoint * ivrEP;
+		PSafePtr<OpalPCSSConnection> activeCall;
+
+		PSafePtr<OpalConnection> GetConnection(PSafePtr<OpalCall> call, bool user, PSafetyMode mode);
 
 };
 

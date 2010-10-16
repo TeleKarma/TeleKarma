@@ -165,6 +165,7 @@ void TkCentralManager::Console() {
 	help << "  s   : Put call on hold and start Anti_IVR" << endl;
 	help << "  d   : Disconnect the call" << endl;
 	help << "  z   : Toggle recording" << endl;
+	help << "  p   : Play audio file test" << endl;
 	help << "  q   : Exit" << endl;
 	help << "  ?   : Help" << endl;
 
@@ -223,6 +224,15 @@ void TkCentralManager::Console() {
 		case 'd' :
 			if (opal->EndCurrentCall()) {
 				cout << ch << endl << "Call terminated." << endl;
+			} else {
+				cout << ch << endl << "Not connected." << endl;
+			}
+			break;
+
+		case 'p' :
+			if (opal->HasActiveCall()) {
+				opal->SendAudioFile("\\TeleKarma\\test.wav");
+				cout << ch << endl << "Theoretically sending audio..." << endl;
 			} else {
 				cout << ch << endl << "Not connected." << endl;
 			}
