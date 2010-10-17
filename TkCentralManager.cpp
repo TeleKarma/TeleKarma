@@ -24,6 +24,7 @@ TkCentralManager::TkCentralManager() : PProcess("TeleKarma"), opal(NULL),
 	cout << "Welcome to TeleKarma!" << endl << endl;
 	PString logFName("log");
 	Timestamp::appendTo(logFName);
+	logFName += ".txt";
 	PTrace::Initialise(5, logFName);
 	PTRACE(3, "TkCentralManager constructed.");
 	state = 'x';
