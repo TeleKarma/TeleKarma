@@ -11,18 +11,36 @@
 #include "TkSIPEndPoint.h"
 #include <opal/ivr.h>
 
-TkOpalManager::TkOpalManager(const PString & stunAddr, const PString & user) {
-	pcssEP = NULL;
-	sipEP  = NULL;
-	aor    = NULL;
+
+TkOpalManager::TkOpalManager() :
+	pcssEP(NULL), 
+	sipEP(NULL), 
+	ivrEP(NULL), 
+	aor(NULL)
+{
+
+}
+
+
+TkOpalManager::~TkOpalManager()
+{
+	if (!currentCallToken.IsEmpty())
+		EndCurrentCall();
+	Unregister();
+}
+
+
+void TkOpalManager::Initialise(const PString & stunAddr, const PString & user)
+{
 
 	///////////////////////////////////////
 	// Disable video
-	// TODO: Configuring opal with --disable-video should make these calls unnecessary.
-#ifndef DISABLE_VIDEO
+
+#if OPAL_VIDEO
 	SetAutoStartReceiveVideo(false);
 	SetAutoStartTransmitVideo(false);
 #endif
+
 	///////////////////////////////////////
 	// STUN Server
 
@@ -35,10 +53,7 @@ TkOpalManager::TkOpalManager(const PString & stunAddr, const PString & user) {
 
 	PTRACE(3, "Sound output device: \"" << pcssEP->GetSoundChannelPlayDevice() << "\"");
 	PTRACE(3, "Sound  input device: \"" << pcssEP->GetSoundChannelRecordDevice() << "\"");
-#ifndef DISABLE_VIDEO
-	PTRACE(3, "Video output device: \"" << GetVideoOutputDevice().deviceName << "\"");
-	PTRACE(3, "Video  input device: \"" << GetVideoInputDevice().deviceName << '"');
-#endif
+
 	///////////////////////////////////////
 	// SIP protocol handler
 
@@ -47,15 +62,31 @@ TkOpalManager::TkOpalManager(const PString & stunAddr, const PString & user) {
 	sipEP->SetDefaultLocalPartyName(user);
 	sipEP->SetRetryTimeouts(10000, 30000);
 	sipEP->StartListeners(sipEP->GetDefaultListeners());
+	
+	///////////////////////////////////////
+	// IVR Endpoint Setup & Config
 
-}
-
-
-TkOpalManager::~TkOpalManager() {
-	if (!currentCallToken.IsEmpty()) {
-		EndCurrentCall();
+	ivrEP = new OpalIVREndPoint(*this);
+/*
+	OpalMediaFormatList mediaFormats;
+	mediaFormats += pcssEP->GetMediaFormats();
+	mediaFormats += ivrEP->GetMediaFormats();
+	OpalMediaFormatList possibleFormats = OpalTranscoder::GetPossibleFormats(mediaFormats);
+	for (OpalMediaFormatList::iterator format = possibleFormats.begin(); format != possibleFormats.end(); ++format) {
+		if (format->IsTransportable())
+			m_mediaInfo.push_back(MyMedia(*format));
 	}
-	Unregister();
+
+	if (PTrace::CanTrace(4)) {
+		OpalMediaFormatList mediaFormats = OpalMediaFormat::GetAllRegisteredMediaFormats();
+		ostream & traceStream = PTrace::Begin(4, __FILE__, __LINE__);
+		traceStream << "TeleKarma\tRegistered media formats:\n";
+		for (PINDEX i = 0; i < mediaFormats.GetSize(); i++)
+			mediaFormats[i].PrintOptions(traceStream);
+		traceStream << PTrace::End;
+	}
+*/
+
 }
 
 

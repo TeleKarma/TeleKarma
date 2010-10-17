@@ -119,7 +119,8 @@ void TkCentralManager::Main() {
 
 	cout << "Initializing telephony system... (this may take a moment)" << flush;
 
-	opal = new TkOpalManager(stunServer, user);
+	opal = new TkOpalManager();
+	opal->Initialise(stunServer, user);
 	
 	for (int i = 0; i < 24; ++i) {
 		cout << "\b";

@@ -12,6 +12,7 @@
 #include <opal/manager.h>
 #include <opal/pcss.h>
 #include <sip/sipep.h>
+#include <opal/ivr.h>
 
 #ifndef OPAL_PTLIB_AUDIO
 #error Cannot compile without PTLib sound channel support!
@@ -25,9 +26,10 @@ class TkOpalManager : public OpalManager {
 	PCLASSINFO(TkOpalManager, OpalManager);
 
 	public:
-		TkOpalManager(const PString & stunAddr, const PString & user);
+		TkOpalManager();
 		virtual ~TkOpalManager();
 
+		void Initialise(const PString & stunAddr, const PString & user);
 		virtual PBoolean Register(const PString & registrar, const PString & user, const PString & passwd, const PString & domain = "n/a");
 		virtual PBoolean StartCall(const PString & ostr);
 		virtual PBoolean SendTone(const char tone);
@@ -52,7 +54,8 @@ class TkOpalManager : public OpalManager {
 		PString aor;
 		TkPCSSEndPoint * pcssEP;
 		SIPEndPoint * sipEP;
-		PSafePtr<OpalPCSSConnection> activeCall;
+		OpalIVREndPoint  * ivrEP;
+//		PSafePtr<OpalPCSSConnection> activeCall;
 
 		PSafePtr<OpalConnection> GetConnection(PSafePtr<OpalCall> call, bool user, PSafetyMode mode);
 
