@@ -6,6 +6,7 @@
  *
  */
 
+#include "userconfig.h"
 #include <ptlib.h>
 #include <opal/buildopts.h>
 #include <string.h>
@@ -45,11 +46,11 @@ TkCentralManager::~TkCentralManager() {
 
 void TkCentralManager::Main() {
 
-	PString registrar = "ekiga.net";
-	PString stunServer = "stun.ekiga.net";
-	PString user = "";
-	PString passwd = "";
-	PString dest = "sip:500@ekiga.net";
+	PString registrar = REGISTRAR;
+	PString stunServer = STUN;
+	PString user = ACCOUNT;
+	PString passwd = PASSWORD;
+	PString dest = DEST;
 	//PString SIP_ADDRESS = "sip:*0131800xxxxxxx@ekiga.net";
 	PString line;
 
@@ -67,14 +68,30 @@ void TkCentralManager::Main() {
 		stunServer = line;
 	}
 
-	cout << "Please enter your SIP user name: " << flush;
+	cout << "Please enter your SIP user name" << flush;
+	if (user.IsEmpty()) {
+		cout << ": ";
+	} else {
+		cout << " [" << user << "]: ";
+	}
+	cout << flush;
 	(*console) >> line;
 	line = line.Trim();
 	if (!line.IsEmpty()) {
 		user = line;
 	}
 
-	cout << "Please enter your SIP password: " << flush;
+	cout << "Please enter your SIP password";
+	if (passwd.IsEmpty()) {
+		cout << ": " << flush;
+	} else {
+		cout << "[";
+		for (int i = 0; i < passwd.GetLength(); ++i) {
+			cout << "*";
+		}
+		cout << "]: ";
+	}
+	cout << flush;
 	int c = 0;
 	int a = 0;
 	while (c != 10 && c != 13)	{
@@ -105,6 +122,10 @@ void TkCentralManager::Main() {
 	if (!line.IsEmpty()) {
 		dest = line;
 	}
+	/* TO DO: figure out how regex matcher works (this doesn't work) */
+	//if (!dest.MatchesRegEx("^sip:")) {
+	//	dest = "sip:" + dest;
+	//}
 
 	cout << endl;
 	
