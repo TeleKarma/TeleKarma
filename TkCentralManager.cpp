@@ -6,7 +6,6 @@
  *
  */
 
-#include "userconfig.h"
 #include <ptlib.h>
 #include <opal/buildopts.h>
 #include <string.h>
@@ -14,18 +13,22 @@
 #include <conio.h>
 #endif
 
+#include "userconfig.h"
 #include "TkCentralManager.h"
 //#include "TkCommandLineView.h"
 #include "TkOpalManager.h"
-#include "Timestamp.h"
 
 
 TkCentralManager::TkCentralManager() : PProcess("TeleKarma"), opal(NULL),
 		console(new PConsoleChannel(PConsoleChannel::StandardInput)) {
 	cout << "Welcome to TeleKarma!" << endl << endl;
-	PString logFName("log");
-	Timestamp::appendTo(logFName);
+
+	// create log filename
+	PTime now;
+	PString logFName("logs/log");
+	logFName += now.AsString("_yyyy.mm.dd_hh.mm.ss");
 	logFName += ".txt";
+
 	PTrace::Initialise(5, logFName);
 	PTRACE(3, "TkCentralManager constructed.");
 	state = 'x';
@@ -238,9 +241,13 @@ void TkCentralManager::Console() {
 			break;
 
 		case 'z':
-			recFName = "rec";
-			Timestamp::appendTo(recFName);
-			recFName += ".wav";
+			// create wav filename
+			{
+				PTime now;
+				recFName = "recordings/rec";
+				recFName += now.AsString("_yyyy.mm.dd_hh.mm.ss");
+				recFName += ".wav";
+			}
 			cout << ch << endl << opal->ToggleRecording(recFName) << endl;
 			break;
 
