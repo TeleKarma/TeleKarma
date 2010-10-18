@@ -51,12 +51,10 @@ class TelephonyIfc : public OpalManager {
 
 	protected:
 		PString currentCallToken;
-//		PString heldCallToken;
 		PString aor;
 		TkPCSSEndPoint * pcssEP;
 		SIPEndPoint * sipEP;
 		OpalIVREndPoint  * ivrEP;
-//		PSafePtr<OpalPCSSConnection> activeCall;
 
 		PSafePtr<OpalConnection> GetConnection(PSafePtr<OpalCall> call, bool user, PSafetyMode mode);
 

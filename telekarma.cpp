@@ -113,6 +113,7 @@ void TeleKarma::Main() {
 void TeleKarma::EnterState(int stateId)
 {
 	if (currentState == states[stateId]) return;
+	cout << "DEBUG: TeleKarma.EnterState(" << stateId << ")" << endl;
 	if (currentState != NULL) currentState->Exit();
 	currentState = states[stateId];
 	currentState->Enter();

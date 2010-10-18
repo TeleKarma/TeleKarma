@@ -77,7 +77,7 @@ void RegisterStateHandler::Enter() {
 	if (passwd.IsEmpty()) {
 		cout << ": ";
 	} else {
-		cout << "[";
+		cout << " [";
 		for (int i = 0; i < passwd.GetLength(); ++i) {
 			cout << "*";
 		}

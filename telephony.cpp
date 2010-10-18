@@ -80,6 +80,7 @@ void TelephonyIfc::Register(const PString & registrar, const PString & user, con
 	}
 }
 
+
 PBoolean TelephonyIfc::IsRegistered()
 {
 	return sipEP->IsRegistered(aor);
@@ -131,8 +132,7 @@ PBoolean TelephonyIfc::SendTone(const char tone) {
 
 PBoolean TelephonyIfc::StartCall(const PString & dest) {
 	if (!currentCallToken.IsEmpty() || dest.IsEmpty()) {
-		// cannot call while current call exists
-		// cannot call if there is a call on hold
+		// cannot call while on a call
 		// cannot call without specifying destination
 		return PFalse;
 	} else {
