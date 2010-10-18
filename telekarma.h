@@ -20,9 +20,6 @@
 /* How long to wait (in milliseconds) before exiting */
 #define EXIT_DELAY     1000
 
-/* Max number of unique DTMF tones to track */
-#define DTMF_TONE_MAX    20
-
 /* DTMF tone that signifies a human */
 #define IS_HUMAN_TONE    '1'
 
@@ -51,7 +48,7 @@ class TeleKarma : public PProcess {
 		void SetSpeakerVolume(int volume);
 		void ToggleRecording();
 		bool ToneReceived(char key, bool clear = true);
-		void OnReceiveTone(char key);
+//		void OnReceiveTone(char key);
 		void SendTone(char key);
 
 		// console I/O methods
@@ -63,8 +60,6 @@ class TeleKarma : public PProcess {
 		StateHandler * currentState;
 		StateHandler * states[STATE_COUNT];
 		TelephonyIfc * phone;
-		char tones[DTMF_TONE_MAX];
-		int nextTone;
 
 		// disabled assignment operator & copy constructor
 		TeleKarma & operator=(const TeleKarma & rhs);

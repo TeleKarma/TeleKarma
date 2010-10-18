@@ -18,6 +18,9 @@
 #error Cannot compile without PTLib sound channel support!
 #endif
 
+/* Max number of unique DTMF tones to track */
+#define DTMF_TONE_MAX    20
+
 class TkPCSSEndPoint;
 
 
@@ -41,17 +44,37 @@ class TelephonyIfc : public OpalManager {
 		virtual PBoolean HasActiveCall();
 		virtual PBoolean IsRegistered();
 
+		/**
+		 * Determines whether a DTMF tone has been received.
+		 * DTMF tones are queued, this checks queue and clears
+		 * it by default. Use clear = false to preserve the
+		 * queue, for example to check for one of multiple
+		 * keys of interest.
+		 */
+		bool ToneReceived(char key, bool clear = true);
+
 		virtual void OnEstablishedCall(OpalCall & call);
 		virtual void OnClearedCall(OpalCall & call);
 		virtual PBoolean OnOpenMediaStream(OpalConnection & connection, OpalMediaStream & stream);
 		//virtual void OnUserInputString(OpalConnection & connection,	const PString & value);
+
+		/**
+		 * Callback invoked when DTMF tone is detected.
+		 * Tones identified by a key (0-9, *, #). Array of
+		 * tones holds record of unique tones detected since
+		 * array was last cleared. This method populates
+		 * the array of tones.
+		 */
 		void OnUserInputTone(OpalConnection& connection, char tone, int duration);
+
 		void WaitForHuman();
 		void SendAudioFile(const PString & path);
 
 	protected:
 		PString callToken;
 		PString aor;
+		char tones[DTMF_TONE_MAX];
+		int nextTone;
 		TkPCSSEndPoint * pcssEP;
 		SIPEndPoint * sipEP;
 		OpalIVREndPoint  * ivrEP;

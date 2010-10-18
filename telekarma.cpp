@@ -33,11 +33,9 @@ using namespace std;
 TeleKarma::TeleKarma() :
 	PProcess("TeleKarma"),
 	phone(NULL),
-	currentState(NULL),
-	nextTone(0)
+	currentState(NULL)
 {
 	for (int i = 0; i < STATE_COUNT; ++i) states[i] = NULL;
-	for (int i = 0; i < DTMF_TONE_MAX; ++i) tones[i] = NULL;
 }
 
 
@@ -179,25 +177,7 @@ void TeleKarma::Disconnect()
  */
 bool TeleKarma::ToneReceived(char key, bool clear)
 {
-	bool r = false;
-	for (int i = 0; i < DTMF_TONE_MAX; ++i)
-		if (tones[i] == key) r = true;
-	if (clear)
-		for (int i = 0; i < DTMF_TONE_MAX; ++i)
-			tones[i] = NULL;
-	return r;
-}
-
-
-/** Add a DTMF tone to the array of received tones. */
-void TeleKarma::OnReceiveTone(char key)
-{
-	for (int i = 0; i < DTMF_TONE_MAX; ++i)
-		if (tones[i] == key) return;
-	tones[nextTone] = key;
-	++nextTone;
-	if (nextTone > DTMF_TONE_MAX)
-		nextTone = 0;
+	return phone->ToneReceived(key, clear);
 }
 
 

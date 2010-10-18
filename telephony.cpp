@@ -16,9 +16,10 @@ TelephonyIfc::TelephonyIfc() :
 	pcssEP(NULL), 
 	sipEP(NULL), 
 	ivrEP(NULL), 
-	aor(NULL)
+	aor(NULL),
+	nextTone(0)
 {
-
+	for (int i = 0; i < DTMF_TONE_MAX; ++i) tones[i] = NULL;
 }
 
 
@@ -252,10 +253,26 @@ PBoolean TelephonyIfc::OnOpenMediaStream(OpalConnection & connection, OpalMediaS
 void TelephonyIfc::WaitForHuman() {
 }
 
-void TelephonyIfc::OnUserInputTone(OpalConnection& connection, char tone,
-								int duration)
+void TelephonyIfc::OnUserInputTone(OpalConnection& connection, char tone, int duration)
 {
-	fprintf(stderr, "Tone %d pressed for %d.\n", tone, duration);
+	for (int i = 0; i < DTMF_TONE_MAX; ++i)
+		if (tones[i] == tone) return;
+	tones[nextTone] = tone;
+	++nextTone;
+	if (nextTone > DTMF_TONE_MAX)
+		nextTone = 0;
+}
+
+bool TelephonyIfc::ToneReceived(char key, bool clear)
+{
+	/* TO GO - clear array upon disconnect */
+	bool r = false;
+	for (int i = 0; i < DTMF_TONE_MAX; ++i)
+		if (tones[i] == key) r = true;
+	if (clear)
+		for (int i = 0; i < DTMF_TONE_MAX; ++i)
+			tones[i] = NULL;
+	return r;
 }
 
 PSafePtr<OpalConnection> TelephonyIfc::GetConnection(PSafePtr<OpalCall> call, bool user, PSafetyMode mode)
