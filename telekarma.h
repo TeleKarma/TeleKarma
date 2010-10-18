@@ -49,7 +49,7 @@ class TeleKarma : public PProcess {
 		void PlayWAV(const PString & src, bool onConnection = true, bool onSpeakers = true);		// details to go
 		void SetMicVolume(int volume);
 		void SetSpeakerVolume(int volume);
-		void TeleKarma::ToggleRecording();
+		void ToggleRecording();
 		bool ToneReceived(char key, bool clear = true);
 		void OnReceiveTone(char key);
 		void SendTone(char key);
