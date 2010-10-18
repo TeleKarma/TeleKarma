@@ -23,7 +23,13 @@
 #define STATE_COUNT       9
 
 /* How many times to call RegisterStateHandler.In() before failing */
-#define REG_ITER_LIMIT 100
+#define REG_ITER_LIMIT  100
+
+/* How long to wait between playing hold & autohold messages */
+#define PAUSE_TIME     4000
+
+/* How many iterations that comes out to... */
+#define PAUSE_ITER_LIMIT    (PAUSE_TIME/SLEEP_DURATION)
 
 class TeleKarma;
 
@@ -160,6 +166,7 @@ class AutoHoldStateHandler : public StateHandler
 		AutoHoldStateHandler(const AutoHoldStateHandler & orig);
 		AutoHoldStateHandler & operator=(const AutoHoldStateHandler & rhs);
 		PStringStream menu;
+		int iterCount;
 
 };
 

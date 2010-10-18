@@ -268,11 +268,17 @@ PString TeleKarma::DisconnectReason()
 }
 
 
-bool TeleKarma::IsPlayingWAV()
+bool TeleKarma::IsPlayingWAV(bool onLine, bool onSpeakers)
 {
-	// TO GO
-	cerr << "Unimplemented: TeleKarma.IsPlayingWAV()" << endl;
-	return false;
+	if (onLine && onSpeakers) {
+		return false;	// TO GO, since we currently don't play WAVs over speaker
+	} else if (onLine) {
+		return (phone != NULL && phone->InIVRMode());
+	} else if (onSpeakers) {
+		return false;	// TO GO, since we currently don't play WAVs over speaker
+	} else {
+		return false;
+	}
 }
 
 void TeleKarma::SetMicVolume(int volume)

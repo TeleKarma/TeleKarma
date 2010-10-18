@@ -20,7 +20,8 @@ TelephonyIfc::TelephonyIfc() :
 	nextTone(0),
 	dialing(false),
 	connected(false),
-	why(NULL)
+	why(""),
+	ivrMode(PFalse)
 {
 	for (int i = 0; i < DTMF_TONE_MAX; ++i) tones[i] = NULL;
 }
@@ -189,6 +190,7 @@ PBoolean TelephonyIfc::Disconnect()
 void TelephonyIfc::OnClearedCall(OpalCall & call)
 {
 	dialing = false;
+	connected = false;
 	if (callToken == call.GetToken()) callToken.MakeEmpty();
 	PString remoteName = call.GetPartyB();
 	//bool printTime = false;
@@ -261,24 +263,25 @@ PBoolean TelephonyIfc::OnOpenMediaStream(OpalConnection & connection, OpalMediaS
 	if (!OpalManager::OnOpenMediaStream(connection, stream)) {
 		return PFalse;
 	}
-
 	PCaselessString prefix = connection.GetEndPoint().GetPrefixName();
-	if (prefix == "pc" || prefix == "pots")
-		PTRACE(3, "Started" << (stream.IsSink() ? "playing " : "grabbing ") << stream.GetMediaFormat());
-	else if (prefix == "ivr")
-		PTRACE(3, "Started" << (stream.IsSink() ? "streaming " : "recording ") << stream.GetMediaFormat());
-	else
+	if (prefix == "pc" || prefix == "pots") {
+		PTRACE(3, "Started " << (stream.IsSink() ? "playing " : "grabbing ") << stream.GetMediaFormat());
+		ivrMode = PFalse;
+	} else if (prefix == "ivr") {
+		PTRACE(3, "Started " << (stream.IsSink() ? "streaming " : "recording ") << stream.GetMediaFormat());
+		ivrMode = PTrue;
+	} else {
 		PTRACE(3, "Started" << (stream.IsSink() ? "sending " : "receiving ") << stream.GetMediaFormat()
 	 		 << (stream.IsSink() ? " to " : " from ")<< prefix);
+	}
 
 	return PTrue;
 }
 
-void TelephonyIfc::WaitForHuman() {
-}
 
 void TelephonyIfc::OnUserInputTone(OpalConnection& connection, char tone, int duration)
 {
+	//cerr << endl << "*** User tone received: " << tone << endl << flush;
 	for (int i = 0; i < DTMF_TONE_MAX; ++i)
 		if (tones[i] == tone) return;
 	tones[nextTone] = tone;
@@ -286,6 +289,7 @@ void TelephonyIfc::OnUserInputTone(OpalConnection& connection, char tone, int du
 	if (nextTone > DTMF_TONE_MAX)
 		nextTone = 0;
 }
+
 
 bool TelephonyIfc::ToneReceived(char key, bool clear)
 {
@@ -313,21 +317,6 @@ PSafePtr<OpalConnection> TelephonyIfc::GetConnection(PSafePtr<OpalCall> call, bo
 
 void TelephonyIfc::SendAudioFile(const PString & path)
 {
-	
-	PTRACE(3, "******************************************************************");
-	PTRACE(3, "******************************************************************");
-	PTRACE(3, "******************************************************************");
-	PTRACE(3, "******************************************************************");
-	PTRACE(3, "******************************************************************");
-	PTRACE(3, "******************************************************************");
-	PTRACE(3, "******************************************************************");
-	PTRACE(3, "******************************************************************");
-	PTRACE(3, "******************************************************************");
-	PTRACE(3, "******************************************************************");
-	PTRACE(3, "******************************************************************");
-	PTRACE(3, "******************************************************************");
-	PTRACE(3, "******************************************************************");
-	PTRACE(3, path);
 
 	PSafePtr<OpalCall> call = FindCallWithLock(callToken);
 	if (call == NULL) {
@@ -353,9 +342,16 @@ void TelephonyIfc::SendAudioFile(const PString & path)
 
 	if (!call->Transfer(ivrXML, connection))
 		PTRACE(3, "Failed to send WAV file.");
+	else
+		ivrMode = PTrue;
 
 	/* TO GO: also play over speakers; use the PSoundChannel classes from PTLib */
 
+}
+
+PBoolean TelephonyIfc::InIVRMode()
+{
+	return ivrMode;
 }
 
 // End of File ///////////////////////////////////////////////////////////////

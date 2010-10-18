@@ -409,7 +409,9 @@ void HoldStateHandler::Exit()
 //
 
 /** ... */
-AutoHoldStateHandler::AutoHoldStateHandler(TeleKarma & tk) : StateHandler(tk)
+AutoHoldStateHandler::AutoHoldStateHandler(TeleKarma & tk) : 
+	StateHandler(tk),
+	iterCount(0)
 {
 	menu << "Select:" << endl;
 //	menu << "  z   : Toggle recording" << endl;
@@ -426,6 +428,9 @@ AutoHoldStateHandler::~AutoHoldStateHandler() { }
 /** ... */
 void AutoHoldStateHandler::Enter()
 {
+	// clear the queue of received dtmf tones (slightly hacky)
+	tk->ToneReceived('0', true);
+	//cerr << endl << "DEBUG: Wait " << PAUSE_ITER_LIMIT << " between cycles." << endl;
 	cout << menu << "Command? " << flush;
 }
 
@@ -436,7 +441,7 @@ void AutoHoldStateHandler::In()
 		cout << endl;
 		PString why = tk->DisconnectReason();
 		if (why != NULL && !why.IsEmpty()) {
-			cout << why << endl << endl << flush;
+			cout << "Call ended." << endl << why << endl << endl << flush;
 		} else {
 			cout << "Call ended for unknown reasons." << endl << endl << flush;
 		}
@@ -446,9 +451,29 @@ void AutoHoldStateHandler::In()
 		// tk->PlayWav("src", false, true);
 		cout << endl;
 		cout << "ALERT: Human auto-detected; call retrieved & active." << endl << flush;
+		// TO GO: actually return to PCSS mode
 		tk->EnterState(CONNECTED);
 	} else {
+		if (iterCount == 0) {
+			// play IVR
+			tk->PlayWAV(AUTO_HOLD_WAV);
+			++iterCount;
+		} else {
+			if (!tk->IsPlayingWAV()) {
+				++iterCount;
+				/*
+				if (iterCount % 10 == 0) {
+					PTime now;
+					cerr << "DEBUG: iterCount = " << iterCount << " of max " << PAUSE_ITER_LIMIT << " at " << setprecision(0) << setw(2) << now.GetSecond() << ":" << setw(5) << now.GetMicrosecond() << endl;
+				}
+				*/
+			} else {
+				//cerr << endl << "DEBUG: Play WAV." << endl;
+			}
+			if (iterCount > PAUSE_ITER_LIMIT) iterCount = 0;
+		}
 		char ch = tk->GetChar();
+		if (ch == 0) return;
 		PTRACE(3, "User command in AutoHold state: " << ch);
 		switch (ch) {
 			case 'x':
@@ -462,6 +487,7 @@ void AutoHoldStateHandler::In()
 				break;
 			case 'r':
 				cout << endl;
+				// TO GO... haven't actually transferred away from IVR
 				tk->EnterState(CONNECTED);
 				break;
 			case 'm':

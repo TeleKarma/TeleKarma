@@ -23,6 +23,12 @@
 /* DTMF tone that signifies a human */
 #define IS_HUMAN_TONE    '1'
 
+/* Auto Hold WAV file */
+#define AUTO_HOLD_WAV   "\\TeleKarma\\test.wav"
+
+/* Regular Hold WAV file */
+#define HOLD_WAV        "\\TeleKarma\\test.wav"
+
 
 class TeleKarma : public PProcess {
 
@@ -43,7 +49,7 @@ class TeleKarma : public PProcess {
 		bool IsConnected();
 		PString DisconnectReason();
 		/* TO GO the following methods are not finished */
-		bool IsPlayingWAV();	
+		bool IsPlayingWAV(bool onLine = true, bool onSpeakers = false);	
 		void PlayWAV(const PString & src, bool onConnection = true, bool onSpeakers = true);		// details to go
 		void SetMicVolume(int volume);
 		void SetSpeakerVolume(int volume);

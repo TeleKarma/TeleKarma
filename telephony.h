@@ -97,6 +97,11 @@ class TelephonyIfc : public OpalManager {
 		 */
 		PString DisconnectReason();
 
+		/**
+		 * Callback invoked when a media stream is opened for
+		 * reading or playing. Used to detect end of IVR 
+		 * mode.
+		 */
 		PBoolean OnOpenMediaStream(OpalConnection & connection, OpalMediaStream & stream);
 
 		/**
@@ -108,18 +113,24 @@ class TelephonyIfc : public OpalManager {
 		 */
 		void OnUserInputTone(OpalConnection& connection, char tone, int duration);
 
-		void WaitForHuman();
-
 		/**
 		 * Transmit a WAV file to the remote party.
 		 */
 		void SendAudioFile(const PString & path);
+
+		/**
+		 * Determine whether the connection is in IVR mode
+		 * or PC mode. IVR mode is active when playing a 
+		 * WAV file over the connection.
+		 */
+		PBoolean InIVRMode();
 
 	protected:
 		PString callToken;
 		PString aor;
 		bool dialing;
 		bool connected;
+		PBoolean ivrMode;
 		PString why;	// describes why call was disconnected
 		char tones[DTMF_TONE_MAX];
 		int nextTone;
