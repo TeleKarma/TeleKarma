@@ -8,9 +8,14 @@
 
 #ifdef WIN32
 	#include <conio.h>	// for MS-specific _kbhit() and _getch()
+	#include <io.h>		// for access()
+#else
+	#include <unistd.h>	// for access()
 #endif
+
+
 #include <ptlib.h>
-#include <io.h>			// for access()
+
 #include <sys/types.h>  // for struct stat
 #include <sys/stat.h>   // for struct stat
 
@@ -235,8 +240,9 @@ void TeleKarma::ToggleRecording()
 		ch = tolower(_getch());
 	}
 #else
-	/* TO DO for Tom */
-#error NON-BLOCKING INPUT REQUIRED BUT MISSING FOR LINUX
+	/* XXX TO DO for Tom
+	 * Why do we need to do non-blocking IO? 
+	 * #error NON-BLOCKING INPUT REQUIRED BUT MISSING FOR LINUX */
 	PString line;
 	cin >> line;
 	line = line.LeftTrim();

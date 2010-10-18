@@ -1,4 +1,4 @@
-CXXFLAGS=-I/usr/local/include/opal
+CXXFLAGS=-I/usr/local/include/opal -g
 CPPFLAGS=-D__LINUX__ -DDISABLE_VIDEO
 
 telekarma: main.o pcss.o sip.o state.o telekarma.o telephony.o
