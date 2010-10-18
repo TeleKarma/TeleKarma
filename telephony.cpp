@@ -17,7 +17,10 @@ TelephonyIfc::TelephonyIfc() :
 	sipEP(NULL), 
 	ivrEP(NULL), 
 	aor(NULL),
-	nextTone(0)
+	nextTone(0),
+	dialing(false),
+	connected(false),
+	why(NULL)
 {
 	for (int i = 0; i < DTMF_TONE_MAX; ++i) tones[i] = NULL;
 }
@@ -25,7 +28,7 @@ TelephonyIfc::TelephonyIfc() :
 
 TelephonyIfc::~TelephonyIfc()
 {
-	if (!callToken.IsEmpty()) EndCurrentCall();
+	if (!callToken.IsEmpty()) Disconnect();
 	Unregister();
 }
 
@@ -131,105 +134,126 @@ PBoolean TelephonyIfc::SendTone(const char tone) {
 }
 
 
-PBoolean TelephonyIfc::StartCall(const PString & dest) {
+PBoolean TelephonyIfc::Dial(const PString & dest)
+{
 	if (!callToken.IsEmpty() || dest.IsEmpty()) {
 		// cannot call while on a call
 		// cannot call without specifying destination
 		return PFalse;
 	} else {
+		connected = true;
+		dialing = true;
+		why = NULL;
 		return SetUpCall("pc:*", dest, callToken);
 	}
 }
 
+PBoolean TelephonyIfc::IsDialing()
+{
+	return dialing;
+}
+
+
+void TelephonyIfc::OnEstablishedCall(OpalCall & call)
+{
+	dialing = false;
+	connected = true;
+	callToken = call.GetToken();
+}
+
+
+PBoolean TelephonyIfc::IsConnected()
+{
+	return connected;
+}
+
 
 /** Disconnect the call currently in progress */
-PBoolean TelephonyIfc::EndCurrentCall() {
+PBoolean TelephonyIfc::Disconnect()
+{
+	dialing = false;
+	connected = false;
 	PSafePtr<OpalCall> call = FindCallWithLock(callToken);
 	if (call == NULL) {
 		// no call in progress
 		return PFalse;
 	} else {
-		if (IsRecording(callToken)) {
+		if (IsRecording(callToken))
 			StopRecording(callToken);
-		}
 		call->Clear();
 		return PTrue;
 	}
 }
 
-PBoolean TelephonyIfc::HasActiveCall() {
-	return (callToken.IsEmpty()) ? PFalse : PTrue;
-}
 
-
-void TelephonyIfc::OnEstablishedCall(OpalCall & call) {
-	callToken = call.GetToken();
-}
-
-
-void TelephonyIfc::OnClearedCall(OpalCall & call) {
-	if (callToken == call.GetToken())
-		callToken.MakeEmpty();
+void TelephonyIfc::OnClearedCall(OpalCall & call)
+{
+	dialing = false;
+	if (callToken == call.GetToken()) callToken.MakeEmpty();
 	PString remoteName = call.GetPartyB();
-	bool printTime = true;
+	//bool printTime = false;
 	switch (call.GetCallEndReason()) {
 	case OpalConnection::EndedByRemoteUser :
-		cout << endl << remoteName << " has ended the call";
+		why = remoteName + " has ended the call";
 		break;
 	case OpalConnection::EndedByCallerAbort :
-		cout << endl << remoteName << " has hung up";
+		why = remoteName + " has hung up";
 		break;
 	case OpalConnection::EndedByRefusal :
-		cout << endl << remoteName << " did not accept your call";
+		why = remoteName + " did not accept your call";
 		break;
 	case OpalConnection::EndedByNoAnswer :
-		cout << endl << remoteName << " did not answer your call";
+		why = remoteName + " did not answer your call";
 		break;
 	case OpalConnection::EndedByTransportFail :
-		cout << endl << "Call with " << remoteName << " ended abnormally";
+		why = remoteName + "Call with " + remoteName + " ended abnormally";
 		break;
 	case OpalConnection::EndedByCapabilityExchange :
-		cout << endl << "Could not find common codec with " << remoteName;
+		why = remoteName + "Could not find common codec with " + remoteName;
 		break;
 	case OpalConnection::EndedByNoAccept :
-		cout << endl << "Did not accept incoming call from " << remoteName;
+		why = remoteName + "Did not accept incoming call from " + remoteName;
 		break;
 	case OpalConnection::EndedByAnswerDenied :
-		cout << endl << "Refused incoming call from " << remoteName;
+		why = remoteName +  "Refused incoming call from " + remoteName;
 		break;
 	case OpalConnection::EndedByNoUser :
-		cout << endl << "Gatekeeper or registrar could not find user " << remoteName;
+		why = remoteName + "Gatekeeper or registrar could not find user " + remoteName;
 		break;
 	case OpalConnection::EndedByNoBandwidth :
-		cout << endl << "Call to " << remoteName << " aborted, insufficient bandwidth";
+		why = remoteName + "Call to " + remoteName + " aborted, insufficient bandwidth";
 		break;
 	case OpalConnection::EndedByUnreachable :
-		cout << endl << remoteName << " could not be reached";
+		why = remoteName + remoteName + " could not be reached";
 		break;
 	case OpalConnection::EndedByNoEndPoint :
-		cout << endl << "No phone running for " << remoteName;
+		why = remoteName + "No phone running for " + remoteName;
 		break;
 	case OpalConnection::EndedByHostOffline :
-		cout << endl << remoteName << " is not online";
+		why = remoteName + remoteName + " is not online";
 		break;
 	case OpalConnection::EndedByConnectFail :
-		cout << endl << "Transport error calling " << remoteName;
+		why = remoteName + "Transport error calling " + remoteName;
 		break;
 	default :
-		printTime = false;
-		//cout << endl << "Call with " << remoteName << " completed";
+		//printTime = false;
+		why = remoteName + "Call with " + remoteName + " completed";
 	}
+	/*
 	if (printTime) {
 		PTime now;
 		cout << ", on " << now.AsString("w h:mma") << ". Duration "
 			<< setprecision(0) << setw(5) << (now - call.GetStartTime())
 			<< "s." << endl;
 	}
-	/* original code - replaced with switch and timestamp above
-	cout << "Call with " << remoteName << " has ended because "
-						<< call.GetCallEndReasonText();
 	*/
 	OpalManager::OnClearedCall(call);
+}
+
+
+PString TelephonyIfc::DisconnectReason()
+{
+	return why;
 }
 
 

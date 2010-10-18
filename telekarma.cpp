@@ -111,7 +111,7 @@ void TeleKarma::Main() {
 void TeleKarma::EnterState(int stateId)
 {
 	if (currentState == states[stateId]) return;
-	cout << "DEBUG: TeleKarma.EnterState(" << stateId << ")" << endl;
+	PTRACE(3, "DEBUG: TeleKarma.EnterState(" << stateId << ")");
 	if (currentState != NULL) currentState->Exit();
 	currentState = states[stateId];
 	currentState->Enter();
@@ -127,13 +127,13 @@ void TeleKarma::Initialize(const PString & stun, const PString & user)
 
 
 /** Output STUN type identification message. */
-void TeleKarma::IdentifySTUNType()
+PString TeleKarma::GetSTUNType()
 {
 	PSTUNClient * stunClient = phone->GetSTUNClient();
 	if (stunClient != NULL) {
-		cout << "STUN client type is '" << stunClient->GetNatTypeName() << "'." << endl;
+		return stunClient->GetNatTypeName();
 	} else {
-		cout << "Not using a STUN client." << endl;
+		return "none";
 	}
 }
 
@@ -144,7 +144,7 @@ void TeleKarma::IdentifySTUNType()
  */
 void TeleKarma::Register(const PString & registrar, const PString & user, const PString & password)
 {
-	phone->Register(registrar, user, password);
+	if (phone != NULL) phone->Register(registrar, user, password);
 }
 
 
@@ -160,14 +160,14 @@ bool TeleKarma::IsRegistered()
 /** Dial the indicated SIP address. Format sipAddr as sip:user@domain. */
 void TeleKarma::Dial(const PString & sipAddr)
 {
-	phone->StartCall(sipAddr);
+	if (phone != NULL) phone->Dial(sipAddr);
 }
 
 
 /** Disconnect the current call. */
 void TeleKarma::Disconnect()
 {
-	phone->EndCurrentCall();
+	if (phone != NULL) phone->Disconnect();
 }
 
 
@@ -177,21 +177,23 @@ void TeleKarma::Disconnect()
  */
 bool TeleKarma::ToneReceived(char key, bool clear)
 {
-	return phone->ToneReceived(key, clear);
+	if (phone != NULL)
+		return phone->ToneReceived(key, clear);
+	return false;
 }
 
 
 /** Play a DTMF tone over phone connection. */
 void TeleKarma::SendTone(char key)
 {
-	phone->SendTone(key);
+	if (phone != NULL) phone->SendTone(key);
 }
 
 
 /** Play a WAV file over phone connection. */
 void TeleKarma::PlayWAV(const PString & filename, bool onLine, bool onSpeaker)
 {
-	if (onLine)	phone->SendAudioFile(filename);
+	if (phone != NULL && onLine) phone->SendAudioFile(filename);
 //	if (onSpeaker) // TO GO
 }
 
@@ -249,31 +251,39 @@ void TeleKarma::Space(int n)
 
 bool TeleKarma::IsDialing()
 {
-	cerr << "Unimplemented: TeleKarma.IsDialing()" << endl;
+	if (phone != NULL) return phone->IsDialing();
 	return false;
 }
 
 bool TeleKarma::IsConnected()
 {
-	cerr << "Unimplemented: TeleKarma.IsConnected()" << endl;
+	if (phone != NULL) return phone->IsConnected();
 	return false;
 }
 
-//UNKNOWN_TYPE GetConnectionState();
+PString TeleKarma::DisconnectReason()
+{
+	if (phone != NULL) return phone->DisconnectReason();
+	return NULL;
+}
+
 
 bool TeleKarma::IsPlayingWAV()
 {
+	// TO GO
 	cerr << "Unimplemented: TeleKarma.IsPlayingWAV()" << endl;
 	return false;
 }
 
 void TeleKarma::SetMicVolume(int volume)
 {
+	// TO GO
 	cerr << "Unimplemented: TeleKarma.SetMicVolume()" << endl;
 }
 
 void TeleKarma::SetSpeakerVolume(int volume)
 {
+	// TO GO
 	cerr << "Unimplemented: TeleKarma.SetSpeakerVolume()" << endl;
 }
 

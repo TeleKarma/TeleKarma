@@ -16,14 +16,17 @@ StateHandler::~StateHandler() { }
 void StateHandler::Enter()
 {
 	cerr << endl << "Something has gone dreadfully wrong (StateHandler::Enter)." << endl;
+	exit(1);
 }
 void StateHandler::In()
 {
 	cerr << endl << "Something has gone dreadfully wrong (StateHandler::IN)." << endl;
+	exit(1);
 }
 void StateHandler::Exit()
 {
 	cerr << endl << "Something has gone dreadfully wrong (StateHandler::Exit)." << endl;
+	exit(1);
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -104,7 +107,9 @@ void RegisterStateHandler::Enter() {
 		c = getchar();
 #endif
 	}
-	cout << endl << flush;
+	cout << endl;
+	cout << "-------------------------------------------------------------" << endl;
+	cout << flush;
 
 	/*
 	cout << "=============================================================" << endl;
@@ -118,9 +123,10 @@ void RegisterStateHandler::Enter() {
 	cout << "Initializing telephony system... (this may take a moment)" << flush;
 	tk->Initialize(stunServer, user);
 	tk->Backspace(24);
-	cout << "done." << endl;
+	cout << "done.";
 	tk->Space(19);
-	tk->IdentifySTUNType();
+	cout << endl;
+	cout << "Identifying STUN client type... " << tk->GetSTUNType() << "." << endl;
 	cout << flush;
 	
 	// Initiate registration (non-blocking)
@@ -132,7 +138,9 @@ void RegisterStateHandler::In() {
 	++iterCount;
 	if (tk->IsRegistered()) {
 		// registration succeeded
-		cout << " done." << endl << flush;
+		cout << " done." << endl;
+		cout << "-------------------------------------------------------------" << endl;
+		cout << flush;
 		tk->EnterState(DIAL);
 	} else if (iterCount > REG_ITER_LIMIT) {
 		// registration failed
@@ -169,10 +177,10 @@ void MenuStateHandler::In()
 	char ch = tk->GetChar();
 	PTRACE(3, "User command in Menu state: " << ch);
 	if (ch == 'q') {
-		cout << endl << flush;
+		cout << endl << endl << flush;
 		tk->EnterState(EXIT);
 	} else if (ch == 'c') {
-		cout << endl << flush;
+		cout << endl << endl << flush;
 		tk->EnterState(DIAL);
 	}
 }
@@ -195,7 +203,7 @@ void DialStateHandler::Enter() {
 	PString line;
 
 	// obtain SIP address to call
-	cout << "Enter an SIP address [" << dest << "]: " << flush;
+	cout << "Enter SIP address [" << dest << "]: " << flush;
 	cin >> line;
 	line = line.Trim();
 	if (!line.IsEmpty()) dest = line;
@@ -203,16 +211,36 @@ void DialStateHandler::Enter() {
 	//if (!dest.MatchesRegEx("^sip:")) {
 	//	dest = "sip:" + dest;
 	//}
-	cout << endl << flush;
+	cout << endl;
+	cout << "-------------------------------------------------------------" << endl;
+	cout << "Dialing... " << flush;
 
 	// attempt to call the provided SIP address (non-blocking)
 	tk->Dial(dest);
+
 }
 
 /** ... */
 void DialStateHandler::In() {
-	// TO GO perform call state detection
-	// Present disconnect & quit options?
+	if (tk->IsConnected()) {
+		// pending call has connected
+		cout << "connected." << endl << endl << flush;
+		tk->EnterState(CONNECTED);
+	} else if (!tk->IsDialing()) {
+		// pending call was cleared
+		PString why = tk->DisconnectReason();
+		if (why != NULL && !why.IsEmpty()) {
+			cout << "failed to connect." << endl;
+			cout << why << endl << endl << flush;
+		} else {
+			cout << "failed to connect." << endl;
+			cout << "Call failed for unknown reasons." << endl << endl << flush;
+		}
+		tk->EnterState(MENU);
+	} else {
+		// TO GO
+		// Present disconnect & quit options?
+	}
 }
 
 /** ... */
@@ -255,7 +283,13 @@ void ConnectedStateHandler::In()
 {
 	if (!tk->IsConnected()) {
 		cout << endl;
-		cout << "Connection terminated by remote party." << endl;
+		PString why = tk->DisconnectReason();
+		if (why != NULL && !why.IsEmpty()) {
+			cout << "Call ended." << endl;
+			cout << why << endl << endl << flush;
+		} else {
+			cout << "Call ended for unknown reasons." << endl << endl << flush;
+		}
 		tk->EnterState(MENU);
 	} else {
 		char ch = tk->GetChar();
@@ -333,7 +367,12 @@ void HoldStateHandler::In()
 {
 	if (!tk->IsConnected()) {
 		cout << endl;
-		cout << "Connection terminated by remote party." << endl;
+		PString why = tk->DisconnectReason();
+		if (why != NULL && !why.IsEmpty()) {
+			cout << why << endl << endl << flush;
+		} else {
+			cout << "Call ended for unknown reasons." << endl << endl << flush;
+		}
 		tk->EnterState(MENU);
 	} else {
 		char ch = tk->GetChar();
@@ -401,7 +440,12 @@ void AutoHoldStateHandler::In()
 {
 	if (!tk->IsConnected()) {
 		cout << endl;
-		cout << "Connection terminated by remote party." << endl;
+		PString why = tk->DisconnectReason();
+		if (why != NULL && !why.IsEmpty()) {
+			cout << why << endl << endl << flush;
+		} else {
+			cout << "Call ended for unknown reasons." << endl << endl << flush;
+		}
 		tk->EnterState(MENU);
 	} else if (tk->ToneReceived(IS_HUMAN_TONE)) {
 		// TO GO: play alarm WAV
@@ -478,7 +522,12 @@ void MuteAutoHoldStateHandler::In()
 {
 	if (!tk->IsConnected()) {
 		cout << endl;
-		cout << "Connection terminated by remote party." << endl;
+		PString why = tk->DisconnectReason();
+		if (why != NULL && !why.IsEmpty()) {
+			cout << why << endl << endl << flush;
+		} else {
+			cout << "Call ended for unknown reasons." << endl << endl << flush;
+		}
 		tk->EnterState(MENU);
 	} else if (tk->ToneReceived(IS_HUMAN_TONE)) {
 		// TO GO: play alarm WAV

@@ -34,14 +34,14 @@ class TeleKarma : public PProcess {
 		void Main();
 		void EnterState(int stateId);
 		void Initialize(const PString & stun, const PString & user);
-		void IdentifySTUNType();
+		PString GetSTUNType();
 		void Register(const PString & registrar, const PString & user, const PString & password);
 		void Dial(const PString & destination);
 		void Disconnect();
 		bool IsRegistered();
 		bool IsDialing();
 		bool IsConnected();
-		//UNKNOWN_TYPE GetConnectionState();
+		PString DisconnectReason();
 		bool IsPlayingWAV();
 		void PlayWAV(const PString & src, bool onConnection = true, bool onSpeakers = true);		// details to go
 		void SetMicVolume(int volume);
@@ -49,7 +49,8 @@ class TeleKarma : public PProcess {
 		void ToggleRecording();
 		bool ToneReceived(char key, bool clear = true);
 		void SendTone(char key);
-
+/* TO GO - don't have a cleanup method to be called from EXIT state */
+/*         needs to disconnect and un-register... or is that deconstructor-based? */
 		// console I/O methods
 		char GetChar();
 		void Backspace(int n);
