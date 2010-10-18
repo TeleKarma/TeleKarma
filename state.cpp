@@ -118,8 +118,8 @@ void RegisterStateHandler::Enter() {
 	cout << "Initializing telephony system... (this may take a moment)" << flush;
 	tk->Initialize(stunServer, user);
 	tk->Backspace(24);
-	tk->Space(19);
 	cout << "done." << endl;
+	tk->Space(19);
 	tk->IdentifySTUNType();
 	cout << flush;
 	

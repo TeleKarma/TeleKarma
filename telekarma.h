@@ -48,7 +48,6 @@ class TeleKarma : public PProcess {
 		void SetSpeakerVolume(int volume);
 		void ToggleRecording();
 		bool ToneReceived(char key, bool clear = true);
-//		void OnReceiveTone(char key);
 		void SendTone(char key);
 
 		// console I/O methods
