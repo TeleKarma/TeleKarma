@@ -1,12 +1,12 @@
 /*
  *
- * TkSIPEndPoint.cpp
+ * sip.cpp
  *
  * The TeleKarma SIP VoIP call end point component.
  *
  */
 
-#include "TkSIPEndPoint.h"
+#include "sip.h"
 
 
 TkSIPEndPoint::TkSIPEndPoint(OpalManager & manager) : SIPEndPoint(manager) {

@@ -1,13 +1,13 @@
 /*
  *
- * TkOpalManager.h
+ * telephony.h
  *
- * The TeleKarma OpalManager component.
+ * The TeleKarma OpalManager (TelephonyIfc) component.
  *
  */
 
-#ifndef _TKOPALMANAGER_H_
-#define _TKOPALMANAGER_H_
+#ifndef _TELEPHONY_H_
+#define _TELEPHONY_H_
 
 #include <opal/manager.h>
 #include <opal/pcss.h>
@@ -21,16 +21,16 @@
 class TkPCSSEndPoint;
 
 
-class TkOpalManager : public OpalManager {
+class TelephonyIfc : public OpalManager {
 
-	PCLASSINFO(TkOpalManager, OpalManager);
+	PCLASSINFO(TelephonyIfc, OpalManager);
 
 	public:
-		TkOpalManager();
-		virtual ~TkOpalManager();
+		TelephonyIfc();
+		virtual ~TelephonyIfc();
 
 		void Initialise(const PString & stunAddr, const PString & user);
-		virtual PBoolean Register(const PString & registrar, const PString & user, const PString & passwd, const PString & domain = "n/a");
+		virtual void Register(const PString & registrar, const PString & user, const PString & passwd);
 		virtual PBoolean StartCall(const PString & ostr);
 		virtual PBoolean SendTone(const char tone);
 		// fix return value later... need tri-state return value
@@ -39,12 +39,13 @@ class TkOpalManager : public OpalManager {
 		virtual PBoolean Unregister();
 		/** True if there is an active (not holding) call. */
 		virtual PBoolean HasActiveCall();
+		virtual PBoolean IsRegistered();
 
 		virtual void OnEstablishedCall(OpalCall & call);
 		virtual void OnClearedCall(OpalCall & call);
 		virtual PBoolean OnOpenMediaStream(OpalConnection & connection, OpalMediaStream & stream);
 		//virtual void OnUserInputString(OpalConnection & connection,	const PString & value);
-		void TkOpalManager::OnUserInputTone(OpalConnection& connection, char tone, int duration);
+		void OnUserInputTone(OpalConnection& connection, char tone, int duration);
 		void WaitForHuman();
 		void SendAudioFile(const PString & path);
 
@@ -62,6 +63,7 @@ class TkOpalManager : public OpalManager {
 };
 
 
-#endif // _TKOPALMANAGER_H_
+#endif // _TELEPHONY_H_
+
 
 // End of File ///////////////////////////////////////////////////////////////

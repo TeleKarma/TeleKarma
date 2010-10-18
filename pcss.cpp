@@ -1,6 +1,6 @@
 /*
  *
- * TkPCSSEndPoint.cpp
+ * pcsst.cpp
  *
  * TeleKarma's extension of Opal's OpalPCSSEndPoint.
  *
@@ -10,11 +10,11 @@
 #include <ptlib.h>
 #include <sip/sip.h>
 
-#include "TkPCSSEndPoint.h"
-#include "TkOpalManager.h"
+#include "pcss.h"
+#include "telephony.h"
 
 
-TkPCSSEndPoint::TkPCSSEndPoint(TkOpalManager & mgr) : OpalPCSSEndPoint(mgr) { }
+TkPCSSEndPoint::TkPCSSEndPoint(TelephonyIfc & mgr) : OpalPCSSEndPoint(mgr) { }
 
 
 PBoolean TkPCSSEndPoint::OnShowIncoming(const OpalPCSSConnection & connection) {

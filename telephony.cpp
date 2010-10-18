@@ -1,18 +1,18 @@
 /*
  *
- * TkOpalManager.cpp
+ * telephony.cpp
  *
- * The TeleKarma OpalManager component.
+ * The Telephony API interface component.
  *
  */
 
-#include "TkOpalManager.h"
-#include "TkPCSSEndPoint.h"
-#include "TkSIPEndPoint.h"
+#include "telephony.h"
+#include "pcss.h"
+#include "sip.h"
 #include <opal/ivr.h>
 
 
-TkOpalManager::TkOpalManager() :
+TelephonyIfc::TelephonyIfc() :
 	pcssEP(NULL), 
 	sipEP(NULL), 
 	ivrEP(NULL), 
@@ -22,15 +22,14 @@ TkOpalManager::TkOpalManager() :
 }
 
 
-TkOpalManager::~TkOpalManager()
+TelephonyIfc::~TelephonyIfc()
 {
-	if (!currentCallToken.IsEmpty())
-		EndCurrentCall();
+	if (!currentCallToken.IsEmpty()) EndCurrentCall();
 	Unregister();
 }
 
 
-void TkOpalManager::Initialise(const PString & stunAddr, const PString & user)
+void TelephonyIfc::Initialise(const PString & stunAddr, const PString & user)
 {
 
 	///////////////////////////////////////
@@ -42,9 +41,9 @@ void TkOpalManager::Initialise(const PString & stunAddr, const PString & user)
 #endif
 
 	///////////////////////////////////////
-	// STUN Server
+	// Optionally set STUN Server
 
-	SetSTUNServer(stunAddr);
+	if (!stunAddr.IsEmpty()) SetSTUNServer(stunAddr);
 
 	///////////////////////////////////////
 	// PC Sound System (PCSS) handler
@@ -67,50 +66,27 @@ void TkOpalManager::Initialise(const PString & stunAddr, const PString & user)
 	// IVR Endpoint Setup & Config
 
 	ivrEP = new OpalIVREndPoint(*this);
-/*
-	OpalMediaFormatList mediaFormats;
-	mediaFormats += pcssEP->GetMediaFormats();
-	mediaFormats += ivrEP->GetMediaFormats();
-	OpalMediaFormatList possibleFormats = OpalTranscoder::GetPossibleFormats(mediaFormats);
-	for (OpalMediaFormatList::iterator format = possibleFormats.begin(); format != possibleFormats.end(); ++format) {
-		if (format->IsTransportable())
-			m_mediaInfo.push_back(MyMedia(*format));
-	}
-
-	if (PTrace::CanTrace(4)) {
-		OpalMediaFormatList mediaFormats = OpalMediaFormat::GetAllRegisteredMediaFormats();
-		ostream & traceStream = PTrace::Begin(4, __FILE__, __LINE__);
-		traceStream << "TeleKarma\tRegistered media formats:\n";
-		for (PINDEX i = 0; i < mediaFormats.GetSize(); i++)
-			mediaFormats[i].PrintOptions(traceStream);
-		traceStream << PTrace::End;
-	}
-*/
 
 }
 
 
-PBoolean TkOpalManager::Register(const PString & registrar, const PString & user, const PString & passwd, const PString & domain) {
-	if (sipEP->IsRegistered(aor)) {
-		return PTrue;
-	} else {
+void TelephonyIfc::Register(const PString & registrar, const PString & user, const PString & passwd) {
+	if (!sipEP->IsRegistered(aor)) {
 		SIPRegister::Params params;
 		params.m_registrarAddress = registrar;
 		params.m_addressOfRecord = user;
 		params.m_password = passwd;
 		sipEP->Register(params, aor);
-		for (int i = 80; i > 0; i--) {
-			if (sipEP->IsRegistered(aor)) {
-				return PTrue;
-			}
-			PThread::Sleep(250);
-		}
-		return PFalse;
 	}
 }
 
+PBoolean TelephonyIfc::IsRegistered()
+{
+	return sipEP->IsRegistered(aor);
+}
 
-PBoolean TkOpalManager::Unregister() {
+
+PBoolean TelephonyIfc::Unregister() {
 	if (sipEP->IsRegistered(aor)) {
 		sipEP->Unregister(aor);
 		while (sipEP->IsRegistered(aor));
@@ -119,7 +95,7 @@ PBoolean TkOpalManager::Unregister() {
 }
 
 
-PString TkOpalManager::ToggleRecording(const PString & fname) {
+PString TelephonyIfc::ToggleRecording(const PString & fname) {
 	if (currentCallToken.IsEmpty()) {
 		return "Cannot start or stop recording without a call in progress.";
 	} else if (IsRecording(currentCallToken)) {
@@ -131,7 +107,7 @@ PString TkOpalManager::ToggleRecording(const PString & fname) {
 	}
 }
 
-PBoolean TkOpalManager::SendTone(const char tone) {
+PBoolean TelephonyIfc::SendTone(const char tone) {
 	if (currentCallToken.IsEmpty()) {
 		// no call in progress
 		return PFalse;
@@ -153,7 +129,7 @@ PBoolean TkOpalManager::SendTone(const char tone) {
 }
 
 
-PBoolean TkOpalManager::StartCall(const PString & dest) {
+PBoolean TelephonyIfc::StartCall(const PString & dest) {
 	if (!currentCallToken.IsEmpty() || dest.IsEmpty()) {
 		// cannot call while current call exists
 		// cannot call if there is a call on hold
@@ -166,7 +142,7 @@ PBoolean TkOpalManager::StartCall(const PString & dest) {
 
 
 /** Disconnect the call currently in progress */
-PBoolean TkOpalManager::EndCurrentCall() {
+PBoolean TelephonyIfc::EndCurrentCall() {
 	PSafePtr<OpalCall> call = FindCallWithLock(currentCallToken);
 	if (call == NULL) {
 		// no call in progress
@@ -180,17 +156,17 @@ PBoolean TkOpalManager::EndCurrentCall() {
 	}
 }
 
-PBoolean TkOpalManager::HasActiveCall() {
+PBoolean TelephonyIfc::HasActiveCall() {
 	return (currentCallToken.IsEmpty()) ? PFalse : PTrue;
 }
 
 
-void TkOpalManager::OnEstablishedCall(OpalCall & call) {
+void TelephonyIfc::OnEstablishedCall(OpalCall & call) {
 	currentCallToken = call.GetToken();
 }
 
 
-void TkOpalManager::OnClearedCall(OpalCall & call) {
+void TelephonyIfc::OnClearedCall(OpalCall & call) {
 	if (currentCallToken == call.GetToken())
 		currentCallToken.MakeEmpty();
 	PString remoteName = call.GetPartyB();
@@ -256,7 +232,7 @@ void TkOpalManager::OnClearedCall(OpalCall & call) {
 }
 
 
-PBoolean TkOpalManager::OnOpenMediaStream(OpalConnection & connection, OpalMediaStream & stream) {
+PBoolean TelephonyIfc::OnOpenMediaStream(OpalConnection & connection, OpalMediaStream & stream) {
 	if (!OpalManager::OnOpenMediaStream(connection, stream)) {
 		return PFalse;
 	}
@@ -273,16 +249,16 @@ PBoolean TkOpalManager::OnOpenMediaStream(OpalConnection & connection, OpalMedia
 	return PTrue;
 }
 
-void TkOpalManager::WaitForHuman() {
+void TelephonyIfc::WaitForHuman() {
 }
 
-void TkOpalManager::OnUserInputTone(OpalConnection& connection, char tone,
+void TelephonyIfc::OnUserInputTone(OpalConnection& connection, char tone,
 								int duration)
 {
 	fprintf(stderr, "Tone %d pressed for %d.\n", tone, duration);
 }
 
-PSafePtr<OpalConnection> TkOpalManager::GetConnection(PSafePtr<OpalCall> call, bool user, PSafetyMode mode)
+PSafePtr<OpalConnection> TelephonyIfc::GetConnection(PSafePtr<OpalCall> call, bool user, PSafetyMode mode)
 {
 	if (call == NULL) 
 		return NULL;
@@ -294,7 +270,7 @@ PSafePtr<OpalConnection> TkOpalManager::GetConnection(PSafePtr<OpalCall> call, b
 	return connection.SetSafetyMode(mode) ? connection : NULL;
 }
 
-void TkOpalManager::SendAudioFile(const PString & path)
+void TelephonyIfc::SendAudioFile(const PString & path)
 {
 	
 	PTRACE(3, "******************************************************************");

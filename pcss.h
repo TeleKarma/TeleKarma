@@ -1,18 +1,18 @@
 /*
  *
- * TkPCSSEndPoint.h
+ * pcss.h
  *
  * TeleKarma's extension of Opal's OpalPCSSEndPoint.
  *
  */
 
-#ifndef _TKPCSSENDPOINT_H_
-#define _TKPCSSENDPOINT_H_
+#ifndef _PCSS_H_
+#define _PCSS_H_
 
 #include <opal/manager.h>
 #include <opal/pcss.h>
 
-class TkOpalManager;
+class TelephonyIfc;
 
 
 class TkPCSSEndPoint : public OpalPCSSEndPoint {
@@ -20,7 +20,7 @@ class TkPCSSEndPoint : public OpalPCSSEndPoint {
   PCLASSINFO(TkPCSSEndPoint, OpalPCSSEndPoint);
 
   public:
-    TkPCSSEndPoint(TkOpalManager & manager);
+    TkPCSSEndPoint(TelephonyIfc & manager);
 
     virtual PBoolean OnShowIncoming(const OpalPCSSConnection & connection);
     virtual PBoolean OnShowOutgoing(const OpalPCSSConnection & connection);
@@ -32,6 +32,6 @@ class TkPCSSEndPoint : public OpalPCSSEndPoint {
 };
 
 
-#endif // _TKPCSSENDPOINT_H_
+#endif // _PCSS_H_
 
 // End of File ///////////////////////////////////////////////////////////////
