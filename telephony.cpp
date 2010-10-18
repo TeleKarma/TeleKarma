@@ -24,7 +24,7 @@ TelephonyIfc::TelephonyIfc() :
 
 TelephonyIfc::~TelephonyIfc()
 {
-	if (!currentCallToken.IsEmpty()) EndCurrentCall();
+	if (!callToken.IsEmpty()) EndCurrentCall();
 	Unregister();
 }
 
@@ -97,23 +97,23 @@ PBoolean TelephonyIfc::Unregister() {
 
 
 PString TelephonyIfc::ToggleRecording(const PString & fname) {
-	if (currentCallToken.IsEmpty()) {
+	if (callToken.IsEmpty()) {
 		return "Cannot start or stop recording without a call in progress.";
-	} else if (IsRecording(currentCallToken)) {
-		StopRecording(currentCallToken);
+	} else if (IsRecording(callToken)) {
+		StopRecording(callToken);
 		return "Recording stopped.";
 	} else {
-		StartRecording(currentCallToken, fname);
+		StartRecording(callToken, fname);
 		return "Recording started.";
 	}
 }
 
 PBoolean TelephonyIfc::SendTone(const char tone) {
-	if (currentCallToken.IsEmpty()) {
+	if (callToken.IsEmpty()) {
 		// no call in progress
 		return PFalse;
 	} else {
-		PSafePtr<OpalCall> call = FindCallWithLock(currentCallToken);
+		PSafePtr<OpalCall> call = FindCallWithLock(callToken);
 		if (call == NULL) {
 			// no call in progress
 			return PFalse;
@@ -131,25 +131,25 @@ PBoolean TelephonyIfc::SendTone(const char tone) {
 
 
 PBoolean TelephonyIfc::StartCall(const PString & dest) {
-	if (!currentCallToken.IsEmpty() || dest.IsEmpty()) {
+	if (!callToken.IsEmpty() || dest.IsEmpty()) {
 		// cannot call while on a call
 		// cannot call without specifying destination
 		return PFalse;
 	} else {
-		return SetUpCall("pc:*", dest, currentCallToken);
+		return SetUpCall("pc:*", dest, callToken);
 	}
 }
 
 
 /** Disconnect the call currently in progress */
 PBoolean TelephonyIfc::EndCurrentCall() {
-	PSafePtr<OpalCall> call = FindCallWithLock(currentCallToken);
+	PSafePtr<OpalCall> call = FindCallWithLock(callToken);
 	if (call == NULL) {
 		// no call in progress
 		return PFalse;
 	} else {
-		if (IsRecording(currentCallToken)) {
-			StopRecording(currentCallToken);
+		if (IsRecording(callToken)) {
+			StopRecording(callToken);
 		}
 		call->Clear();
 		return PTrue;
@@ -157,18 +157,18 @@ PBoolean TelephonyIfc::EndCurrentCall() {
 }
 
 PBoolean TelephonyIfc::HasActiveCall() {
-	return (currentCallToken.IsEmpty()) ? PFalse : PTrue;
+	return (callToken.IsEmpty()) ? PFalse : PTrue;
 }
 
 
 void TelephonyIfc::OnEstablishedCall(OpalCall & call) {
-	currentCallToken = call.GetToken();
+	callToken = call.GetToken();
 }
 
 
 void TelephonyIfc::OnClearedCall(OpalCall & call) {
-	if (currentCallToken == call.GetToken())
-		currentCallToken.MakeEmpty();
+	if (callToken == call.GetToken())
+		callToken.MakeEmpty();
 	PString remoteName = call.GetPartyB();
 	bool printTime = true;
 	switch (call.GetCallEndReason()) {
@@ -288,7 +288,7 @@ void TelephonyIfc::SendAudioFile(const PString & path)
 	PTRACE(3, "******************************************************************");
 	PTRACE(3, path);
 
-	PSafePtr<OpalCall> call = FindCallWithLock(currentCallToken);
+	PSafePtr<OpalCall> call = FindCallWithLock(callToken);
 	if (call == NULL) {
 		PTRACE(3, "Attempted to send WAV file failed: no active call.");
 		return;

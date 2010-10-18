@@ -50,7 +50,7 @@ class TelephonyIfc : public OpalManager {
 		void SendAudioFile(const PString & path);
 
 	protected:
-		PString currentCallToken;
+		PString callToken;
 		PString aor;
 		TkPCSSEndPoint * pcssEP;
 		SIPEndPoint * sipEP;
