@@ -107,9 +107,7 @@ void RegisterStateHandler::Enter() {
 		c = getchar();
 #endif
 	}
-	cout << endl;
-	cout << "-------------------------------------------------------------" << endl;
-	cout << flush;
+	cout << endl << endl << flush;
 
 	/*
 	cout << "=============================================================" << endl;
@@ -138,13 +136,11 @@ void RegisterStateHandler::In() {
 	++iterCount;
 	if (tk->IsRegistered()) {
 		// registration succeeded
-		cout << " done." << endl;
-		cout << "-------------------------------------------------------------" << endl;
-		cout << flush;
-		tk->EnterState(DIAL);
+		cout << "done." << endl << endl << flush;
+		tk->EnterState(MENU);
 	} else if (iterCount > REG_ITER_LIMIT) {
 		// registration failed
-		cout << " failed." << endl << flush;
+		cout << "failed." << endl << flush;
 		tk->EnterState(EXIT);
 	}
 }
@@ -211,9 +207,7 @@ void DialStateHandler::Enter() {
 	//if (!dest.MatchesRegEx("^sip:")) {
 	//	dest = "sip:" + dest;
 	//}
-	cout << endl;
-	cout << "-------------------------------------------------------------" << endl;
-	cout << "Dialing... " << flush;
+	cout << endl << "Dialing... " << flush;
 
 	// attempt to call the provided SIP address (non-blocking)
 	tk->Dial(dest);
@@ -296,20 +290,20 @@ void ConnectedStateHandler::In()
 		PTRACE(3, "User command in Connected state: " << ch);
 		switch (ch) {
 			case 'x':
-				cout << endl;
+				cout << endl << endl;
 				tk->EnterState(DISCONNECT);
 				break;
 			case 'z':	// for dev & test purposes only
 				// TO GO user feedback message improvement
-				cout << endl << "Recording toggled." << endl << "Command? " << flush;
+				cout << endl << endl << "Recording toggled." << endl << endl << "Command? " << flush;
 				tk->ToggleRecording();
 				break;
 			case 'h':
-				cout << endl;
+				cout << endl << endl;
 				tk->EnterState(HOLD);
 				break;
 			case 'w':
-				cout << endl;
+				cout << endl << endl;
 				tk->EnterState(AUTO_HOLD);
 				break;
 			case 'p':	// for dev & test purposes only
@@ -587,7 +581,7 @@ DisconnectStateHandler::~DisconnectStateHandler() { }
 /** ... */
 void DisconnectStateHandler::Enter()
 {
-	cout << "Disconnecting..." << endl << flush;
+	cout << "Disconnecting... " << flush;
 	tk->Disconnect();
 }
 
@@ -595,7 +589,7 @@ void DisconnectStateHandler::Enter()
 void DisconnectStateHandler::In()
 {
 	if (!tk->IsConnected()) {
-		cout << "done." << endl << flush;
+		cout << "done." << endl << endl << flush;
 		tk->EnterState(MENU);
 	}
 }

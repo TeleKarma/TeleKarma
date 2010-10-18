@@ -42,15 +42,15 @@ class TeleKarma : public PProcess {
 		bool IsDialing();
 		bool IsConnected();
 		PString DisconnectReason();
-		bool IsPlayingWAV();
+		/* TO GO the following methods are not finished */
+		bool IsPlayingWAV();	
 		void PlayWAV(const PString & src, bool onConnection = true, bool onSpeakers = true);		// details to go
 		void SetMicVolume(int volume);
 		void SetSpeakerVolume(int volume);
+		/* End TO GO section */
 		void ToggleRecording();
 		bool ToneReceived(char key, bool clear = true);
 		void SendTone(char key);
-/* TO GO - don't have a cleanup method to be called from EXIT state */
-/*         needs to disconnect and un-register... or is that deconstructor-based? */
 		// console I/O methods
 		char GetChar();
 		void Backspace(int n);
