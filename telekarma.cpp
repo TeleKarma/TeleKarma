@@ -74,7 +74,7 @@ void TeleKarma::Main() {
 	// create log file
 	PTime now;
 	PString logFName("logs/log");
-	logFName += now.AsString("_yyyy.mm.dd_hh.mm.ss");
+	logFName += now.AsString("_yyyy.MM.dd_hh.mm.ss");
 	logFName += ".txt";
 	PTrace::Initialise(5, logFName);
 
