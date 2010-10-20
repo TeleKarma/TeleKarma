@@ -10,6 +10,7 @@
 #include "pcss.h"
 #include "sip.h"
 #include <opal/ivr.h>
+#include <opal/opalmixer.h>
 
 
 TelephonyIfc::TelephonyIfc() :
@@ -19,7 +20,6 @@ TelephonyIfc::TelephonyIfc() :
 	aor(NULL),
 	nextTone(0),
 	dialing(false),
-	connected(false),
 	why(""),
 	ivrMode(PFalse)
 {
@@ -54,6 +54,8 @@ void TelephonyIfc::Initialise(const PString & stunAddr, const PString & user)
 	// PC Sound System (PCSS) handler
 
 	pcssEP = new TkPCSSEndPoint(*this);
+	// XXX This may not be necessary.
+	pcssEP->StartListeners(pcssEP->GetDefaultListeners());
 
 	PTRACE(3, "Sound output device: \"" << pcssEP->GetSoundChannelPlayDevice() << "\"");
 	PTRACE(3, "Sound  input device: \"" << pcssEP->GetSoundChannelRecordDevice() << "\"");
@@ -71,6 +73,14 @@ void TelephonyIfc::Initialise(const PString & stunAddr, const PString & user)
 	// IVR Endpoint Setup & Config
 
 	ivrEP = new OpalIVREndPoint(*this);
+
+	///////////////////////////////////////
+	// Mixer Endpoint Setup
+	mixerEP = new OpalMixerEndPoint(*this, "mcu");
+	OpalMixerNodeInfo * mcuNodeInfo = new OpalMixerNodeInfo;
+	mcuNodeInfo->m_name = "Telekarma";
+	mixerEP->SetAdHocNodeInfo(mcuNodeInfo);
+	SetUpCall("mcu:*", "pc:*", pcToken);
 
 }
 
@@ -142,10 +152,9 @@ PBoolean TelephonyIfc::Dial(const PString & dest)
 		// cannot call without specifying destination
 		return PFalse;
 	} else {
-		connected = true;
 		dialing = true;
 		why = NULL;
-		return SetUpCall("pc:*", dest, callToken);
+		return SetUpCall("mcu:*", dest, callToken);
 	}
 }
 
@@ -158,14 +167,12 @@ PBoolean TelephonyIfc::IsDialing()
 void TelephonyIfc::OnEstablishedCall(OpalCall & call)
 {
 	dialing = false;
-	connected = true;
-	callToken = call.GetToken();
 }
 
 
 PBoolean TelephonyIfc::IsConnected()
 {
-	return connected;
+	return IsCallEstablished(callToken);
 }
 
 
@@ -173,7 +180,6 @@ PBoolean TelephonyIfc::IsConnected()
 PBoolean TelephonyIfc::Disconnect()
 {
 	dialing = false;
-	connected = false;
 	PSafePtr<OpalCall> call = FindCallWithLock(callToken);
 	if (call == NULL) {
 		// no call in progress
@@ -190,7 +196,6 @@ PBoolean TelephonyIfc::Disconnect()
 void TelephonyIfc::OnClearedCall(OpalCall & call)
 {
 	dialing = false;
-	connected = false;
 	if (callToken == call.GetToken()) callToken.MakeEmpty();
 	PString remoteName = call.GetPartyB();
 	//bool printTime = false;
@@ -324,12 +329,6 @@ void TelephonyIfc::SendAudioFile(const PString & path)
 		return;
 	}
 
-	PSafePtr<OpalPCSSConnection> connection = PSafePtrCast<OpalConnection, OpalPCSSConnection>(GetConnection(call, true, PSafeReadOnly));
-	if (connection == NULL) {
-		PTRACE(3, "Attempted to send WAV file failed: no pcss connection.");
-		return;
-	}
-
 	PStringStream ivrXML;
 	ivrXML << "ivr:<?xml version=\"1.0\"?>"
 		"<vxml version=\"1.0\">"
@@ -340,12 +339,9 @@ void TelephonyIfc::SendAudioFile(const PString & path)
 			"</form>"
 		"</vxml>";
 
-	if (!call->Transfer(ivrXML, connection))
-		PTRACE(3, "Failed to send WAV file.");
-	else
-		ivrMode = PTrue;
-
-	/* TO GO: also play over speakers; use the PSoundChannel classes from PTLib */
+	PString ivrCall;
+	SetUpCall("mcu:*", ivrXML, ivrCall);
+	ivrMode = PTrue;
 
 }
 

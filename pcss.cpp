@@ -18,7 +18,7 @@ TkPCSSEndPoint::TkPCSSEndPoint(TelephonyIfc & mgr) : OpalPCSSEndPoint(mgr) { }
 
 
 PBoolean TkPCSSEndPoint::OnShowIncoming(const OpalPCSSConnection & connection) {
-	return PTrue;
+	return AcceptIncomingCall(connection.GetToken());
 }
 
 

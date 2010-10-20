@@ -22,7 +22,7 @@
 #define DTMF_TONE_MAX    20
 
 class TkPCSSEndPoint;
-
+class OpalMixerEndPoint;
 
 class TelephonyIfc : public OpalManager {
 
@@ -127,9 +127,9 @@ class TelephonyIfc : public OpalManager {
 
 	protected:
 		PString callToken;
+		PString pcToken;
 		PString aor;
 		bool dialing;
-		bool connected;
 		PBoolean ivrMode;
 		PString why;	// describes why call was disconnected
 		char tones[DTMF_TONE_MAX];
@@ -137,6 +137,7 @@ class TelephonyIfc : public OpalManager {
 		TkPCSSEndPoint * pcssEP;
 		SIPEndPoint * sipEP;
 		OpalIVREndPoint  * ivrEP;
+		OpalMixerEndPoint * mixerEP;
 
 		PSafePtr<OpalConnection> GetConnection(PSafePtr<OpalCall> call, bool user, PSafetyMode mode);
 
