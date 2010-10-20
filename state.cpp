@@ -307,7 +307,7 @@ void ConnectedStateHandler::In()
 				tk->EnterState(AUTO_HOLD);
 				break;
 			case 'p':	// for dev & test purposes only
-				tk->PlayWAV("\\TeleKarma\\test.wav");
+				tk->PlayWAV("test.wav");
 				break;
 //			case 'q':
 //				cout << endl << flush;

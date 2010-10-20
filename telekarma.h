@@ -24,10 +24,10 @@
 #define IS_HUMAN_TONE    '1'
 
 /* Auto Hold WAV file */
-#define AUTO_HOLD_WAV   "\\TeleKarma\\test.wav"
+#define AUTO_HOLD_WAV   "test.wav"
 
 /* Regular Hold WAV file */
-#define HOLD_WAV        "\\TeleKarma\\test.wav"
+#define HOLD_WAV        "test.wav"
 
 
 class TeleKarma : public PProcess {
