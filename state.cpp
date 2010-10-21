@@ -57,11 +57,13 @@ void RegisterStateHandler::Enter() {
 	PString line;
 
 	cout << "Please enter your SIP Registrar's address [" << registrar << "]: ";
+	line.MakeEmpty();
 	cin >> line;
 	line = line.Trim();
 	if (!line.IsEmpty()) registrar = line;
 
 	cout << "Please enter your SIP Registrar's STUN address [" << stunServer << "]: ";
+	line.MakeEmpty();
 	cin >> line;
 	line = line.Trim();
 	if (!line.IsEmpty()) stunServer = line;
@@ -72,6 +74,7 @@ void RegisterStateHandler::Enter() {
 	} else {
 		cout << " [" << user << "]: ";
 	}
+	line.MakeEmpty();
 	cin >> line;
 	line = line.Trim();
 	if (!line.IsEmpty()) user = line;
@@ -86,21 +89,21 @@ void RegisterStateHandler::Enter() {
 		}
 		cout << "]: ";
 	}
-	/** IMPORTANT TO DO: Bug exists here if password entered & default password is present */
 	cout << flush;
+	line.MakeEmpty();
 	int c = 0;
 	int a = 0;
 	while (c != 10 && c != 13)	{
 		// protect the cast
 		if (c >= 32 && c <= 255) {
-			passwd += (char)c;
+			line += (char)c;
 			cout << "*" << flush;
 			++a;
 		} else if (c == 8 && a > 0) {
 			// backspace
 			cout << "\b \b" << flush;
 			--a;
-			passwd = passwd.Left(a);
+			line = line.Left(a);
 		}
 #ifdef WIN32
 		c = _getch();
@@ -108,6 +111,7 @@ void RegisterStateHandler::Enter() {
 		c = getchar();
 #endif
 	}
+	if (!line.IsEmpty()) passwd = line;
 	cout << endl << endl << flush;
 
 	cout << "=============================================================" << endl;
