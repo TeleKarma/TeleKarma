@@ -28,7 +28,7 @@
 /* How long to wait between playing hold & autohold messages */
 #define PAUSE_TIME     4000
 
-/* How many iterations that comes out to... */
+/* How many control loop iterations that comes out to... */
 #define PAUSE_ITER_LIMIT    (PAUSE_TIME/SLEEP_DURATION)
 
 class TeleKarma;
@@ -149,6 +149,7 @@ class HoldStateHandler : public StateHandler
 		HoldStateHandler(const HoldStateHandler & orig);
 		HoldStateHandler & operator=(const HoldStateHandler & rhs);
 		PStringStream menu;
+		int iterCount;
 
 };
 

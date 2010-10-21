@@ -114,12 +114,14 @@ void RegisterStateHandler::Enter() {
 	if (!line.IsEmpty()) passwd = line;
 	cout << endl << endl << flush;
 
+	/*
 	cout << "=============================================================" << endl;
 	cout << "SIP Server Address: '" << registrar << "'" << endl;
 	cout << "STUN Server Address: '" << stunServer << "'" << endl;
 	cout << "User name: '" << user << "'" << endl;
 	cout << "Password: '" << passwd << "'" << endl;
 	cout << "=============================================================" << endl;
+	*/
 
 	cout << "Initializing telephony system... (this may take a moment)" << flush;
 	tk->Initialize(stunServer, user);
@@ -337,7 +339,9 @@ void ConnectedStateHandler::Exit() { }
 //
 
 /** ... */
-HoldStateHandler::HoldStateHandler(TeleKarma & tk) : StateHandler(tk)
+HoldStateHandler::HoldStateHandler(TeleKarma & tk) : 
+	StateHandler(tk),
+	iterCount(0)
 {
 	menu << "Select:" << endl;
 //	menu << "  z   : Toggle recording" << endl;
@@ -372,6 +376,13 @@ void HoldStateHandler::In()
 		}
 		tk->EnterState(MENU);
 	} else {
+		if (iterCount == 0) {
+			tk->PlayWAV(HOLD_WAV);
+			++iterCount;
+		} else {
+			if (!tk->IsPlayingWAV()) ++iterCount;
+			if (iterCount > PAUSE_ITER_LIMIT) iterCount = 0;
+		}
 		char ch = tk->GetChar();
 		PTRACE(3, "User command in Hold state: " << ch);
 		switch (ch) {
@@ -458,21 +469,10 @@ void AutoHoldStateHandler::In()
 		tk->EnterState(CONNECTED);
 	} else {
 		if (iterCount == 0) {
-			// play IVR
 			tk->PlayWAV(AUTO_HOLD_WAV);
 			++iterCount;
 		} else {
-			if (!tk->IsPlayingWAV()) {
-				++iterCount;
-				/*
-				if (iterCount % 10 == 0) {
-					PTime now;
-					cerr << "DEBUG: iterCount = " << iterCount << " of max " << PAUSE_ITER_LIMIT << " at " << setprecision(0) << setw(2) << now.GetSecond() << ":" << setw(5) << now.GetMicrosecond() << endl;
-				}
-				*/
-			} else {
-				//cerr << endl << "DEBUG: Play WAV." << endl;
-			}
+			if (!tk->IsPlayingWAV()) ++iterCount;
 			if (iterCount > PAUSE_ITER_LIMIT) iterCount = 0;
 		}
 		char ch = tk->GetChar();
