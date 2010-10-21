@@ -86,6 +86,7 @@ void RegisterStateHandler::Enter() {
 		}
 		cout << "]: ";
 	}
+	/** IMPORTANT TO DO: Bug exists here if password entered & default password is present */
 	cout << flush;
 	int c = 0;
 	int a = 0;
@@ -109,14 +110,12 @@ void RegisterStateHandler::Enter() {
 	}
 	cout << endl << endl << flush;
 
-	/*
 	cout << "=============================================================" << endl;
 	cout << "SIP Server Address: '" << registrar << "'" << endl;
 	cout << "STUN Server Address: '" << stunServer << "'" << endl;
 	cout << "User name: '" << user << "'" << endl;
 	cout << "Password: '" << passwd << "'" << endl;
 	cout << "=============================================================" << endl;
-	*/
 
 	cout << "Initializing telephony system... (this may take a moment)" << flush;
 	tk->Initialize(stunServer, user);
