@@ -228,7 +228,7 @@ void DialStateHandler::In() {
 	} else if (!tk->IsDialing()) {
 		// pending call was cleared
 		PString why = tk->DisconnectReason();
-		if (why != NULL && !why.IsEmpty()) {
+		if (!why.IsEmpty()) {
 			cout << "failed to connect." << endl;
 			cout << why << endl << endl << flush;
 		} else {
@@ -284,7 +284,7 @@ void ConnectedStateHandler::In()
 	if (!tk->IsConnected()) {
 		cout << endl;
 		PString why = tk->DisconnectReason();
-		if (why != NULL && !why.IsEmpty()) {
+		if (!why.IsEmpty()) {
 			cout << "Call ended." << endl;
 			cout << why << endl << endl << flush;
 		} else {
@@ -372,7 +372,7 @@ void HoldStateHandler::In()
 	if (!tk->IsConnected()) {
 		cout << endl;
 		PString why = tk->DisconnectReason();
-		if (why != NULL && !why.IsEmpty()) {
+		if (!why.IsEmpty()) {
 			cout << why << endl << endl << flush;
 		} else {
 			cout << "Call ended for unknown reasons." << endl << endl << flush;
@@ -462,7 +462,7 @@ void AutoHoldStateHandler::In()
 	if (!tk->IsConnected()) {
 		cout << endl;
 		PString why = tk->DisconnectReason();
-		if (why != NULL && !why.IsEmpty()) {
+		if (!why.IsEmpty()) {
 			cout << "Call ended." << endl << why << endl << endl << flush;
 		} else {
 			cout << "Call ended for unknown reasons." << endl << endl << flush;

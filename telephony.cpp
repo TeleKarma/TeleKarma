@@ -17,12 +17,18 @@ TelephonyIfc::TelephonyIfc() :
 	pcssEP(NULL), 
 	sipEP(NULL), 
 	ivrEP(NULL), 
-	aor(NULL),
+	aor(""),
+	callToken(""),
+	pcToken(""),
 	nextTone(0),
 	dialing(false),
 	why(""),
 	ivrMode(PFalse)
 {
+	why.MakeEmpty();
+	callToken.MakeEmpty();
+	pcToken.MakeEmpty();
+	aor.MakeEmpty();
 	for (int i = 0; i < DTMF_TONE_MAX; ++i) tones[i] = NULL;
 }
 
@@ -153,7 +159,7 @@ PBoolean TelephonyIfc::Dial(const PString & dest)
 		return PFalse;
 	} else {
 		dialing = true;
-		why = NULL;
+		why.MakeEmpty();
 		return SetUpCall("mcu:*", dest, callToken);
 	}
 }
