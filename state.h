@@ -16,11 +16,10 @@
 #define CONNECTED         4
 #define DISCONNECT        5
 #define AUTO_HOLD         6
-#define MUTE_AUTO_HOLD    7
-#define HOLD              8
+#define HOLD              7
 
 /* Number of System States - array size */
-#define STATE_COUNT       9
+#define STATE_COUNT       8
 
 /* How many times to call RegisterStateHandler.In() before failing */
 #define REG_ITER_LIMIT  100
@@ -168,23 +167,7 @@ class AutoHoldStateHandler : public StateHandler
 		AutoHoldStateHandler & operator=(const AutoHoldStateHandler & rhs);
 		PStringStream menu;
 		int iterCount;
-
-};
-
-
-class MuteAutoHoldStateHandler : public StateHandler
-{
-	public:
-		MuteAutoHoldStateHandler(TeleKarma & tk);
-		virtual ~MuteAutoHoldStateHandler();
-		void Enter();
-		void In();
-		void Exit();
-
-	private:
-		MuteAutoHoldStateHandler(const MuteAutoHoldStateHandler & orig);
-		MuteAutoHoldStateHandler & operator=(const MuteAutoHoldStateHandler & rhs);
-		PStringStream menu;
+		bool mute;
 
 };
 

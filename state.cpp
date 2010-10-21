@@ -425,14 +425,15 @@ void HoldStateHandler::Exit()
 /** ... */
 AutoHoldStateHandler::AutoHoldStateHandler(TeleKarma & tk) : 
 	StateHandler(tk),
-	iterCount(0)
+	iterCount(0),
+	mute(false)
 {
 	menu << "Select:" << endl;
 //	menu << "  z   : Toggle recording" << endl;
 	menu << "  r   : Retrieve call" << endl;
 //	menu << "  q   : Quit" << endl;
 	menu << "  x   : Disconnect" << endl;
-	menu << "  m   : Mute mic & speakers" << endl;
+	menu << "  m   : Mute/Unmute Speakers" << endl;
 	menu << endl;
 }
 
@@ -444,6 +445,8 @@ void AutoHoldStateHandler::Enter()
 {
 	// clear the queue of received dtmf tones (slightly hacky)
 	tk->ToneReceived('0', true);
+	// Mute the microphone
+	tk->SetMicVolume(0);
 	//cerr << endl << "DEBUG: Wait " << PAUSE_ITER_LIMIT << " between cycles." << endl;
 	cout << menu << "Command? " << flush;
 }
@@ -494,7 +497,13 @@ void AutoHoldStateHandler::In()
 				tk->EnterState(CONNECTED);
 				break;
 			case 'm':
-				tk->EnterState(MUTE_AUTO_HOLD);
+				//tk->EnterState(MUTE_AUTO_HOLD);
+				if (mute) {
+					tk->SetSpeakerVolume(100);
+				} else {
+					tk->SetSpeakerVolume(0);
+				}
+				mute = !mute;
 				break;
 //			case 'q':
 //				cout << endl << flush;
@@ -508,93 +517,10 @@ void AutoHoldStateHandler::In()
 /** ... */
 void AutoHoldStateHandler::Exit()
 {
+	tk->SetMicVolume(100);
+	tk->SetSpeakerVolume(100);
 	// TO GO - if in IVR mode, transfer back to PCSS mode
 }
-
-
-
-/////////////////////////////////////////////////////////////////////////
-// MuteAutoHold
-//
-
-/** ... */
-MuteAutoHoldStateHandler::MuteAutoHoldStateHandler(TeleKarma & tk) : StateHandler(tk)
-{
-	menu << "Select:" << endl;
-//	menu << "  z   : Toggle recording" << endl;
-	menu << "  r   : Retrieve call" << endl;
-//	menu << "  q   : Quit" << endl;
-	menu << "  x   : Disconnect" << endl;
-	menu << "  m   : Un-mute mic & speakers" << endl;
-	menu << endl;
-}
-
-/** ... */
-MuteAutoHoldStateHandler::~MuteAutoHoldStateHandler() { }
-
-/** ... */
-void MuteAutoHoldStateHandler::Enter()
-{
-	tk->SetMicVolume(0);
-	tk->SetSpeakerVolume(0);
-	cout << menu << "Command? " << flush;
-}
-
-/** ... */
-void MuteAutoHoldStateHandler::In()
-{
-	if (!tk->IsConnected()) {
-		cout << endl;
-		PString why = tk->DisconnectReason();
-		if (why != NULL && !why.IsEmpty()) {
-			cout << why << endl << endl << flush;
-		} else {
-			cout << "Call ended for unknown reasons." << endl << endl << flush;
-		}
-		tk->EnterState(MENU);
-	} else if (tk->ToneReceived(IS_HUMAN_TONE)) {
-		// TO GO: play alarm WAV
-		// tk->PlayWav("src", false, true);
-		cout << endl;
-		cout << "ALERT: Human auto-detected; call retrieved & active." << endl << flush;
-		tk->EnterState(CONNECTED);
-	} else {
-		char ch = tk->GetChar();
-		PTRACE(3, "User command in MuteAutoHold state: " << ch);
-		switch (ch) {
-			case 'x':
-				cout << endl;
-				tk->EnterState(DISCONNECT);
-				break;
-			case 'z':	// for dev & test purposes only
-				// TO GO user feedback message improvement
-				cout << endl << "Recording toggled." << endl << "Command? " << flush;
-				tk->ToggleRecording();
-				break;
-			case 'r':
-				cout << endl;
-				tk->EnterState(CONNECTED);
-				break;
-			case 'm':
-				tk->EnterState(AUTO_HOLD);
-				break;
-//			case 'q':
-//				cout << endl << flush;
-//				tk->EnterState(EXIT);
-//				break;
-		}
-	}
-
-}
-
-/** ... */
-void MuteAutoHoldStateHandler::Exit()
-{
-	// TO GO - if in IVR mode, transfer back to PCSS mode
-	tk->SetMicVolume(0);
-	tk->SetSpeakerVolume(0);
-}
-
 
 
 /////////////////////////////////////////////////////////////////////////

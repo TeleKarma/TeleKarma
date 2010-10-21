@@ -85,7 +85,6 @@ void TeleKarma::Main() {
 	states[CONNECTED]      = new ConnectedStateHandler(*this);
 	states[HOLD]           = new HoldStateHandler(*this);
 	states[AUTO_HOLD]      = new AutoHoldStateHandler(*this);
-	states[MUTE_AUTO_HOLD] = new MuteAutoHoldStateHandler(*this);
 	states[EXIT]           = new ExitStateHandler(*this);
 	states[DISCONNECT]     = new DisconnectStateHandler(*this);
 
