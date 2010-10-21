@@ -261,6 +261,7 @@ ConnectedStateHandler::ConnectedStateHandler(TeleKarma & tk) : StateHandler(tk)
 	menu << "  w   : Hold until human detected" << endl;
 //	menu << "  q   : Quit" << endl;
 	menu << "  x   : Disconnect" << endl;
+	menu << "  d   : Disconnect" << endl;
 	menu << "----------------------------------------" << endl;
 	menu << "  z   : [FOR TESTING] Toggle recording" << endl;
 	menu << "  p   : [FOR TESTING] Play WAV file" << endl;
@@ -295,6 +296,7 @@ void ConnectedStateHandler::In()
 		PTRACE(3, "User command in Connected state: " << ch);
 		switch (ch) {
 			case 'x':
+			case 'd':
 				cout << endl << endl;
 				tk->EnterState(DISCONNECT);
 				break;
@@ -348,6 +350,7 @@ HoldStateHandler::HoldStateHandler(TeleKarma & tk) :
 	menu << "  r   : Retrieve call" << endl;
 //	menu << "  q   : Quit" << endl;
 	menu << "  x   : Disconnect" << endl;
+	menu << "  d   : Disconnect" << endl;
 	menu << endl;
 }
 
@@ -387,6 +390,7 @@ void HoldStateHandler::In()
 		PTRACE(3, "User command in Hold state: " << ch);
 		switch (ch) {
 			case 'x':
+			case 'd':
 				cout << endl;
 				tk->EnterState(DISCONNECT);
 				break;
@@ -433,6 +437,7 @@ AutoHoldStateHandler::AutoHoldStateHandler(TeleKarma & tk) :
 	menu << "  r   : Retrieve call" << endl;
 //	menu << "  q   : Quit" << endl;
 	menu << "  x   : Disconnect" << endl;
+	menu << "  d   : Disconnect" << endl;
 	menu << "  m   : Mute/Unmute Speakers" << endl;
 	menu << endl;
 }
@@ -483,6 +488,7 @@ void AutoHoldStateHandler::In()
 		PTRACE(3, "User command in AutoHold state: " << ch);
 		switch (ch) {
 			case 'x':
+			case 'd':
 				cout << endl;
 				tk->EnterState(DISCONNECT);
 				break;
