@@ -20,7 +20,7 @@ TelephonyIfc::TelephonyIfc() :
 	aor(""),
 	callToken(""),
 	pcToken(""),
-	ivrToken(""),
+	wavToken(""),
 	why(""),
 	nextTone(0),
 	dialing(false),
@@ -29,7 +29,7 @@ TelephonyIfc::TelephonyIfc() :
 	why.MakeEmpty();
 	callToken.MakeEmpty();
 	pcToken.MakeEmpty();
-	ivrToken.MakeEmpty();
+	wavToken.MakeEmpty();
 	aor.MakeEmpty();
 	ClearTones();
 }
@@ -185,9 +185,9 @@ void TelephonyIfc::Disconnect()
 		if (IsRecording(callToken)) StopRecording(callToken);
 		call->Clear();
 	}
-	PSafePtr<OpalCall> ivr  = FindCallWithLock(ivrToken);
+	PSafePtr<OpalCall> ivr  = FindCallWithLock(wavToken);
 	if (ivr != NULL) {
-		if (IsRecording(ivrToken)) StopRecording(ivrToken);
+		if (IsRecording(wavToken)) StopRecording(wavToken);
 		ivr->Clear();
 	}
 	PSafePtr<OpalCall> pc   = FindCallWithLock(pcToken);
@@ -200,8 +200,8 @@ void TelephonyIfc::Disconnect()
 
 void TelephonyIfc::OnClearedCall(OpalCall & call)
 {
-	if (ivrToken == call.GetToken()) {
-		ivrToken.MakeEmpty();
+	if (wavToken == call.GetToken()) {
+		wavToken.MakeEmpty();
 	} else if (pcToken == call.GetToken()) {
 		pcToken.MakeEmpty();
 	} else if (callToken == call.GetToken()) {
@@ -275,7 +275,6 @@ PBoolean TelephonyIfc::OnOpenMediaStream(OpalConnection & connection, OpalMediaS
 	PCaselessString prefix = connection.GetEndPoint().GetPrefixName();
 	if (prefix == "pc" || prefix == "pots") {
 		PTRACE(3, "Started " << (stream.IsSink() ? "playing " : "grabbing ") << stream.GetMediaFormat());
-		OnAudioFileSent();
 	} else if (prefix == "ivr") {
 		PTRACE(3, "Started " << (stream.IsSink() ? "streaming " : "recording ") << stream.GetMediaFormat());
 		ivrMode = PTrue;
@@ -316,63 +315,27 @@ bool TelephonyIfc::ToneReceived(char key, bool clear)
 	return r;
 }
 
-void TelephonyIfc::SendAudioFile(const PString & path)
+PBoolean TelephonyIfc::PlayWAV(const PString & path, int repeat, int delay)
 {
-
-	if (!callToken.IsEmpty()) {
-		PSafePtr<OpalCall> call = FindCallWithLock(callToken);
-		if (call == NULL) {
-			PTRACE(3, "Attempted to send WAV file failed: no active call.");
-			return;
-		}
-	} else {
-		PTRACE(3, "Attempted to send WAV file failed: no active call.");
-		return;
+	if (!wavToken.IsEmpty()) {
+		cout << "Only one wav file can be played at a time.\n";
+		return PFalse;
 	}
-
-	if (!ivrToken.IsEmpty()) {
-		PSafePtr<OpalCall> ivr = FindCallWithLock(ivrToken);
-		if (ivr == NULL) {
-			PTRACE(3, "Attempted to send WAV file failed: wav file send in process.");
-			return;
-		}
-	}
-
-	PStringStream ivrXML;
-	ivrXML << "ivr:<?xml version=\"1.0\"?>"
-		"<vxml version=\"1.0\">"
-			"<form id=\"PlayFile\">"
-				"<transfer bridge=\"false\" dest=\"pc:*;Auto-Answer=1\">"
-					"<audio src=\"" << PURL(PFilePath(path)) << "\"/>"
-				"</transfer>"
-			"</form>"
-		"</vxml>";
-
-	ivrMode = PTrue;
-	SetUpCall("mcu:*", ivrXML, ivrToken);
-
+	PStringStream ivrString;
+	ivrString << "ivr:repeat=" << repeat << ";delay=" << delay << ";" << PURL(PFilePath(path));
+	SetUpCall("mcu:*", ivrString, wavToken);
+	return PTrue;
 }
 
-void TelephonyIfc::OnAudioFileSent() {
-	ivrMode = PFalse;
-	PSafePtr<OpalCall> ivr = FindCallWithLock(ivrToken);
-	if (ivr != NULL) {
-		ivr->Clear();
-		cerr << endl << "OnAudioFileSent: Cleared IVR Connection" << endl;
-	}
-	ivrToken.MakeEmpty();
+void TelephonyIfc::StopWAV()
+{
+	ClearCall(wavToken);
+	wavToken.MakeEmpty();
 }
 
-
-void TelephonyIfc::Retrieve()
+PBoolean TelephonyIfc::IsPlayingWav()
 {
-	cerr << endl << "Retrieve Call" << endl;
-	OnAudioFileSent();
-}
-
-PBoolean TelephonyIfc::InIVRMode()
-{
-	return ivrMode;
+	return IsCallEstablished(wavToken);
 }
 
 void TelephonyIfc::SetMicVolume(unsigned int gain)
@@ -393,7 +356,7 @@ void TelephonyIfc::SetMicVolume(unsigned int gain)
 			cerr << endl << "Set Call Mic Volume @ " << gain << "%" << endl;
 		}
 	}
-	PSafePtr<OpalCall> ivr = FindCallWithLock(ivrToken);
+	PSafePtr<OpalCall> ivr = FindCallWithLock(wavToken);
 	if (ivr != NULL) {
 		PSafePtr<OpalConnection> connection = ivr->GetConnection(0, PSafeReference);
 		if (connection != NULL) {
@@ -422,7 +385,7 @@ void TelephonyIfc::SetSpeakerVolume(unsigned int gain)
 			cerr << endl << "Set Call Speaker Volume @ " << gain << "%" << endl;
 		}
 	}
-	PSafePtr<OpalCall> ivr = FindCallWithLock(ivrToken);
+	PSafePtr<OpalCall> ivr = FindCallWithLock(wavToken);
 	if (ivr != NULL) {
 		PSafePtr<OpalConnection> connection = ivr->GetConnection(0, PSafeReference);
 		if (connection != NULL) {

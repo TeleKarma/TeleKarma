@@ -200,18 +200,33 @@ void TeleKarma::SendTone(char key)
 
 
 /** Play a WAV file over phone connection. */
-void TeleKarma::PlayWAV(const PString & filename, bool onLine, bool onSpeaker)
+void TeleKarma::PlayWAV(const PString & filename, int repeat, int delay)
 {
-	if (phone != NULL && onLine) phone->SendAudioFile(filename);
+	if (phone != NULL) {
+		phone->PlayWAV(filename, repeat, delay);
+	}
 }
 
-
-/** Retrieve a call from IVR. */
-void TeleKarma::Retrieve()
+void TeleKarma::StopWAV()
 {
-	if (phone != NULL) phone->Retrieve();
+	if (phone != NULL) {
+		phone->StopWAV();
+	}
 }
 
+void TeleKarma::StartIVR()
+{
+	if (phone != NULL) {
+		phone->PlayWAV(AUTO_HOLD_WAV, IVR_REPEATS, PAUSE_TIME);
+	}
+}
+
+void TeleKarma::StopIVR()
+{
+	if (phone != NULL) {
+		phone->StopWAV();
+	}
+}
 
 void TeleKarma::ToggleRecording()
 {
@@ -288,7 +303,7 @@ bool TeleKarma::IsPlayingWAV(bool onLine, bool onSpeakers)
 	if (onLine && onSpeakers) {
 		return false;	// TO GO, since we currently don't play WAVs over speaker
 	} else if (onLine) {
-		return (phone != NULL && phone->InIVRMode());
+		return (phone != NULL && phone->IsPlayingWav());
 	} else if (onSpeakers) {
 		return false;	// TO GO, since we currently don't play WAVs over speaker
 	} else {

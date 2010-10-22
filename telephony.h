@@ -118,19 +118,15 @@ class TelephonyIfc : public OpalManager {
 		 * tones received since the last time the array was
 		 * cleared.
 		 */
-		void TelephonyIfc::ClearTones();
+		void ClearTones();
 
 		/**
 		 * Transmit a WAV file to the remote party.
 		 */
-		void SendAudioFile(const PString & path);
+		PBoolean PlayWAV(const PString & path, int repeat=0, int delay=0);
+		void StopWAV();
 
-		/**
-		 * Determine whether the connection is in IVR mode
-		 * or PC mode. IVR mode is active when playing a 
-		 * WAV file over the connection.
-		 */
-		PBoolean InIVRMode();
+		PBoolean IsPlayingWav();
 
 		/**
 		 * Retrieve the call from any form of IVR mode.
@@ -150,8 +146,8 @@ class TelephonyIfc : public OpalManager {
 
 	protected:
 		PString callToken;
-		PString ivrToken;
 		PString pcToken;
+		PString wavToken;
 		PString aor;
 		bool dialing;
 		PBoolean ivrMode;

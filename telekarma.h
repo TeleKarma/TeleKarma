@@ -17,6 +17,15 @@
 /* How long (in milliseconds) to sleep between run loops */
 #define SLEEP_DURATION   50
 
+/* How long to wait between playing hold & autohold messages */
+#define PAUSE_TIME     2000
+
+/* How many times to loop the IVR message.  We want the IVR to repeat forever,
+ * so this number should be large. */
+#define IVR_REPEATS 10000
+
+#define HOLD_REPEATS 10000
+
 /* How long to wait (in milliseconds) before exiting */
 #define EXIT_DELAY     1000
 
@@ -49,10 +58,14 @@ class TeleKarma : public PProcess {
 		bool IsConnected();
 		PString DisconnectReason();
 		/* TO GO the following methods are not finished */
-		bool IsPlayingWAV(bool onLine = true, bool onSpeakers = false);	
-		void PlayWAV(const PString & src, bool onConnection = true, bool onSpeakers = true);		// details to go
+		bool IsPlayingWAV(bool onLine = true, bool onSpeakers = false);
+		void PlayWAV(const PString & src, int repeat = 0, int delay = 0);		// details to go
 		void SetMicVolume(unsigned int volume);
 		void SetSpeakerVolume(unsigned int volume);
+		void StartIVR();
+		void StopIVR();
+		void StartWAV();
+		void StopWAV();
 		/* End TO GO section */
 		void ToggleRecording();
 		void Retrieve();
