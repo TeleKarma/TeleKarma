@@ -348,7 +348,7 @@ HoldStateHandler::HoldStateHandler(TeleKarma & tk) :
 	menu << "Select:" << endl;
 //	menu << "  z   : Toggle recording" << endl;
 	menu << "  r   : Retrieve call" << endl;
-//	menu << "  q   : Quit" << endl;
+	menu << "  q   : Quit" << endl;
 	menu << "  x   : Disconnect" << endl;
 	menu << "  d   : Disconnect" << endl;
 	menu << endl;
@@ -360,9 +360,9 @@ HoldStateHandler::~HoldStateHandler() { }
 /** ... */
 void HoldStateHandler::Enter()
 {
+	iterCount = 0;
 	tk->SetMicVolume(0);
 	tk->SetSpeakerVolume(0);
-	// TO GO play WAV file repeatedly
 	cout << menu << "Command? " << flush;
 }
 
@@ -403,10 +403,10 @@ void HoldStateHandler::In()
 				cout << endl;
 				tk->EnterState(CONNECTED);
 				break;
-//			case 'q':
-//				cout << endl << flush;
-//				tk->EnterState(EXIT);
-//				break;
+			case 'q':
+				cout << endl << flush;
+				tk->EnterState(EXIT);
+				break;
 		}
 	}
 
@@ -417,6 +417,7 @@ void HoldStateHandler::Exit()
 {
 	tk->SetMicVolume(100);
 	tk->SetSpeakerVolume(100);
+	tk->Retrieve();
 }
 
 
@@ -435,7 +436,7 @@ AutoHoldStateHandler::AutoHoldStateHandler(TeleKarma & tk) :
 	menu << "Select:" << endl;
 //	menu << "  z   : Toggle recording" << endl;
 	menu << "  r   : Retrieve call" << endl;
-//	menu << "  q   : Quit" << endl;
+	menu << "  q   : Quit" << endl;
 	menu << "  x   : Disconnect" << endl;
 	menu << "  d   : Disconnect" << endl;
 	menu << "  m   : Mute/Unmute Speakers" << endl;
@@ -448,12 +449,16 @@ AutoHoldStateHandler::~AutoHoldStateHandler() { }
 /** ... */
 void AutoHoldStateHandler::Enter()
 {
-	// clear the queue of received dtmf tones (slightly hacky)
-	tk->ToneReceived('0', true);
+	iterCount = 0;
+	// clear the queue of received dtmf tones
+	tk->ClearTones();
 	// Mute the microphone
 	tk->SetMicVolume(0);
-	//cerr << endl << "DEBUG: Wait " << PAUSE_ITER_LIMIT << " between cycles." << endl;
 	cout << menu << "Command? " << flush;
+#ifdef WIN32
+	// Win32 library call
+	PlaySound(TEXT("alert2.wav"), NULL, SND_FILENAME);
+#endif
 }
 
 /** ... */
@@ -473,7 +478,10 @@ void AutoHoldStateHandler::In()
 		// tk->PlayWav("src", false, true);
 		cout << endl;
 		cout << "ALERT: Human auto-detected; call retrieved & active." << endl << flush;
-		// TO GO: actually return to PCSS mode
+#ifdef WIN32
+		// Win32 library call
+		PlaySound(TEXT("alert.wav"), NULL, SND_FILENAME);
+#endif
 		tk->EnterState(CONNECTED);
 	} else {
 		if (iterCount == 0) {
@@ -499,11 +507,9 @@ void AutoHoldStateHandler::In()
 				break;
 			case 'r':
 				cout << endl;
-				// TO GO... haven't actually transferred away from IVR
 				tk->EnterState(CONNECTED);
 				break;
 			case 'm':
-				//tk->EnterState(MUTE_AUTO_HOLD);
 				if (mute) {
 					tk->SetSpeakerVolume(100);
 				} else {
@@ -511,10 +517,10 @@ void AutoHoldStateHandler::In()
 				}
 				mute = !mute;
 				break;
-//			case 'q':
-//				cout << endl << flush;
-//				tk->EnterState(EXIT);
-//				break;
+			case 'q':
+				cout << endl << flush;
+				tk->EnterState(EXIT);
+				break;
 		}
 	}
 
@@ -525,7 +531,7 @@ void AutoHoldStateHandler::Exit()
 {
 	tk->SetMicVolume(100);
 	tk->SetSpeakerVolume(100);
-	// TO GO - if in IVR mode, transfer back to PCSS mode
+	tk->Retrieve();
 }
 
 

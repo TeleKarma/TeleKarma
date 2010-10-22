@@ -51,11 +51,13 @@ class TeleKarma : public PProcess {
 		/* TO GO the following methods are not finished */
 		bool IsPlayingWAV(bool onLine = true, bool onSpeakers = false);	
 		void PlayWAV(const PString & src, bool onConnection = true, bool onSpeakers = true);		// details to go
-		void SetMicVolume(int volume);
-		void SetSpeakerVolume(int volume);
+		void SetMicVolume(unsigned int volume);
+		void SetSpeakerVolume(unsigned int volume);
 		/* End TO GO section */
 		void ToggleRecording();
+		void Retrieve();
 		bool ToneReceived(char key, bool clear = true);
+		void ClearTones();
 		void SendTone(char key);
 		// console I/O methods
 		char GetChar();

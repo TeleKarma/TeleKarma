@@ -20,22 +20,24 @@ TelephonyIfc::TelephonyIfc() :
 	aor(""),
 	callToken(""),
 	pcToken(""),
+	ivrToken(""),
+	why(""),
 	nextTone(0),
 	dialing(false),
-	why(""),
 	ivrMode(PFalse)
 {
 	why.MakeEmpty();
 	callToken.MakeEmpty();
 	pcToken.MakeEmpty();
+	ivrToken.MakeEmpty();
 	aor.MakeEmpty();
-	for (int i = 0; i < DTMF_TONE_MAX; ++i) tones[i] = NULL;
+	ClearTones();
 }
 
 
 TelephonyIfc::~TelephonyIfc()
 {
-	if (!callToken.IsEmpty()) Disconnect();
+	Disconnect();
 	Unregister();
 }
 
@@ -79,6 +81,7 @@ void TelephonyIfc::Initialise(const PString & stunAddr, const PString & user)
 	// IVR Endpoint Setup & Config
 
 	ivrEP = new OpalIVREndPoint(*this);
+	ivrEP->StartListeners(ivrEP->GetDefaultListeners());
 
 	///////////////////////////////////////
 	// Mixer Endpoint Setup
@@ -86,7 +89,7 @@ void TelephonyIfc::Initialise(const PString & stunAddr, const PString & user)
 	OpalMixerNodeInfo * mcuNodeInfo = new OpalMixerNodeInfo;
 	mcuNodeInfo->m_name = "Telekarma";
 	mixerEP->SetAdHocNodeInfo(mcuNodeInfo);
-	SetUpCall("mcu:*", "pc:*", pcToken);
+	mixerEP->StartListeners(mixerEP->GetDefaultListeners());
 
 }
 
@@ -110,6 +113,7 @@ PBoolean TelephonyIfc::IsRegistered()
 
 PBoolean TelephonyIfc::Unregister() {
 	if (sipEP->IsRegistered(aor)) {
+		Disconnect();
 		sipEP->Unregister(aor);
 		while (sipEP->IsRegistered(aor));
 	}
@@ -129,38 +133,29 @@ PString TelephonyIfc::ToggleRecording(const PString & fname) {
 	}
 }
 
-PBoolean TelephonyIfc::SendTone(const char tone) {
-	if (callToken.IsEmpty()) {
-		// no call in progress
-		return PFalse;
-	} else {
+void TelephonyIfc::SendTone(const char tone) {
+	if (!callToken.IsEmpty()) {
 		PSafePtr<OpalCall> call = FindCallWithLock(callToken);
-		if (call == NULL) {
-			// no call in progress
-			return PFalse;
-		} else {
+		if (call != NULL) {
 			PSafePtr<OpalConnection> conn = call->GetConnection(0);
 			while (conn != NULL) {
 				conn->SendUserInputTone(tone, 180);
 				// would be nice to hear this on speaker...
 				++conn;
 			}
-			return PTrue;
 		}
 	}
 }
 
 
-PBoolean TelephonyIfc::Dial(const PString & dest)
+void TelephonyIfc::Dial(const PString & dest)
 {
-	if (!callToken.IsEmpty() || dest.IsEmpty()) {
-		// cannot call while on a call
-		// cannot call without specifying destination
-		return PFalse;
-	} else {
+	if (callToken.IsEmpty() && !dest.IsEmpty()) {
 		dialing = true;
+		ClearTones();
 		why.MakeEmpty();
-		return SetUpCall("mcu:*", dest, callToken);
+		SetUpCall("mcu:*", "pc:*", pcToken);
+		SetUpCall("mcu:*", dest, callToken);
 	}
 }
 
@@ -172,7 +167,7 @@ PBoolean TelephonyIfc::IsDialing()
 
 void TelephonyIfc::OnEstablishedCall(OpalCall & call)
 {
-	dialing = false;
+	if (callToken == call.GetToken()) dialing = false;
 }
 
 
@@ -183,83 +178,86 @@ PBoolean TelephonyIfc::IsConnected()
 
 
 /** Disconnect the call currently in progress */
-PBoolean TelephonyIfc::Disconnect()
+void TelephonyIfc::Disconnect()
 {
-	dialing = false;
 	PSafePtr<OpalCall> call = FindCallWithLock(callToken);
-	if (call == NULL) {
-		// no call in progress
-		return PFalse;
-	} else {
-		if (IsRecording(callToken))
-			StopRecording(callToken);
+	if (call != NULL) {
+		if (IsRecording(callToken)) StopRecording(callToken);
 		call->Clear();
-		return PTrue;
+	}
+	PSafePtr<OpalCall> ivr  = FindCallWithLock(ivrToken);
+	if (ivr != NULL) {
+		if (IsRecording(ivrToken)) StopRecording(ivrToken);
+		ivr->Clear();
+	}
+	PSafePtr<OpalCall> pc   = FindCallWithLock(pcToken);
+	if (pc != NULL) {
+		if(IsRecording(pcToken)) StopRecording(pcToken);
+		pc->Clear();
 	}
 }
 
 
 void TelephonyIfc::OnClearedCall(OpalCall & call)
 {
-	dialing = false;
-	if (callToken == call.GetToken()) callToken.MakeEmpty();
-	PString remoteName = call.GetPartyB();
-	//bool printTime = false;
-	switch (call.GetCallEndReason()) {
-	case OpalConnection::EndedByRemoteUser :
-		why = remoteName + " has ended the call";
-		break;
-	case OpalConnection::EndedByCallerAbort :
-		why = remoteName + " has hung up";
-		break;
-	case OpalConnection::EndedByRefusal :
-		why = remoteName + " did not accept your call";
-		break;
-	case OpalConnection::EndedByNoAnswer :
-		why = remoteName + " did not answer your call";
-		break;
-	case OpalConnection::EndedByTransportFail :
-		why = remoteName + "Call with " + remoteName + " ended abnormally";
-		break;
-	case OpalConnection::EndedByCapabilityExchange :
-		why = remoteName + "Could not find common codec with " + remoteName;
-		break;
-	case OpalConnection::EndedByNoAccept :
-		why = remoteName + "Did not accept incoming call from " + remoteName;
-		break;
-	case OpalConnection::EndedByAnswerDenied :
-		why = remoteName +  "Refused incoming call from " + remoteName;
-		break;
-	case OpalConnection::EndedByNoUser :
-		why = remoteName + "Gatekeeper or registrar could not find user " + remoteName;
-		break;
-	case OpalConnection::EndedByNoBandwidth :
-		why = remoteName + "Call to " + remoteName + " aborted, insufficient bandwidth";
-		break;
-	case OpalConnection::EndedByUnreachable :
-		why = remoteName + remoteName + " could not be reached";
-		break;
-	case OpalConnection::EndedByNoEndPoint :
-		why = remoteName + "No phone running for " + remoteName;
-		break;
-	case OpalConnection::EndedByHostOffline :
-		why = remoteName + remoteName + " is not online";
-		break;
-	case OpalConnection::EndedByConnectFail :
-		why = remoteName + "Transport error calling " + remoteName;
-		break;
-	default :
-		//printTime = false;
-		why = remoteName + "Call with " + remoteName + " completed";
+	if (ivrToken == call.GetToken()) {
+		ivrToken.MakeEmpty();
+	} else if (pcToken == call.GetToken()) {
+		pcToken.MakeEmpty();
+	} else if (callToken == call.GetToken()) {
+		// update connectivity status
+		dialing = false;
+		callToken.MakeEmpty();
+		// update disconnect reason
+		PString remoteName = call.GetPartyB();
+		switch (call.GetCallEndReason()) {
+		case OpalConnection::EndedByRemoteUser :
+			why = remoteName + " has ended the call";
+			break;
+		case OpalConnection::EndedByCallerAbort :
+			why = remoteName + " has hung up";
+			break;
+		case OpalConnection::EndedByRefusal :
+			why = remoteName + " did not accept your call";
+			break;
+		case OpalConnection::EndedByNoAnswer :
+			why = remoteName + " did not answer your call";
+			break;
+		case OpalConnection::EndedByTransportFail :
+			why = remoteName + "Call with " + remoteName + " ended abnormally";
+			break;
+		case OpalConnection::EndedByCapabilityExchange :
+			why = remoteName + "Could not find common codec with " + remoteName;
+			break;
+		case OpalConnection::EndedByNoAccept :
+			why = remoteName + "Did not accept incoming call from " + remoteName;
+			break;
+		case OpalConnection::EndedByAnswerDenied :
+			why = remoteName +  "Refused incoming call from " + remoteName;
+			break;
+		case OpalConnection::EndedByNoUser :
+			why = remoteName + "Gatekeeper or registrar could not find user " + remoteName;
+			break;
+		case OpalConnection::EndedByNoBandwidth :
+			why = remoteName + "Call to " + remoteName + " aborted, insufficient bandwidth";
+			break;
+		case OpalConnection::EndedByUnreachable :
+			why = remoteName + remoteName + " could not be reached";
+			break;
+		case OpalConnection::EndedByNoEndPoint :
+			why = remoteName + "No phone running for " + remoteName;
+			break;
+		case OpalConnection::EndedByHostOffline :
+			why = remoteName + remoteName + " is not online";
+			break;
+		case OpalConnection::EndedByConnectFail :
+			why = remoteName + "Transport error calling " + remoteName;
+			break;
+		default :
+			why = remoteName + "Call with " + remoteName + " completed";
+		}
 	}
-	/*
-	if (printTime) {
-		PTime now;
-		cout << ", on " << now.AsString("w h:mma") << ". Duration "
-			<< setprecision(0) << setw(5) << (now - call.GetStartTime())
-			<< "s." << endl;
-	}
-	*/
+	ClearTones();
 	OpalManager::OnClearedCall(call);
 }
 
@@ -277,7 +275,7 @@ PBoolean TelephonyIfc::OnOpenMediaStream(OpalConnection & connection, OpalMediaS
 	PCaselessString prefix = connection.GetEndPoint().GetPrefixName();
 	if (prefix == "pc" || prefix == "pots") {
 		PTRACE(3, "Started " << (stream.IsSink() ? "playing " : "grabbing ") << stream.GetMediaFormat());
-		ivrMode = PFalse;
+		OnAudioFileSent();
 	} else if (prefix == "ivr") {
 		PTRACE(3, "Started " << (stream.IsSink() ? "streaming " : "recording ") << stream.GetMediaFormat());
 		ivrMode = PTrue;
@@ -292,7 +290,6 @@ PBoolean TelephonyIfc::OnOpenMediaStream(OpalConnection & connection, OpalMediaS
 
 void TelephonyIfc::OnUserInputTone(OpalConnection& connection, char tone, int duration)
 {
-	//cerr << endl << "*** User tone received: " << tone << endl << flush;
 	for (int i = 0; i < DTMF_TONE_MAX; ++i)
 		if (tones[i] == tone) return;
 	tones[nextTone] = tone;
@@ -302,37 +299,43 @@ void TelephonyIfc::OnUserInputTone(OpalConnection& connection, char tone, int du
 }
 
 
+void TelephonyIfc::ClearTones()
+{
+	for (int i = 0; i < DTMF_TONE_MAX; ++i)
+		tones[i] = NULL;
+	nextTone = 0;
+}
+
+
 bool TelephonyIfc::ToneReceived(char key, bool clear)
 {
-	/* TO GO - clear array upon disconnect */
 	bool r = false;
 	for (int i = 0; i < DTMF_TONE_MAX; ++i)
 		if (tones[i] == key) r = true;
-	if (clear)
-		for (int i = 0; i < DTMF_TONE_MAX; ++i)
-			tones[i] = NULL;
+	if (clear) ClearTones();
 	return r;
-}
-
-PSafePtr<OpalConnection> TelephonyIfc::GetConnection(PSafePtr<OpalCall> call, bool user, PSafetyMode mode)
-{
-	if (call == NULL) 
-		return NULL;
-
-	PSafePtr<OpalConnection> connection = call->GetConnection(0, PSafeReference);
-	while (connection != NULL && connection->IsNetworkConnection() == user)
-		++connection;
-
-	return connection.SetSafetyMode(mode) ? connection : NULL;
 }
 
 void TelephonyIfc::SendAudioFile(const PString & path)
 {
 
-	PSafePtr<OpalCall> call = FindCallWithLock(callToken);
-	if (call == NULL) {
+	if (!callToken.IsEmpty()) {
+		PSafePtr<OpalCall> call = FindCallWithLock(callToken);
+		if (call == NULL) {
+			PTRACE(3, "Attempted to send WAV file failed: no active call.");
+			return;
+		}
+	} else {
 		PTRACE(3, "Attempted to send WAV file failed: no active call.");
 		return;
+	}
+
+	if (!ivrToken.IsEmpty()) {
+		PSafePtr<OpalCall> ivr = FindCallWithLock(ivrToken);
+		if (ivr == NULL) {
+			PTRACE(3, "Attempted to send WAV file failed: wav file send in process.");
+			return;
+		}
 	}
 
 	PStringStream ivrXML;
@@ -345,15 +348,88 @@ void TelephonyIfc::SendAudioFile(const PString & path)
 			"</form>"
 		"</vxml>";
 
-	PString ivrCall;
-	SetUpCall("mcu:*", ivrXML, ivrCall);
 	ivrMode = PTrue;
+	SetUpCall("mcu:*", ivrXML, ivrToken);
 
+}
+
+void TelephonyIfc::OnAudioFileSent() {
+	ivrMode = PFalse;
+	PSafePtr<OpalCall> ivr = FindCallWithLock(ivrToken);
+	if (ivr != NULL) {
+		ivr->Clear();
+		cerr << endl << "OnAudioFileSent: Cleared IVR Connection" << endl;
+	}
+	ivrToken.MakeEmpty();
+}
+
+
+void TelephonyIfc::Retrieve()
+{
+	cerr << endl << "Retrieve Call" << endl;
+	OnAudioFileSent();
 }
 
 PBoolean TelephonyIfc::InIVRMode()
 {
 	return ivrMode;
+}
+
+void TelephonyIfc::SetMicVolume(unsigned int gain)
+{
+	PSafePtr<OpalCall> pc = FindCallWithLock(pcToken);
+	if (pc != NULL) {
+		PSafePtr<OpalConnection> connection = pc->GetConnection(0, PSafeReference);
+		if (connection != NULL) {
+			connection->SetAudioVolume(PTrue, gain);
+			cerr << endl << "Set PC Mic Volume @ " << gain << "%" << endl;
+		}
+	}
+	PSafePtr<OpalCall> call = FindCallWithLock(callToken);
+	if (call != NULL) {
+		PSafePtr<OpalConnection> connection = call->GetConnection(0, PSafeReference);
+		if (connection != NULL) {
+			connection->SetAudioVolume(PTrue, gain);
+			cerr << endl << "Set Call Mic Volume @ " << gain << "%" << endl;
+		}
+	}
+	PSafePtr<OpalCall> ivr = FindCallWithLock(ivrToken);
+	if (ivr != NULL) {
+		PSafePtr<OpalConnection> connection = ivr->GetConnection(0, PSafeReference);
+		if (connection != NULL) {
+			connection->SetAudioVolume(PTrue, gain);
+			cerr << endl << "Set IVR Mic Volume @ " << gain << "%" << endl;
+		}
+	}
+}
+
+
+void TelephonyIfc::SetSpeakerVolume(unsigned int gain)
+{
+	PSafePtr<OpalCall> pc = FindCallWithLock(pcToken);
+	if (pc != NULL) {
+		PSafePtr<OpalConnection> connection = pc->GetConnection(0, PSafeReference);
+		if (connection != NULL) {
+			connection->SetAudioVolume(PFalse, gain);
+			cerr << endl << "Set Speaker Volume @ " << gain << "%" << endl;
+		}
+	}
+	PSafePtr<OpalCall> call = FindCallWithLock(callToken);
+	if (call != NULL) {
+		PSafePtr<OpalConnection> connection = call->GetConnection(0, PSafeReference);
+		if (connection != NULL) {
+			connection->SetAudioVolume(PFalse, gain);
+			cerr << endl << "Set Call Speaker Volume @ " << gain << "%" << endl;
+		}
+	}
+	PSafePtr<OpalCall> ivr = FindCallWithLock(ivrToken);
+	if (ivr != NULL) {
+		PSafePtr<OpalConnection> connection = ivr->GetConnection(0, PSafeReference);
+		if (connection != NULL) {
+			connection->SetAudioVolume(PFalse, gain);
+			cerr << endl << "Set IVR Speaker Volume @ " << gain << "%" << endl;
+		}
+	}
 }
 
 // End of File ///////////////////////////////////////////////////////////////

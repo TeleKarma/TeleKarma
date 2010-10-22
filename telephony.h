@@ -58,12 +58,12 @@ class TelephonyIfc : public OpalManager {
 		/**
 		 * Send a DTMF tone to the remote party if connected.
 		 */
-		PBoolean SendTone(const char tone);
+		void SendTone(const char tone);
 
 		/**
 		 * Initiate a new call.
 		 */
-		PBoolean Dial(const PString & ostr);
+		void Dial(const PString & ostr);
 
 		/**
 		 * Determines whether there is a call being dialed, but
@@ -84,7 +84,7 @@ class TelephonyIfc : public OpalManager {
 		/**
 		 * Disconnect the current call if it exists.
 		 */
-		PBoolean Disconnect();
+		void Disconnect();
 		
 		/**
 		 * Callback invoked when call has been disconnected.
@@ -114,6 +114,13 @@ class TelephonyIfc : public OpalManager {
 		void OnUserInputTone(OpalConnection& connection, char tone, int duration);
 
 		/**
+		 * Clears the array that holds a record of unique 
+		 * tones received since the last time the array was
+		 * cleared.
+		 */
+		void TelephonyIfc::ClearTones();
+
+		/**
 		 * Transmit a WAV file to the remote party.
 		 */
 		void SendAudioFile(const PString & path);
@@ -125,8 +132,25 @@ class TelephonyIfc : public OpalManager {
 		 */
 		PBoolean InIVRMode();
 
+		/**
+		 * Retrieve the call from any form of IVR mode.
+		 */
+		void Retrieve();
+
+		/**
+		 * Set the gain (volume) of the microphone.
+		 */
+		void SetMicVolume(unsigned int gain);
+
+		/**
+		 * Set the gain (volume) of the pc's speakers or
+		 * other sound output device.
+		 */
+		void SetSpeakerVolume(unsigned int gain);
+
 	protected:
 		PString callToken;
+		PString ivrToken;
 		PString pcToken;
 		PString aor;
 		bool dialing;
@@ -139,7 +163,7 @@ class TelephonyIfc : public OpalManager {
 		OpalIVREndPoint  * ivrEP;
 		OpalMixerEndPoint * mixerEP;
 
-		PSafePtr<OpalConnection> GetConnection(PSafePtr<OpalCall> call, bool user, PSafetyMode mode);
+		void OnAudioFileSent();
 
 };
 

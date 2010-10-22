@@ -9,6 +9,7 @@
 #ifdef WIN32
 	#include <conio.h>	// for MS-specific _kbhit() and _getch()
 	#include <io.h>		// for access()
+	//#include "winsound.h"
 #else
 	#include <unistd.h>	// for access()
 #endif
@@ -182,6 +183,15 @@ bool TeleKarma::ToneReceived(char key, bool clear)
 }
 
 
+/** 
+ * Resets the array of received tones.
+ */
+void TeleKarma::ClearTones()
+{
+	if (phone != NULL) phone->ClearTones();
+}
+
+
 /** Play a DTMF tone over phone connection. */
 void TeleKarma::SendTone(char key)
 {
@@ -193,7 +203,13 @@ void TeleKarma::SendTone(char key)
 void TeleKarma::PlayWAV(const PString & filename, bool onLine, bool onSpeaker)
 {
 	if (phone != NULL && onLine) phone->SendAudioFile(filename);
-//	if (onSpeaker) // TO GO
+}
+
+
+/** Retrieve a call from IVR. */
+void TeleKarma::Retrieve()
+{
+	if (phone != NULL) phone->Retrieve();
 }
 
 
@@ -280,16 +296,22 @@ bool TeleKarma::IsPlayingWAV(bool onLine, bool onSpeakers)
 	}
 }
 
-void TeleKarma::SetMicVolume(int volume)
+void TeleKarma::SetMicVolume(unsigned int volume)
 {
-	// TO GO
-	cerr << "Unimplemented: TeleKarma.SetMicVolume()" << endl;
+	if (phone != NULL) return phone->SetMicVolume(volume);
+#ifdef WIN32
+	if (volume > 0) {
+		//UnMuteMic();
+	} else {
+		//MuteMic();
+	}
+
+#endif
 }
 
-void TeleKarma::SetSpeakerVolume(int volume)
+void TeleKarma::SetSpeakerVolume(unsigned int volume)
 {
-	// TO GO
-	cerr << "Unimplemented: TeleKarma.SetSpeakerVolume()" << endl;
+	if (phone != NULL) return phone->SetSpeakerVolume(volume);
 }
 
 
