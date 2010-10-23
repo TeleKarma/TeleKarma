@@ -146,6 +146,7 @@ void RegisterStateHandler::In() {
 	} else if (iterCount > REG_ITER_LIMIT) {
 		// registration failed
 		cout << "failed." << endl << flush;
+		cout << "Could not register...exiting program." << endl << flush;
 		tk->EnterState(EXIT);
 	}
 }
@@ -260,7 +261,7 @@ ConnectedStateHandler::ConnectedStateHandler(TeleKarma & tk) : StateHandler(tk)
 	menu << "  h   : Hold call" << endl;
 	menu << "  w   : Hold until human detected" << endl;
 //	menu << "  q   : Quit" << endl;
-	menu << "  x   : Disconnect" << endl;
+//	menu << "  x   : Disconnect" << endl;
 	menu << "  d   : Disconnect" << endl;
 	menu << "----------------------------------------" << endl;
 	menu << "  z   : [FOR TESTING] Toggle recording" << endl;
@@ -295,7 +296,7 @@ void ConnectedStateHandler::In()
 		char ch = tk->GetChar();
 		PTRACE(3, "User command in Connected state: " << ch);
 		switch (ch) {
-			case 'x':
+//			case 'x':
 			case 'd':
 				cout << endl << endl;
 				tk->EnterState(DISCONNECT);
@@ -349,7 +350,7 @@ HoldStateHandler::HoldStateHandler(TeleKarma & tk) :
 //	menu << "  z   : Toggle recording" << endl;
 	menu << "  r   : Retrieve call" << endl;
 	menu << "  q   : Quit" << endl;
-	menu << "  x   : Disconnect" << endl;
+//	menu << "  x   : Disconnect" << endl;
 	menu << "  d   : Disconnect" << endl;
 	menu << endl;
 }
@@ -383,7 +384,7 @@ void HoldStateHandler::In()
 		char ch = tk->GetChar();
 		PTRACE(3, "User command in Hold state: " << ch);
 		switch (ch) {
-			case 'x':
+//			case 'x':
 			case 'd':
 				cout << endl;
 				tk->EnterState(DISCONNECT);
@@ -430,7 +431,7 @@ AutoHoldStateHandler::AutoHoldStateHandler(TeleKarma & tk) :
 //	menu << "  z   : Toggle recording" << endl;
 	menu << "  r   : Retrieve call" << endl;
 	menu << "  q   : Quit" << endl;
-	menu << "  x   : Disconnect" << endl;
+//	menu << "  x   : Disconnect" << endl;
 	menu << "  d   : Disconnect" << endl;
 	menu << "  m   : Mute/Unmute Speakers" << endl;
 	menu << endl;
@@ -486,7 +487,7 @@ void AutoHoldStateHandler::In()
 		if (ch == 0) return;
 		PTRACE(3, "User command in AutoHold state: " << ch);
 		switch (ch) {
-			case 'x':
+//			case 'x':
 			case 'd':
 				cout << endl;
 				tk->EnterState(DISCONNECT);
