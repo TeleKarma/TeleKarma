@@ -473,10 +473,10 @@ void AutoHoldStateHandler::In()
 	} else if (tk->ToneReceived(IS_HUMAN_TONE)) {
 		// TO GO: play alarm WAV
 		// tk->PlayWav("src", false, true);
+#ifdef WIN32
 		PlaySound(TEXT("userconnected.wav"), NULL, SND_FILENAME);
 		cout << endl;
 		cout << "ALERT: Human auto-detected; call retrieved & active." << endl << flush;
-#ifdef WIN32
 		// Win32 library call
 		PlaySound(TEXT("alert.wav"), NULL, SND_FILENAME);
 #endif

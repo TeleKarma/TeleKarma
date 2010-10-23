@@ -144,8 +144,8 @@ class TelephonyIfc : public OpalManager {
 		 */
 		void SetSpeakerVolume(unsigned int gain);
 
-		void TelephonyIfc::TurnOffMicrophone();
-		void TelephonyIfc::TurnOnMicrophone();
+		void TurnOffMicrophone();
+		void TurnOnMicrophone();
 
 	protected:
 		PString callToken;
