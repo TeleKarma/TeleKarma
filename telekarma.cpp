@@ -217,7 +217,7 @@ void TeleKarma::StopWAV()
 void TeleKarma::StartIVR()
 {
 	if (phone != NULL) {
-		//phone->PlayWAV(AUTO_HOLD_WAV, IVR_REPEATS, PAUSE_TIME);
+		phone->PlayWAV(AUTO_HOLD_WAV, IVR_REPEATS, PAUSE_TIME);
 		phone->TurnOffMicrophone();
 	}
 }
