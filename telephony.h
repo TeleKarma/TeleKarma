@@ -43,9 +43,11 @@ class TelephonyIfc : public OpalManager {
 
 		PBoolean Unregister();
 
-		// fix return value later... need tri-state return value
-		PString  ToggleRecording(const PString & fname);
-		
+		PBoolean IsRecording();
+
+		void StartRecording(const PString & fname);
+
+		void StopRecording();
 		/**
 		 * Determines whether a DTMF tone has been received.
 		 * DTMF tones are queued, this checks queue and clears
@@ -151,6 +153,7 @@ class TelephonyIfc : public OpalManager {
 		PString callToken;
 		PString pcToken;
 		PString wavToken;
+		PString recordToken;
 		PString aor;
 		bool dialing;
 		PBoolean ivrMode;

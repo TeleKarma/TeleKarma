@@ -232,11 +232,15 @@ void TeleKarma::StopIVR()
 
 void TeleKarma::ToggleRecording()
 {
-	PTime now;
-	PString recFName("recordings/rec");
-	recFName += now.AsString("_yyyy.MM.dd_hh.mm.ss");
-	recFName += ".wav";
-	phone->ToggleRecording(recFName);
+	if (!phone->IsRecording()) {
+		PTime now;
+		PString recFName("recordings/rec");
+		recFName += now.AsString("_yyyy.MM.dd_hh.mm.ss");
+		recFName += ".wav";
+		phone->StartRecording(recFName);
+	} else {
+		phone->StopRecording();
+	}
 }
 
 
