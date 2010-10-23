@@ -395,4 +395,16 @@ void TelephonyIfc::SetSpeakerVolume(unsigned int gain)
 	}
 }
 
+void TelephonyIfc::TurnOffMicrophone()
+{
+	ClearCall(pcToken);
+	//SetupCall("mcu:*", "pc:*", pcToken);
+	SetUpCall("mcu:*;Listen-Only=1", "pc:*", pcToken);
+}
+
+void TelephonyIfc::TurnOnMicrophone(){
+	ClearCall(pcToken);
+	SetUpCall("mcu:*", "pc:*", pcToken);
+}
+
 // End of File ///////////////////////////////////////////////////////////////
