@@ -349,7 +349,7 @@ HoldStateHandler::HoldStateHandler(TeleKarma & tk) :
 	menu << "Select:" << endl;
 //	menu << "  z   : Toggle recording" << endl;
 	menu << "  r   : Retrieve call" << endl;
-	menu << "  q   : Quit" << endl;
+//	menu << "  q   : Quit" << endl;
 //	menu << "  x   : Disconnect" << endl;
 	menu << "  d   : Disconnect" << endl;
 	menu << endl;
@@ -398,10 +398,10 @@ void HoldStateHandler::In()
 				cout << endl;
 				tk->EnterState(CONNECTED);
 				break;
-			case 'q':
+/*			case 'q':
 				cout << endl << flush;
 				tk->EnterState(EXIT);
-				break;
+				break;*/
 		}
 	}
 
@@ -430,7 +430,7 @@ AutoHoldStateHandler::AutoHoldStateHandler(TeleKarma & tk) :
 	menu << "Select:" << endl;
 //	menu << "  z   : Toggle recording" << endl;
 	menu << "  r   : Retrieve call" << endl;
-	menu << "  q   : Quit" << endl;
+//	menu << "  q   : Quit" << endl;
 //	menu << "  x   : Disconnect" << endl;
 	menu << "  d   : Disconnect" << endl;
 	menu << "  m   : Mute/Unmute Speakers" << endl;
@@ -510,10 +510,10 @@ void AutoHoldStateHandler::In()
 				}
 				mute = !mute;
 				break;
-			case 'q':
+/*			case 'q':
 				cout << endl << flush;
 				tk->EnterState(EXIT);
-				break;
+				break;*/
 		}
 	}
 
