@@ -1,6 +1,7 @@
 #include <opal/manager.h>
 #include <opal/pcss.h>
 #include <sip/sipep.h>
+#include <opal/opalmixer.h>
 #include <iostream>
 
 class MyPCSSEndPoint : public OpalPCSSEndPoint {
@@ -21,7 +22,7 @@ MyPCSSEndPoint::~MyPCSSEndPoint() {
 }
 
 PBoolean MyPCSSEndPoint::OnShowIncoming(const OpalPCSSConnection & connection) {
-	return PTrue;
+	return AcceptIncomingCall(connection.GetToken());
 }
 
 PBoolean MyPCSSEndPoint::OnShowOutgoing(const OpalPCSSConnection & connection) {
@@ -152,6 +153,11 @@ void MyProcess::Main() {
 	std::cout << "Registering with " << params.m_registrarAddress << "; this may take a while..." << std::endl;
 	endPoint->Register(params, aor);
 
+	OpalMixerEndPoint * mixerEP = new OpalMixerEndPoint(manager, "mcu");
+	OpalMixerNodeInfo * mcuNodeInfo = new OpalMixerNodeInfo;
+	mcuNodeInfo->m_name = "Telekarma";
+	mixerEP->SetAdHocNodeInfo(mcuNodeInfo);
+	mixerEP->StartListeners(mixerEP->GetDefaultListeners());
 	int i;
 	for(i = 20; i > 0; i--) {
 		if (endPoint->IsRegistered(aor)) {
@@ -163,12 +169,13 @@ void MyProcess::Main() {
 	if (i > 0) {
 		std::cout << "Registration succeeded; aor=" << aor << std::endl;
 		std::cout << "Calling..." << std::endl;
-		PSafePtr<OpalCall> call = manager.SetUpCall("pc:*", SIP_ADDRESS);
+		PSafePtr<OpalCall> call2 = manager.SetUpCall("mcu:*", "pc:*");
+		PSafePtr<OpalCall> call = manager.SetUpCall("mcu:*", SIP_ADDRESS);
 		while(!call);
-		call->StartRecording("test.wav");
+//		manager.StartRecording("test.wav");
 		std::cout << "Connection will automatically terminate after 15 seconds..." << std::endl;
 		PThread::Sleep(15*1000);
-		call->StopRecording();
+//		manager.StopRecording();
 		std::cout << "Connection automatically terminated by design." << std::endl;
 		call->Clear();
 		endPoint->Unregister(aor);
