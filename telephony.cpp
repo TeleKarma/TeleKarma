@@ -72,7 +72,6 @@ void TelephonyIfc::Initialise(const PString & stunAddr, const PString & user)
 	// SIP protocol handler
 
 	sipEP = new TkSIPEndPoint(*this);
-	sipEP->SetSendUserInputMode(OpalConnection::SendUserInputAsTone);
 	sipEP->SetDefaultLocalPartyName(user);
 	sipEP->SetRetryTimeouts(10000, 30000);
 	sipEP->StartListeners(sipEP->GetDefaultListeners());
