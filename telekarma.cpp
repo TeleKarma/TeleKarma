@@ -243,7 +243,6 @@ void TeleKarma::ToggleRecording()
 	}
 }
 
-
 /**
  * Obtain one character of keyboard input if present.
  * Convert to lowercase and return. If no input, return
@@ -259,14 +258,21 @@ void TeleKarma::ToggleRecording()
 		ch = tolower(_getch());
 	}
 #else
-	/* XXX TO DO for Tom
-	 * Why do we need to do non-blocking IO? 
-	 * #error NON-BLOCKING INPUT REQUIRED BUT MISSING FOR LINUX */
-	PString line;
-	cin >> line;
-	line = line.LeftTrim();
-	if (line.GetLength() > 0)
-		ch = line[0];
+	/* Thanks to:
+	 * http://cc.byexamples.com/2007/04/08/non-blocking-user-input-in-loop-without-ncurses/ 
+	 * for linux kbhit implementation*/
+	struct timeval tv;
+	fd_set fds;
+	tv.tv_sec = 0;
+	tv.tv_usec = 0;
+	FD_ZERO(&fds);
+	FD_SET(STDIN_FILENO, &fds);
+	select(STDIN_FILENO+1, &fds, NULL, NULL, &tv);
+	if(FD_ISSET(0, &fds)) {
+		ch = tolower(getchar());
+	} else {
+		ch = NULL;
+	}
 #endif
 	return ch;
 }
