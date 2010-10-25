@@ -216,7 +216,20 @@ void TeleKarma::StopWAV()
 
 void TeleKarma::StartIVR(const PString &fname)
 {
+	/*bool assurance = false;
+	PString assuranceName = "assurance.wav";
+	phone->PlayWAV(assuranceName, 0,0);
+	while (!assurance){
+		if(!phone->IsPlayingWav()){
+			
+			assurance = true;
+		}
+	}*/
 	if (phone != NULL) {
+		PString assuranceName = "assurance.wav";
+		PlayWAV(assuranceName, 0,0);
+		PThread::Sleep(10000);
+		StopWAV();
 		phone->PlayWAV(fname, IVR_REPEATS, PAUSE_TIME);
 		phone->TurnOffMicrophone();
 	}
