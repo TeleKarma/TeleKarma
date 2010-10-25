@@ -26,7 +26,6 @@
 
 class TeleKarma;
 
-
 class StateHandler
 {
 	public:
