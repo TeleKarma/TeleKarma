@@ -18,7 +18,7 @@
 #define SLEEP_DURATION   50
 
 /* How long to wait between playing hold & autohold messages */
-#define PAUSE_TIME     2000
+#define PAUSE_TIME     0
 
 /* How many times to loop the IVR message.  We want the IVR to repeat forever,
  * so this number should be large. */
@@ -33,10 +33,10 @@
 #define IS_HUMAN_TONE    '1'
 
 /* Auto Hold WAV file */
-#define AUTO_HOLD_WAV   "test.wav"
+#define AUTO_HOLD_WAV   "press1.wav"
 
 /* Regular Hold WAV file */
-#define HOLD_WAV        "test.wav"
+#define HOLD_WAV        "pleasehold.wav"
 
 
 class TeleKarma : public PProcess {

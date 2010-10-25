@@ -72,7 +72,6 @@ void TelephonyIfc::Initialise(const PString & stunAddr, const PString & user)
 	// SIP protocol handler
 
 	sipEP = new TkSIPEndPoint(*this);
-	sipEP->SetSendUserInputMode(OpalConnection::SendUserInputAsTone);
 	sipEP->SetDefaultLocalPartyName(user);
 	sipEP->SetRetryTimeouts(10000, 30000);
 	sipEP->StartListeners(sipEP->GetDefaultListeners());
@@ -120,17 +119,24 @@ PBoolean TelephonyIfc::Unregister() {
 	return PTrue;
 }
 
+void TelephonyIfc::StartRecording(const PString & fname) {
+	if (recordToken.IsEmpty()) {
+		PString VXML = "ivr:<vxml><form>"
+		"<record name=\"msg\" dtmfterm=\"false\" dest=\"" +
+					PURL(PFilePath(fname)).AsString() + "\"/>"
+		"</form></vxml>";
 
-PString TelephonyIfc::ToggleRecording(const PString & fname) {
-	if (callToken.IsEmpty()) {
-		return "Cannot start or stop recording without a call in progress.";
-	} else if (IsRecording(callToken)) {
-		StopRecording(callToken);
-		return "Recording stopped.";
-	} else {
-		StartRecording(callToken, fname);
-		return "Recording started.";
+		SetUpCall("mcu:*;Listen-Only=1", VXML, recordToken);
 	}
+}
+
+void TelephonyIfc::StopRecording() {
+	ClearCall(recordToken);
+	recordToken.MakeEmpty();
+}
+
+PBoolean TelephonyIfc::IsRecording() {
+	return IsCallEstablished(recordToken);
 }
 
 void TelephonyIfc::SendTone(const char tone) {
@@ -182,17 +188,17 @@ void TelephonyIfc::Disconnect()
 {
 	PSafePtr<OpalCall> call = FindCallWithLock(callToken);
 	if (call != NULL) {
-		if (IsRecording(callToken)) StopRecording(callToken);
+		if (IsRecording()) StopRecording();
 		call->Clear();
 	}
 	PSafePtr<OpalCall> ivr  = FindCallWithLock(wavToken);
 	if (ivr != NULL) {
-		if (IsRecording(wavToken)) StopRecording(wavToken);
+		if (IsRecording()) StopRecording();
 		ivr->Clear();
 	}
 	PSafePtr<OpalCall> pc   = FindCallWithLock(pcToken);
 	if (pc != NULL) {
-		if(IsRecording(pcToken)) StopRecording(pcToken);
+		if(IsRecording()) StopRecording();
 		pc->Clear();
 	}
 }

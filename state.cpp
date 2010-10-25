@@ -362,8 +362,8 @@ HoldStateHandler::~HoldStateHandler() { }
 void HoldStateHandler::Enter()
 {
 	iterCount = 0;
-	tk->SetMicVolume(0);
-	tk->SetSpeakerVolume(0);
+	//tk->SetMicVolume(0);
+	//tk->SetSpeakerVolume(0);
 	tk->PlayWAV(HOLD_WAV, HOLD_REPEATS, PAUSE_TIME);
 	cout << menu << "Command? " << flush;
 }
@@ -407,11 +407,9 @@ void HoldStateHandler::In()
 
 }
 
-/** Restore volume. */
 void HoldStateHandler::Exit()
 {
-	tk->SetMicVolume(100);
-	tk->SetSpeakerVolume(100);
+	tk->StopWAV();
 }
 
 
@@ -447,7 +445,7 @@ void AutoHoldStateHandler::Enter()
 	// clear the queue of received dtmf tones
 	tk->ClearTones();
 	// Mute the microphone
-	tk->SetMicVolume(0);
+	//tk->SetMicVolume(0);
 	// clear the queue of received dtmf tones (slightly hacky)
 	tk->ToneReceived('0', true);
 	tk->StartIVR();
@@ -504,9 +502,9 @@ void AutoHoldStateHandler::In()
 				break;
 			case 'm':
 				if (mute) {
-					tk->SetSpeakerVolume(100);
+					//tk->SetSpeakerVolume(100);
 				} else {
-					tk->SetSpeakerVolume(0);
+					//tk->SetSpeakerVolume(0);
 				}
 				mute = !mute;
 				break;
@@ -522,8 +520,8 @@ void AutoHoldStateHandler::In()
 /** ... */
 void AutoHoldStateHandler::Exit()
 {
-	tk->SetMicVolume(100);
-	tk->SetSpeakerVolume(100);
+	//tk->SetMicVolume(100);
+	//tk->SetSpeakerVolume(100);
 }
 
 
