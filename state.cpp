@@ -433,7 +433,7 @@ AutoHoldStateHandler::AutoHoldStateHandler(TeleKarma & tk) :
 //	menu << "  q   : Quit" << endl;
 //	menu << "  x   : Disconnect" << endl;
 	menu << "  d   : Disconnect" << endl;
-	menu << "  m   : Mute/Unmute Speakers" << endl;
+	//menu << "  m   : Mute/Unmute Speakers" << endl;
 	menu << endl;
 }
 
@@ -473,6 +473,7 @@ void AutoHoldStateHandler::In()
 	} else if (tk->ToneReceived(IS_HUMAN_TONE)) {
 		// TO GO: play alarm WAV
 		// tk->PlayWav("src", false, true);
+		tk->StopIVR();
 #ifdef WIN32
 		PlaySound(TEXT("userconnected.wav"), NULL, SND_FILENAME);
 		cout << endl;
@@ -480,7 +481,7 @@ void AutoHoldStateHandler::In()
 		// Win32 library call
 		PlaySound(TEXT("alert.wav"), NULL, SND_FILENAME);
 #endif
-		tk->StopIVR();
+		
 		tk->EnterState(CONNECTED);
 	} else {
 		char ch = tk->GetChar();
@@ -502,14 +503,14 @@ void AutoHoldStateHandler::In()
 				tk->StopIVR();
 				tk->EnterState(CONNECTED);
 				break;
-			case 'm':
+			/*case 'm':
 				if (mute) {
 					//tk->SetSpeakerVolume(100);
 				} else {
 					//tk->SetSpeakerVolume(0);
 				}
 				mute = !mute;
-				break;
+				break;*/
 /*			case 'q':
 				cout << endl << flush;
 				tk->EnterState(EXIT);

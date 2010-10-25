@@ -68,6 +68,7 @@ class TeleKarma : public PProcess {
 		void StopWAV();
 		/* End TO GO section */
 		void ToggleRecording();
+		void StartRecording();
 		void Retrieve();
 		bool ToneReceived(char key, bool clear = true);
 		void ClearTones();
