@@ -364,7 +364,8 @@ void HoldStateHandler::Enter()
 	iterCount = 0;
 	//tk->SetMicVolume(0);
 	//tk->SetSpeakerVolume(0);
-	tk->PlayWAV(HOLD_WAV, HOLD_REPEATS, PAUSE_TIME);
+	//tk->PlayWAV(HOLD_WAV, HOLD_REPEATS, PAUSE_TIME);
+	tk->StartIVR(HOLD_WAV);
 	cout << menu << "Command? " << flush;
 }
 
@@ -409,7 +410,8 @@ void HoldStateHandler::In()
 
 void HoldStateHandler::Exit()
 {
-	tk->StopWAV();
+	//tk->StopWAV();
+	tk->StopIVR();
 }
 
 
@@ -448,7 +450,7 @@ void AutoHoldStateHandler::Enter()
 	//tk->SetMicVolume(0);
 	// clear the queue of received dtmf tones (slightly hacky)
 	tk->ToneReceived('0', true);
-	tk->StartIVR();
+	tk->StartIVR(AUTO_HOLD_WAV);
 	cout << menu << "Command? " << flush;
 #ifdef WIN32
 	// Win32 library call

@@ -214,10 +214,10 @@ void TeleKarma::StopWAV()
 	}
 }
 
-void TeleKarma::StartIVR()
+void TeleKarma::StartIVR(const PString &fname)
 {
 	if (phone != NULL) {
-		phone->PlayWAV(AUTO_HOLD_WAV, IVR_REPEATS, PAUSE_TIME);
+		phone->PlayWAV(fname, IVR_REPEATS, PAUSE_TIME);
 		phone->TurnOffMicrophone();
 	}
 }
