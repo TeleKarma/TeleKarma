@@ -407,11 +407,9 @@ void HoldStateHandler::In()
 
 }
 
-/** Restore volume. */
 void HoldStateHandler::Exit()
 {
-	//tk->SetMicVolume(100);
-	//tk->SetSpeakerVolume(100);
+	tk->StopWAV();
 }
 
 
