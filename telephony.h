@@ -24,6 +24,9 @@
 class TkPCSSEndPoint;
 class OpalMixerEndPoint;
 
+/** This class is the interface between telekarama and the Opal telephony
+ * library.
+ */
 class TelephonyIfc : public OpalManager {
 
 	PCLASSINFO(TelephonyIfc, OpalManager);
@@ -32,7 +35,19 @@ class TelephonyIfc : public OpalManager {
 		TelephonyIfc();
 		virtual ~TelephonyIfc();
 
+		/**
+		 * Set up the TelephonyIfc class
+		 * @param stunAddr Address for the stun server
+		 * (e.g. stun.ekiga.net)
+		 * @param user The username that is used to authenticate with
+		 * the registrar that will be used
+		 */
 		void Initialise(const PString & stunAddr, const PString & user);
+
+		/**
+		 * Register with a service provided
+		 * @param registrar Address of the registrar (e.g. ekiga.net)
+		 */
 		void Register(const PString & registrar, const PString & user, const PString & passwd);
 
 		/**
@@ -41,29 +56,55 @@ class TelephonyIfc : public OpalManager {
 		 */
 		PBoolean IsRegistered();
 
+		/**
+		 * Unregister from the current SIP provider.
+		 */
 		PBoolean Unregister();
 
+		/**
+		 * @return PTrue if the current call is being recorded
+		 * @return PFalse if the current call is not being recorded
+		 */
 		PBoolean IsRecording();
 
+		/**
+		 * Begin recording the current call
+		 * @param fname Path to the file where the recording will be
+		 * saved.
+		 */
 		void StartRecording(const PString & fname);
 
+		/**
+		 * Stop recording the current call
+		 */
 		void StopRecording();
+
 		/**
 		 * Determines whether a DTMF tone has been received.
 		 * DTMF tones are queued, this checks queue and clears
 		 * it by default. Use clear = false to preserve the
 		 * queue, for example to check for one of multiple
 		 * keys of interest.
+		 *
+		 * @param key The DTMF tone (use '1' not 1 if you are looking
+		 * for the tone that comes from pressing the one key on a
+		 * phone).
+		 * @param clear Clear all entries in the queue for tone key
 		 */
 		bool ToneReceived(char key, bool clear = true);
 
 		/**
 		 * Send a DTMF tone to the remote party if connected.
+		 * @param tone Tone to send
 		 */
 		void SendTone(const char tone);
 
 		/**
 		 * Initiate a new call.
+		 * @param ostr URL representing the party to call in the form of
+		 * [proto:][alias@][transport$]address[:port]
+		 * Here is an example using the SIP protocol:
+		 * sip:telekarma@uoregon.edu
 		 */
 		void Dial(const PString & ostr);
 
@@ -75,6 +116,7 @@ class TelephonyIfc : public OpalManager {
 
 		/**
 		 * Callback invoked when call has been established.
+		 * @param call The call that has been established.
 		 */
 		void OnEstablishedCall(OpalCall & call);
 
@@ -90,11 +132,12 @@ class TelephonyIfc : public OpalManager {
 		
 		/**
 		 * Callback invoked when call has been disconnected.
+		 * @param call The call that has been cleared
 		 */
 		void OnClearedCall(OpalCall & call);
 
 		/**
-		 * Returns a human-friendly discription of the reason
+		 * Returns a human-friendly description of the reason
 		 * a call ended or NULL.
 		 */
 		PString DisconnectReason();
@@ -103,6 +146,8 @@ class TelephonyIfc : public OpalManager {
 		 * Callback invoked when a media stream is opened for
 		 * reading or playing. Used to detect end of IVR 
 		 * mode.
+		 * @param connection Connection that owns the stream
+		 * @param stream The stream that has been opened
 		 */
 		PBoolean OnOpenMediaStream(OpalConnection & connection, OpalMediaStream & stream);
 
@@ -112,6 +157,9 @@ class TelephonyIfc : public OpalManager {
 		 * tones holds record of unique tones detected since
 		 * array was last cleared. This method populates
 		 * the array of tones.
+		 * @param connection The connection that recieved the tone
+		 * @param tone The tone that was received
+		 * @param duration of the tone in milliseconds
 		 */
 		void OnUserInputTone(OpalConnection& connection, char tone, int duration);
 
@@ -124,8 +172,17 @@ class TelephonyIfc : public OpalManager {
 
 		/**
 		 * Transmit a WAV file to the remote party.
+		 * @note You can only play one WAV file at a time.
+		 * @param path WAV file to play
+		 * @param repeat The number of times to repeat the file
+		 * @param delay The time in milliseconds to wait between
+		 * repeated playings of the file
 		 */
 		PBoolean PlayWAV(const PString & path, int repeat=0, int delay=0);
+
+		/**
+		 * Stop the WAV file that is currently playing
+		 */
 		void StopWAV();
 
 		PBoolean IsPlayingWav();
@@ -146,18 +203,38 @@ class TelephonyIfc : public OpalManager {
 		 */
 		void SetSpeakerVolume(unsigned int gain);
 
+		/**
+		 * Block all microphone input
+		 */
 		void TurnOffMicrophone();
+
+		/**
+		 * Un-Block all microphone input
+		 */
 		void TurnOnMicrophone();
 
 	protected:
+		/** Call token for the connection from telekarama to the remote
+		 * party */
 		PString callToken;
+		/** Call token for the connection from telekarama to the PC
+		 * sound system */
 		PString pcToken;
+		/** Call token used to reference the WAV file that is currently
+		 * playing */
 		PString wavToken;
+		/** Call token for the connection from telekarma to the
+		 * recording device */
 		PString recordToken;
 		PString aor;
+		/** PTrue if telekarma is dialing a remote party otherwise
+		 * PFalse*/
 		bool dialing;
+		/** PTrue if telekarma is in IVR mode otherwise PFalse */
 		PBoolean ivrMode;
-		PString why;	// describes why call was disconnected
+		/** Describes why call was disconnected */
+		PString why;
+		/** Queue of tones pressed by the remote user */
 		char tones[DTMF_TONE_MAX];
 		int nextTone;
 		TkPCSSEndPoint * pcssEP;
