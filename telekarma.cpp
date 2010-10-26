@@ -2,35 +2,34 @@
  *
  * telekarma.cpp
  *
- * The TeleKarma main application.
+ * Implementation of TeleKarma main application.
+ *
+ * See telekarma.h for full API documentation.
  *
  */
 
 #ifdef WIN32
-	#include <conio.h>	// for MS-specific _kbhit() and _getch()
-	#include <io.h>		// for access()
-	//#include "winsound.h"
+	#include <conio.h>			// for MS-specific _kbhit() and _getch()
+	#include <io.h>				// for access()
 #else
-	#include <unistd.h>	// for access()
+	#include <unistd.h>			// for access()
 #endif
 
 
 #include <ptlib.h>
-
-#include <sys/types.h>  // for struct stat
-#include <sys/stat.h>   // for struct stat
-
+#include <sys/types.h>  		// for struct stat
+#include <sys/stat.h>   		// for struct stat
 #include "telekarma.h"
 
 #ifdef WIN32
-	#define ACCESS _access
+	#define ACCESS _access		// MSFT proprietary version of C-standard access function
 #else
-	#define ACCESS access
+	#define ACCESS access		// C-standard access function (for linux)
 #endif
 
 using namespace std;
 
-
+// Constructor - best practices in field initialization.
 TeleKarma::TeleKarma() :
 	PProcess("TeleKarma"),
 	phone(NULL),
@@ -39,18 +38,20 @@ TeleKarma::TeleKarma() :
 	for (int i = 0; i < STATE_COUNT; ++i) states[i] = NULL;
 }
 
-
+// Destructor - heap memory management, delay prior to exit,
+// and final message to console.
 TeleKarma::~TeleKarma()
 {
 	currentState = NULL;
 	for (int i = 0; i < STATE_COUNT; ++i)
 		if (states[i] != NULL) delete states[i];
 	if (phone != NULL) delete phone;
+	cout << "Thank you for using TeleKarma." << endl << flush;
 	PThread::Sleep(EXIT_DELAY);
-	cout << "Thank you for using TeleKarma." << endl;
 }
 
 
+// Main program
 void TeleKarma::Main() {
 
 	cout << "Welcome to TeleKarma!" << endl << endl << flush;
@@ -64,7 +65,7 @@ void TeleKarma::Main() {
 		PThread::Sleep(2000);
 		exit(1);
 	}
-	const char * strPath2 = "recordings"; 
+	const char * strPath2 = "recordings";
 	stat(strPath2, &status);
 	if ((ACCESS(strPath2, 0) == -1) || !(status.st_mode & S_IFDIR)){
 		cout << "Please create a \"recordings\" folder in your TeleKarma program folder." << endl << flush;
@@ -171,7 +172,7 @@ void TeleKarma::Disconnect()
 }
 
 
-/** 
+/**
  * Determine whether a DTMF tone has been recieved and
  * optionally reset the array of received tones.
  */
@@ -183,7 +184,7 @@ bool TeleKarma::ToneReceived(char key, bool clear)
 }
 
 
-/** 
+/**
  * Resets the array of received tones.
  */
 void TeleKarma::ClearTones()
@@ -216,15 +217,6 @@ void TeleKarma::StopWAV()
 
 void TeleKarma::StartIVR(const PString &fname)
 {
-	/*bool assurance = false;
-	PString assuranceName = "assurance.wav";
-	phone->PlayWAV(assuranceName, 0,0);
-	while (!assurance){
-		if(!phone->IsPlayingWav()){
-			
-			assurance = true;
-		}
-	}*/
 	if (phone != NULL) {
 		PString assuranceName = "assurance.wav";
 		PlayWAV(assuranceName, 0,0);
@@ -232,7 +224,7 @@ void TeleKarma::StartIVR(const PString &fname)
 		PThread::Sleep(4500);
 		StopWAV();
 		cout << "finished.\n" << flush;
-		
+		StartRecording();
 		phone->PlayWAV(fname, IVR_REPEATS, PAUSE_TIME);
 		phone->TurnOffMicrophone();
 	}
@@ -255,6 +247,7 @@ void TeleKarma::ToggleRecording()
 		phone->StopRecording();
 	}
 }
+
 void TeleKarma::StartRecording() {
 	PTime now;
 	PString recFName("recordings/rec");
@@ -279,7 +272,7 @@ void TeleKarma::StartRecording() {
 	}
 #else
 	/* Thanks to:
-	 * http://cc.byexamples.com/2007/04/08/non-blocking-user-input-in-loop-without-ncurses/ 
+	 * http://cc.byexamples.com/2007/04/08/non-blocking-user-input-in-loop-without-ncurses/
 	 * for linux kbhit implementation*/
 	struct timeval tv;
 	fd_set fds;
@@ -298,14 +291,12 @@ void TeleKarma::StartRecording() {
 }
 
 
-/** Print n backspaces to stdout. Does not flush. */
 void TeleKarma::Backspace(int n)
 {
 	for (int i = 0; i < n; ++i) cout << '\b';
 }
 
 
-/** Print n spaces to stdout. Does not flush. */
 void TeleKarma::Space(int n)
 {
 	for (int i = 0; i < n; ++i) cout << ' ';
@@ -345,6 +336,7 @@ bool TeleKarma::IsPlayingWAV(bool onLine, bool onSpeakers)
 
 void TeleKarma::SetMicVolume(unsigned int volume)
 {
+	// not functioning per Opal spec
 	if (phone != NULL) return phone->SetMicVolume(volume);
 #ifdef WIN32
 	if (volume > 0) {
@@ -358,6 +350,7 @@ void TeleKarma::SetMicVolume(unsigned int volume)
 
 void TeleKarma::SetSpeakerVolume(unsigned int volume)
 {
+	// not functioning per Opal spec
 	if (phone != NULL) return phone->SetSpeakerVolume(volume);
 }
 
