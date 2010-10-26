@@ -1,7 +1,7 @@
 #include <ptlib.h>
 #include "telekarma.h"
 
-/*
+/**
  * The PCREATE_PROCESS macro...
  * 1. Defines the main() function.
  * 2. Creates an instance of TeleKarma.

@@ -138,7 +138,7 @@ void RegisterStateHandler::Enter() {
 	cout << endl;
 	cout << "Identifying STUN client type... " << tk->GetSTUNType() << "." << endl;
 	cout << flush;
-	
+
 	// Initiate registration (non-blocking)
 	cout << "Registering with " << registrar << " as " << user << "... " << flush;
 	tk->Register(registrar, user, passwd);
@@ -275,10 +275,10 @@ ConnectedStateHandler::ConnectedStateHandler(TeleKarma & tk) : StateHandler(tk)
 	menu << "  h   : Hold call" << endl;
 	menu << "  w   : Hold until human detected" << endl;
 	menu << "  d   : Disconnect" << endl;
-	menu << "----------------------------------------" << endl;
-	menu << "  z   : [FOR TESTING] Toggle recording" << endl;
-	menu << "  p   : [FOR TESTING] Play WAV file" << endl;
-	menu << "----------------------------------------" << endl;
+//	menu << "----------------------------------------" << endl;
+//	menu << "  z   : [FOR TESTING] Toggle recording" << endl;
+//	menu << "  p   : [FOR TESTING] Play WAV file" << endl;
+//	menu << "----------------------------------------" << endl;
 	menu << endl;
 }
 
@@ -350,7 +350,7 @@ void ConnectedStateHandler::Exit() { }
 //
 
 /** Initialize and display the menu. */
-HoldStateHandler::HoldStateHandler(TeleKarma & tk) : 
+HoldStateHandler::HoldStateHandler(TeleKarma & tk) :
 	StateHandler(tk),
 	iterCount(0)
 {
@@ -394,7 +394,7 @@ void HoldStateHandler::In()
 			case 'd':
 				cout << endl;
 				tk->EnterState(DISCONNECT);
-				break;			
+				break;
 			case 'r': // take control back from the HoldState
 				cout << endl;
 				tk->EnterState(CONNECTED);
@@ -422,10 +422,10 @@ void HoldStateHandler::Exit()
 // AutoHold
 //
 
-/** This the main state for our "AutoHold" feature where a continual loop of 
+/** This the main state for our "AutoHold" feature where a continual loop of
 *** of audio is played and then listens for a dial-tone response of the number 1 key.
 **/
-AutoHoldStateHandler::AutoHoldStateHandler(TeleKarma & tk) : 
+AutoHoldStateHandler::AutoHoldStateHandler(TeleKarma & tk) :
 	StateHandler(tk),
 	iterCount(0),
 	mute(false)
@@ -482,10 +482,10 @@ void AutoHoldStateHandler::In()
 		// Win32 library call
 		PlaySound(TEXT("alert.wav"), NULL, SND_FILENAME); //Alert that you are going back to "Connected" state.
 #endif
-		
+
 		tk->EnterState(CONNECTED);
 	} else {
-		char ch = tk->GetChar(); 
+		char ch = tk->GetChar();
 		if (ch == 0) return;
 		PTRACE(3, "User command in AutoHold state: " << ch);
 		switch (ch) {
