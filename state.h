@@ -152,6 +152,11 @@ class RegisterStateHandler : public StateHandler
 };
 
 
+/**
+ * This class is responsible for displaying the simple menu
+ * presenting 'call' or 'quit' options and responding to
+ * either command.
+ */
 class MenuStateHandler : public StateHandler
 {
 	public:
@@ -178,6 +183,11 @@ class MenuStateHandler : public StateHandler
 };
 
 
+/**
+ * This class is responsible for obtaining a SIP number
+ * from the user, initiating dialing, and confirming
+ * success or failure of the connection.
+ */
 class DialStateHandler : public StateHandler
 {
 	public:
@@ -203,6 +213,11 @@ class DialStateHandler : public StateHandler
 };
 
 
+/**
+ * This class is responsible for user options and connection
+ * state handling when in a normal call connection (as
+ * opposed to one of the hold modes).
+ */
 class ConnectedStateHandler : public StateHandler
 {
 	public:
@@ -230,6 +245,13 @@ class ConnectedStateHandler : public StateHandler
 };
 
 
+/**
+ * This class is responsible for placing a connected call
+ * on standard hold, including recording, playing a wav
+ * loop, presenting user options, detecting user commands
+ * and responding those commands and connection state
+ * appropriately.
+ */
 class HoldStateHandler : public StateHandler
 {
 	public:
@@ -256,7 +278,14 @@ class HoldStateHandler : public StateHandler
 
 };
 
-
+/**
+ * This class is responsible for placing a connected call
+ * on detect human hold, including recording, muting mic,
+ * playing a wav loop, detecting a DTMF tone, alerting the
+ * user if a human is detected, monitoring call connection
+ * state, and restoring the connection and mic upon
+ * retrieval or human detection.
+ */
 class AutoHoldStateHandler : public StateHandler
 {
 	public:
@@ -291,6 +320,10 @@ class AutoHoldStateHandler : public StateHandler
 };
 
 
+/**
+ * This class is responsible for disconnecting a call.
+ * Forwards to the menu state.
+ */
 class DisconnectStateHandler : public StateHandler
 {
 	public:
