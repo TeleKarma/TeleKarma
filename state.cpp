@@ -505,7 +505,7 @@ void AutoHoldStateHandler::In()
 				cout << endl << "Recording toggled." << endl << "Command? " << flush;
 				tk->ToggleRecording();
 				break;
-			\// Maybe used in future development.
+			// Maybe used in future development.
 			/*case 'm':
 				if (mute) {
 					//tk->SetSpeakerVolume(100);
