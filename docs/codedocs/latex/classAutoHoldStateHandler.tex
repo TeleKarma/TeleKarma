@@ -1,0 +1,110 @@
+\hypertarget{classAutoHoldStateHandler}{
+\section{AutoHoldStateHandler Class Reference}
+\label{classAutoHoldStateHandler}\index{AutoHoldStateHandler@{AutoHoldStateHandler}}
+}
+This class is responsible for placing a connected call on detect human hold, including recording, muting mic, playing a wav loop, detecting a DTMF tone, alerting the user if a human is detected, monitoring call connection state, and restoring the connection and mic upon retrieval or human detection.  
+
+
+{\tt \#include $<$state.h$>$}
+
+Inheritance diagram for AutoHoldStateHandler:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=182pt]{classAutoHoldStateHandler__inherit__graph}
+\end{center}
+\end{figure}
+Collaboration diagram for AutoHoldStateHandler:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=400pt]{classAutoHoldStateHandler__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{classAutoHoldStateHandler_3537482b30296c65f6380f25291a8d3d}{AutoHoldStateHandler} (\hyperlink{classTeleKarma}{TeleKarma} \&tk)
+\begin{CompactList}\small\item\em Constructor. \item\end{CompactList}\item 
+virtual \hyperlink{classAutoHoldStateHandler_b4022aa559ad037e07fbd4f9a395d3f6}{$\sim$AutoHoldStateHandler} ()
+\begin{CompactList}\small\item\em Destructor. \item\end{CompactList}\item 
+void \hyperlink{classAutoHoldStateHandler_e2ceac17b4e28f9ca869bd0130659aad}{Enter} ()
+\begin{CompactList}\small\item\em Starts wav playback, recording, disables mic, clears touchtone queue, plays sound to user and prints UI menu to console. \item\end{CompactList}\item 
+void \hyperlink{classAutoHoldStateHandler_ae7396add19df1c6e3199cfb533df040}{In} ()
+\begin{CompactList}\small\item\em Detects user commands, call state, and for receipt of designed DTMF tone. \item\end{CompactList}\item 
+void \hyperlink{classAutoHoldStateHandler_c601de6921ba53a17531dea0d00f493b}{Exit} ()
+\begin{CompactList}\small\item\em Does nothing. \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+This class is responsible for placing a connected call on detect human hold, including recording, muting mic, playing a wav loop, detecting a DTMF tone, alerting the user if a human is detected, monitoring call connection state, and restoring the connection and mic upon retrieval or human detection. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classAutoHoldStateHandler_3537482b30296c65f6380f25291a8d3d}{
+\index{AutoHoldStateHandler@{AutoHoldStateHandler}!AutoHoldStateHandler@{AutoHoldStateHandler}}
+\index{AutoHoldStateHandler@{AutoHoldStateHandler}!AutoHoldStateHandler@{AutoHoldStateHandler}}
+\subsubsection[{AutoHoldStateHandler}]{\setlength{\rightskip}{0pt plus 5cm}AutoHoldStateHandler::AutoHoldStateHandler ({\bf TeleKarma} \& {\em tk})}}
+\label{classAutoHoldStateHandler_3537482b30296c65f6380f25291a8d3d}
+
+
+Constructor. 
+
+This the main state for our \char`\"{}AutoHold\char`\"{} feature where a continual loop of of audio is played and then listens for a dial-tone response of the number 1 key.
+
+Calls superclass constructor. Creates menu string. \hypertarget{classAutoHoldStateHandler_b4022aa559ad037e07fbd4f9a395d3f6}{
+\index{AutoHoldStateHandler@{AutoHoldStateHandler}!$\sim$AutoHoldStateHandler@{$\sim$AutoHoldStateHandler}}
+\index{$\sim$AutoHoldStateHandler@{$\sim$AutoHoldStateHandler}!AutoHoldStateHandler@{AutoHoldStateHandler}}
+\subsubsection[{$\sim$AutoHoldStateHandler}]{\setlength{\rightskip}{0pt plus 5cm}AutoHoldStateHandler::$\sim$AutoHoldStateHandler ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classAutoHoldStateHandler_b4022aa559ad037e07fbd4f9a395d3f6}
+
+
+Destructor. 
+
+Nothin to deconstruct.
+
+No action.
+
+\subsection{Member Function Documentation}
+\hypertarget{classAutoHoldStateHandler_e2ceac17b4e28f9ca869bd0130659aad}{
+\index{AutoHoldStateHandler@{AutoHoldStateHandler}!Enter@{Enter}}
+\index{Enter@{Enter}!AutoHoldStateHandler@{AutoHoldStateHandler}}
+\subsubsection[{Enter}]{\setlength{\rightskip}{0pt plus 5cm}void AutoHoldStateHandler::Enter ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classAutoHoldStateHandler_e2ceac17b4e28f9ca869bd0130659aad}
+
+
+Starts wav playback, recording, disables mic, clears touchtone queue, plays sound to user and prints UI menu to console. 
+
+.. 
+
+Reimplemented from \hyperlink{classStateHandler_c08036e743cf5172d6931cf3b6d321c6}{StateHandler}.\hypertarget{classAutoHoldStateHandler_c601de6921ba53a17531dea0d00f493b}{
+\index{AutoHoldStateHandler@{AutoHoldStateHandler}!Exit@{Exit}}
+\index{Exit@{Exit}!AutoHoldStateHandler@{AutoHoldStateHandler}}
+\subsubsection[{Exit}]{\setlength{\rightskip}{0pt plus 5cm}void AutoHoldStateHandler::Exit ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classAutoHoldStateHandler_c601de6921ba53a17531dea0d00f493b}
+
+
+Does nothing. 
+
+No extra actions taken when exiting AutoHold.
+
+Reimplemented from \hyperlink{classStateHandler_5ce0f2cb3d4a9f5aca137d47eac75c1e}{StateHandler}.\hypertarget{classAutoHoldStateHandler_ae7396add19df1c6e3199cfb533df040}{
+\index{AutoHoldStateHandler@{AutoHoldStateHandler}!In@{In}}
+\index{In@{In}!AutoHoldStateHandler@{AutoHoldStateHandler}}
+\subsubsection[{In}]{\setlength{\rightskip}{0pt plus 5cm}void AutoHoldStateHandler::In ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classAutoHoldStateHandler_ae7396add19df1c6e3199cfb533df040}
+
+
+Detects user commands, call state, and for receipt of designed DTMF tone. 
+
+This is our AutoHold Handler.
+
+Forwards to the appropriate state upon detection of relevant input or conditions. Responsible for alerting user if human is detected.
+
+This takes care of all the main functionality for AutoHold. 
+
+Reimplemented from \hyperlink{classStateHandler_cee16f855e7354d21abafa47acd1046c}{StateHandler}.
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+state.h\item 
+state.cpp\end{CompactItemize}

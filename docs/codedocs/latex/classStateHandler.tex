@@ -1,0 +1,93 @@
+\hypertarget{classStateHandler}{
+\section{StateHandler Class Reference}
+\label{classStateHandler}\index{StateHandler@{StateHandler}}
+}
+{\tt \#include $<$state.h$>$}
+
+Inheritance diagram for StateHandler:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=400pt]{classStateHandler__inherit__graph}
+\end{center}
+\end{figure}
+Collaboration diagram for StateHandler:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=400pt]{classStateHandler__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{classStateHandler_4195b90b30a542cc31b1cfe4ac9df201}{StateHandler} (\hyperlink{classTeleKarma}{TeleKarma} \&tk)
+\begin{CompactList}\small\item\em Constructor. \item\end{CompactList}\item 
+virtual \hyperlink{classStateHandler_e80b39428525c88bdeea3efd94d540f9}{$\sim$StateHandler} ()
+\begin{CompactList}\small\item\em Destructor. \item\end{CompactList}\item 
+virtual void \hyperlink{classStateHandler_c08036e743cf5172d6931cf3b6d321c6}{Enter} ()
+\begin{CompactList}\small\item\em Called when a state handler is designated the active state handler in \hyperlink{classTeleKarma}{TeleKarma}. \item\end{CompactList}\item 
+\hypertarget{classStateHandler_cee16f855e7354d21abafa47acd1046c}{
+virtual void \hyperlink{classStateHandler_cee16f855e7354d21abafa47acd1046c}{In} ()}
+\label{classStateHandler_cee16f855e7354d21abafa47acd1046c}
+
+\begin{CompactList}\small\item\em Called from within \hyperlink{classTeleKarma}{TeleKarma}'s main control loop upon each iteration for as long as this state handler is the active state handler in \hyperlink{classTeleKarma}{TeleKarma}. \item\end{CompactList}\item 
+\hypertarget{classStateHandler_5ce0f2cb3d4a9f5aca137d47eac75c1e}{
+virtual void \hyperlink{classStateHandler_5ce0f2cb3d4a9f5aca137d47eac75c1e}{Exit} ()}
+\label{classStateHandler_5ce0f2cb3d4a9f5aca137d47eac75c1e}
+
+\begin{CompactList}\small\item\em Called by \hyperlink{classTeleKarma}{TeleKarma} when this state handler is the active state handler but is about to be replaced as active state handler by another state handler class instance. \item\end{CompactList}\end{CompactItemize}
+\subsection*{Protected Attributes}
+\begin{CompactItemize}
+\item 
+\hypertarget{classStateHandler_be2e0705379f3861112ca89c64de648e}{
+\hyperlink{classTeleKarma}{TeleKarma} $\ast$ \textbf{tk}}
+\label{classStateHandler_be2e0705379f3861112ca89c64de648e}
+
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+Abstract superclass that defines the interface for all state handler delegate classes. 
+
+\hyperlink{classTeleKarma}{TeleKarma} delegates state handling to subclasses of this class. State handlers are responsible for detecting environmental events (user input, telephony events), changing the current state handler in \hyperlink{classTeleKarma}{TeleKarma}, and carrying out actions via the \hyperlink{classTeleKarma}{TeleKarma} interface.  
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classStateHandler_4195b90b30a542cc31b1cfe4ac9df201}{
+\index{StateHandler@{StateHandler}!StateHandler@{StateHandler}}
+\index{StateHandler@{StateHandler}!StateHandler@{StateHandler}}
+\subsubsection[{StateHandler}]{\setlength{\rightskip}{0pt plus 5cm}StateHandler::StateHandler ({\bf TeleKarma} \& {\em tk})}}
+\label{classStateHandler_4195b90b30a542cc31b1cfe4ac9df201}
+
+
+Constructor. 
+
+Retains a pointer to the \hyperlink{classTeleKarma}{TeleKarma} instance for access to that class's methods. \hypertarget{classStateHandler_e80b39428525c88bdeea3efd94d540f9}{
+\index{StateHandler@{StateHandler}!$\sim$StateHandler@{$\sim$StateHandler}}
+\index{$\sim$StateHandler@{$\sim$StateHandler}!StateHandler@{StateHandler}}
+\subsubsection[{$\sim$StateHandler}]{\setlength{\rightskip}{0pt plus 5cm}StateHandler::$\sim$StateHandler ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classStateHandler_e80b39428525c88bdeea3efd94d540f9}
+
+
+Destructor. 
+
+No action. 
+
+\subsection{Member Function Documentation}
+\hypertarget{classStateHandler_c08036e743cf5172d6931cf3b6d321c6}{
+\index{StateHandler@{StateHandler}!Enter@{Enter}}
+\index{Enter@{Enter}!StateHandler@{StateHandler}}
+\subsubsection[{Enter}]{\setlength{\rightskip}{0pt plus 5cm}void StateHandler::Enter ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classStateHandler_c08036e743cf5172d6931cf3b6d321c6}
+
+
+Called when a state handler is designated the active state handler in \hyperlink{classTeleKarma}{TeleKarma}. 
+
+Hopefully these are never called! 
+
+Reimplemented in \hyperlink{classExitStateHandler_a17a1677784b257819f1ec731d1e9bdb}{ExitStateHandler}, \hyperlink{classRegisterStateHandler_ce5bc429d43d18e9233f521c2edf930a}{RegisterStateHandler}, \hyperlink{classMenuStateHandler_b38fbf0fdf66be47ebb7e200a66925ba}{MenuStateHandler}, \hyperlink{classDialStateHandler_945709f5589569cf5441b1c779efed7c}{DialStateHandler}, \hyperlink{classConnectedStateHandler_3eb15025f62e77147d7e20590daabf3e}{ConnectedStateHandler}, \hyperlink{classHoldStateHandler_29f89f435a48b793e153ede7c5d94397}{HoldStateHandler}, \hyperlink{classAutoHoldStateHandler_e2ceac17b4e28f9ca869bd0130659aad}{AutoHoldStateHandler}, and \hyperlink{classDisconnectStateHandler_29fb86c820ff7ff183051170161347eb}{DisconnectStateHandler}.
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+state.h\item 
+state.cpp\end{CompactItemize}

@@ -1,0 +1,106 @@
+\hypertarget{classRegisterStateHandler}{
+\section{RegisterStateHandler Class Reference}
+\label{classRegisterStateHandler}\index{RegisterStateHandler@{RegisterStateHandler}}
+}
+This class is responsible for initializing telephony and registering the user with an SIP registrar, including gathering SIP account information from the user, initiating registration, and verifying successful registration.  
+
+
+{\tt \#include $<$state.h$>$}
+
+Inheritance diagram for RegisterStateHandler:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=178pt]{classRegisterStateHandler__inherit__graph}
+\end{center}
+\end{figure}
+Collaboration diagram for RegisterStateHandler:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=400pt]{classRegisterStateHandler__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{classRegisterStateHandler_146b015654e6136dbc7b183630f51b2b}{RegisterStateHandler} (\hyperlink{classTeleKarma}{TeleKarma} \&tk)
+\begin{CompactList}\small\item\em Constructor. \item\end{CompactList}\item 
+virtual \hyperlink{classRegisterStateHandler_50abd4cf05e90e206662b94b8eb9e657}{$\sim$RegisterStateHandler} ()
+\begin{CompactList}\small\item\em Destructor. \item\end{CompactList}\item 
+void \hyperlink{classRegisterStateHandler_ce5bc429d43d18e9233f521c2edf930a}{Enter} ()
+\begin{CompactList}\small\item\em Acquires registration data from user, calls \hyperlink{classTeleKarma}{TeleKarma}'s \hyperlink{classTeleKarma_94f24d2895a64c49d1d5daf9a5a40c7e}{TeleKarma\#Initialize(const PString \&, const PString \&)} method, and initiates registration. \item\end{CompactList}\item 
+void \hyperlink{classRegisterStateHandler_576721a87410fc48c0264a56a3b3d466}{In} ()
+\begin{CompactList}\small\item\em Checks registration state until timeout. \item\end{CompactList}\item 
+void \hyperlink{classRegisterStateHandler_ce8f8dd19fb90516d5ee4db4ba1731d7}{Exit} ()
+\begin{CompactList}\small\item\em Does nothing. \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+This class is responsible for initializing telephony and registering the user with an SIP registrar, including gathering SIP account information from the user, initiating registration, and verifying successful registration. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classRegisterStateHandler_146b015654e6136dbc7b183630f51b2b}{
+\index{RegisterStateHandler@{RegisterStateHandler}!RegisterStateHandler@{RegisterStateHandler}}
+\index{RegisterStateHandler@{RegisterStateHandler}!RegisterStateHandler@{RegisterStateHandler}}
+\subsubsection[{RegisterStateHandler}]{\setlength{\rightskip}{0pt plus 5cm}RegisterStateHandler::RegisterStateHandler ({\bf TeleKarma} \& {\em tk})}}
+\label{classRegisterStateHandler_146b015654e6136dbc7b183630f51b2b}
+
+
+Constructor. 
+
+Calls superclass constructor. \hypertarget{classRegisterStateHandler_50abd4cf05e90e206662b94b8eb9e657}{
+\index{RegisterStateHandler@{RegisterStateHandler}!$\sim$RegisterStateHandler@{$\sim$RegisterStateHandler}}
+\index{$\sim$RegisterStateHandler@{$\sim$RegisterStateHandler}!RegisterStateHandler@{RegisterStateHandler}}
+\subsubsection[{$\sim$RegisterStateHandler}]{\setlength{\rightskip}{0pt plus 5cm}RegisterStateHandler::$\sim$RegisterStateHandler ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classRegisterStateHandler_50abd4cf05e90e206662b94b8eb9e657}
+
+
+Destructor. 
+
+Nothing extra to do in the RegisterState deconstructor.
+
+No action.
+
+\subsection{Member Function Documentation}
+\hypertarget{classRegisterStateHandler_ce5bc429d43d18e9233f521c2edf930a}{
+\index{RegisterStateHandler@{RegisterStateHandler}!Enter@{Enter}}
+\index{Enter@{Enter}!RegisterStateHandler@{RegisterStateHandler}}
+\subsubsection[{Enter}]{\setlength{\rightskip}{0pt plus 5cm}void RegisterStateHandler::Enter ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classRegisterStateHandler_ce5bc429d43d18e9233f521c2edf930a}
+
+
+Acquires registration data from user, calls \hyperlink{classTeleKarma}{TeleKarma}'s \hyperlink{classTeleKarma_94f24d2895a64c49d1d5daf9a5a40c7e}{TeleKarma\#Initialize(const PString \&, const PString \&)} method, and initiates registration. 
+
+Enter the register state and prompt for the user's info to register.
+
+Reimplemented from \hyperlink{classStateHandler_c08036e743cf5172d6931cf3b6d321c6}{StateHandler}.\hypertarget{classRegisterStateHandler_ce8f8dd19fb90516d5ee4db4ba1731d7}{
+\index{RegisterStateHandler@{RegisterStateHandler}!Exit@{Exit}}
+\index{Exit@{Exit}!RegisterStateHandler@{RegisterStateHandler}}
+\subsubsection[{Exit}]{\setlength{\rightskip}{0pt plus 5cm}void RegisterStateHandler::Exit ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classRegisterStateHandler_ce8f8dd19fb90516d5ee4db4ba1731d7}
+
+
+Does nothing. 
+
+Nothing extra do to when we exit the RegisterState.
+
+Reimplemented from \hyperlink{classStateHandler_5ce0f2cb3d4a9f5aca137d47eac75c1e}{StateHandler}.\hypertarget{classRegisterStateHandler_576721a87410fc48c0264a56a3b3d466}{
+\index{RegisterStateHandler@{RegisterStateHandler}!In@{In}}
+\index{In@{In}!RegisterStateHandler@{RegisterStateHandler}}
+\subsubsection[{In}]{\setlength{\rightskip}{0pt plus 5cm}void RegisterStateHandler::In ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classRegisterStateHandler_576721a87410fc48c0264a56a3b3d466}
+
+
+Checks registration state until timeout. 
+
+Attempt to register when we are in the RegisterState.
+
+Forwards to menu state upon success, or exit state if registration fails. 
+
+Reimplemented from \hyperlink{classStateHandler_cee16f855e7354d21abafa47acd1046c}{StateHandler}.
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+state.h\item 
+state.cpp\end{CompactItemize}

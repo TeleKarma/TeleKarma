@@ -1,0 +1,386 @@
+\hypertarget{classTelephonyIfc}{
+\section{TelephonyIfc Class Reference}
+\label{classTelephonyIfc}\index{TelephonyIfc@{TelephonyIfc}}
+}
+This class is the interface between telekarama and the Opal telephony library.  
+
+
+{\tt \#include $<$telephony.h$>$}
+
+Collaboration diagram for TelephonyIfc:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=400pt]{classTelephonyIfc__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+void \hyperlink{classTelephonyIfc_f9e1672e2302bd86c082070db8cf9b9f}{Initialise} (const PString \&stunAddr, const PString \&user)
+\begin{CompactList}\small\item\em Set up the \hyperlink{classTelephonyIfc}{TelephonyIfc} class. \item\end{CompactList}\item 
+void \hyperlink{classTelephonyIfc_ddbfc63168d5e70fd4f83469de4aabb7}{Register} (const PString \&registrar, const PString \&user, const PString \&passwd)
+\begin{CompactList}\small\item\em Register with a service provided. \item\end{CompactList}\item 
+\hypertarget{classTelephonyIfc_20e9a9dd2df97b6c50aa1e19191c890a}{
+PBoolean \hyperlink{classTelephonyIfc_20e9a9dd2df97b6c50aa1e19191c890a}{IsRegistered} ()}
+\label{classTelephonyIfc_20e9a9dd2df97b6c50aa1e19191c890a}
+
+\begin{CompactList}\small\item\em Indicates whether the user is registered with a SIP provider. \item\end{CompactList}\item 
+\hypertarget{classTelephonyIfc_957da4a7936c3672a48f0fa93f655676}{
+PBoolean \hyperlink{classTelephonyIfc_957da4a7936c3672a48f0fa93f655676}{Unregister} ()}
+\label{classTelephonyIfc_957da4a7936c3672a48f0fa93f655676}
+
+\begin{CompactList}\small\item\em Unregister from the current SIP provider. \item\end{CompactList}\item 
+PBoolean \hyperlink{classTelephonyIfc_4acdd44e7af7967ed53cdf9d47dc0c27}{IsRecording} ()
+\item 
+void \hyperlink{classTelephonyIfc_2cd8176d99232038fbe8718417135b07}{StartRecording} (const PString \&fname)
+\begin{CompactList}\small\item\em Begin recording the current call. \item\end{CompactList}\item 
+\hypertarget{classTelephonyIfc_14352867be8fe5f0fcf501701e9052b2}{
+void \hyperlink{classTelephonyIfc_14352867be8fe5f0fcf501701e9052b2}{StopRecording} ()}
+\label{classTelephonyIfc_14352867be8fe5f0fcf501701e9052b2}
+
+\begin{CompactList}\small\item\em Stop recording the current call. \item\end{CompactList}\item 
+bool \hyperlink{classTelephonyIfc_60cba0b92e2f33357c063c251fae2997}{ToneReceived} (char key, bool clear=true)
+\begin{CompactList}\small\item\em Determines whether a DTMF tone has been received. \item\end{CompactList}\item 
+void \hyperlink{classTelephonyIfc_ac6179d75a2c623e05ccb345b45741f1}{SendTone} (const char tone)
+\begin{CompactList}\small\item\em Send a DTMF tone to the remote party if connected. \item\end{CompactList}\item 
+void \hyperlink{classTelephonyIfc_2e0adbafa63cd9c07a1c1c6ce68bf933}{Dial} (const PString \&ostr)
+\begin{CompactList}\small\item\em Initiate a new call. \item\end{CompactList}\item 
+\hypertarget{classTelephonyIfc_074e1d67c95ce1e66d346bb7315d5dcd}{
+PBoolean \hyperlink{classTelephonyIfc_074e1d67c95ce1e66d346bb7315d5dcd}{IsDialing} ()}
+\label{classTelephonyIfc_074e1d67c95ce1e66d346bb7315d5dcd}
+
+\begin{CompactList}\small\item\em Determines whether there is a call being dialed, but not yet connected. \item\end{CompactList}\item 
+void \hyperlink{classTelephonyIfc_a482ebd5daf3bf5d69ec40a46a0616e9}{OnEstablishedCall} (OpalCall \&call)
+\begin{CompactList}\small\item\em Callback invoked when call has been established. \item\end{CompactList}\item 
+\hypertarget{classTelephonyIfc_2a68749063e9e0c45ac31e8e44fa0849}{
+PBoolean \hyperlink{classTelephonyIfc_2a68749063e9e0c45ac31e8e44fa0849}{IsConnected} ()}
+\label{classTelephonyIfc_2a68749063e9e0c45ac31e8e44fa0849}
+
+\begin{CompactList}\small\item\em Determines whether there is a connected call. \item\end{CompactList}\item 
+void \hyperlink{classTelephonyIfc_68160576582be102ace0f4ae277d7129}{Disconnect} ()
+\begin{CompactList}\small\item\em Disconnect the current call if it exists. \item\end{CompactList}\item 
+void \hyperlink{classTelephonyIfc_7efa2a51fd26f3c5072ee8b7ba09d75c}{OnClearedCall} (OpalCall \&call)
+\begin{CompactList}\small\item\em Callback invoked when call has been disconnected. \item\end{CompactList}\item 
+\hypertarget{classTelephonyIfc_d5e6a50893f0915064f23c8d50de481f}{
+PString \hyperlink{classTelephonyIfc_d5e6a50893f0915064f23c8d50de481f}{DisconnectReason} ()}
+\label{classTelephonyIfc_d5e6a50893f0915064f23c8d50de481f}
+
+\begin{CompactList}\small\item\em Returns a human-friendly description of the reason a call ended or NULL. \item\end{CompactList}\item 
+PBoolean \hyperlink{classTelephonyIfc_f3a2ff3766cf45c203dba5a2260445b1}{OnOpenMediaStream} (OpalConnection \&connection, OpalMediaStream \&stream)
+\begin{CompactList}\small\item\em Callback invoked when a media stream is opened for reading or playing. \item\end{CompactList}\item 
+void \hyperlink{classTelephonyIfc_085ab0d59a990bda8b17cb56b1baaeb1}{OnUserInputTone} (OpalConnection \&connection, char tone, int duration)
+\begin{CompactList}\small\item\em Callback invoked when DTMF tone is detected. \item\end{CompactList}\item 
+\hypertarget{classTelephonyIfc_c471d58342002859cc9a59b1d1e494ca}{
+void \hyperlink{classTelephonyIfc_c471d58342002859cc9a59b1d1e494ca}{ClearTones} ()}
+\label{classTelephonyIfc_c471d58342002859cc9a59b1d1e494ca}
+
+\begin{CompactList}\small\item\em Clears the array that holds a record of unique tones received since the last time the array was cleared. \item\end{CompactList}\item 
+PBoolean \hyperlink{classTelephonyIfc_1138529389af3b4712bd11fadd4836ca}{PlayWAV} (const PString \&path, int repeat=0, int delay=0)
+\begin{CompactList}\small\item\em Transmit a WAV file to the remote party. \item\end{CompactList}\item 
+\hypertarget{classTelephonyIfc_6bf03dc65c5128fc1b7c299a6e40740f}{
+void \hyperlink{classTelephonyIfc_6bf03dc65c5128fc1b7c299a6e40740f}{StopWAV} ()}
+\label{classTelephonyIfc_6bf03dc65c5128fc1b7c299a6e40740f}
+
+\begin{CompactList}\small\item\em Stop the WAV file that is currently playing. \item\end{CompactList}\item 
+\hypertarget{classTelephonyIfc_a471fa455406339841ed30bddedb7dab}{
+PBoolean \textbf{IsPlayingWav} ()}
+\label{classTelephonyIfc_a471fa455406339841ed30bddedb7dab}
+
+\item 
+\hypertarget{classTelephonyIfc_e5318586774b3cae6afd9bd3596ac0a6}{
+void \hyperlink{classTelephonyIfc_e5318586774b3cae6afd9bd3596ac0a6}{Retrieve} ()}
+\label{classTelephonyIfc_e5318586774b3cae6afd9bd3596ac0a6}
+
+\begin{CompactList}\small\item\em Retrieve the call from any form of IVR mode. \item\end{CompactList}\item 
+\hypertarget{classTelephonyIfc_9c7068e7f0ef2d4498272b4a20361d4c}{
+void \hyperlink{classTelephonyIfc_9c7068e7f0ef2d4498272b4a20361d4c}{SetMicVolume} (unsigned int gain)}
+\label{classTelephonyIfc_9c7068e7f0ef2d4498272b4a20361d4c}
+
+\begin{CompactList}\small\item\em Set the gain (volume) of the microphone. \item\end{CompactList}\item 
+\hypertarget{classTelephonyIfc_8cf9b680409dfad0e8453a93b1057af2}{
+void \hyperlink{classTelephonyIfc_8cf9b680409dfad0e8453a93b1057af2}{SetSpeakerVolume} (unsigned int gain)}
+\label{classTelephonyIfc_8cf9b680409dfad0e8453a93b1057af2}
+
+\begin{CompactList}\small\item\em Set the gain (volume) of the pc's speakers or other sound output device. \item\end{CompactList}\item 
+\hypertarget{classTelephonyIfc_4b81a2cfb03620cd829e8da73dfe0ea4}{
+void \hyperlink{classTelephonyIfc_4b81a2cfb03620cd829e8da73dfe0ea4}{TurnOffMicrophone} ()}
+\label{classTelephonyIfc_4b81a2cfb03620cd829e8da73dfe0ea4}
+
+\begin{CompactList}\small\item\em Block all microphone input. \item\end{CompactList}\item 
+\hypertarget{classTelephonyIfc_d5ecca9d510408b2ce43cb5b5071b357}{
+void \hyperlink{classTelephonyIfc_d5ecca9d510408b2ce43cb5b5071b357}{TurnOnMicrophone} ()}
+\label{classTelephonyIfc_d5ecca9d510408b2ce43cb5b5071b357}
+
+\begin{CompactList}\small\item\em Un-Block all microphone input. \item\end{CompactList}\end{CompactItemize}
+\subsection*{Protected Member Functions}
+\begin{CompactItemize}
+\item 
+\hypertarget{classTelephonyIfc_95f4177c87b299ab8dd0a2a13a319e0e}{
+void \textbf{OnAudioFileSent} ()}
+\label{classTelephonyIfc_95f4177c87b299ab8dd0a2a13a319e0e}
+
+\end{CompactItemize}
+\subsection*{Protected Attributes}
+\begin{CompactItemize}
+\item 
+\hypertarget{classTelephonyIfc_3541fbc8e53e233226678ef3033b591f}{
+PString \hyperlink{classTelephonyIfc_3541fbc8e53e233226678ef3033b591f}{callToken}}
+\label{classTelephonyIfc_3541fbc8e53e233226678ef3033b591f}
+
+\begin{CompactList}\small\item\em Call token for the connection from telekarama to the remote party. \item\end{CompactList}\item 
+\hypertarget{classTelephonyIfc_86cd9e4c5ffe313c8aa4b73b02a02a47}{
+PString \hyperlink{classTelephonyIfc_86cd9e4c5ffe313c8aa4b73b02a02a47}{pcToken}}
+\label{classTelephonyIfc_86cd9e4c5ffe313c8aa4b73b02a02a47}
+
+\begin{CompactList}\small\item\em Call token for the connection from telekarama to the PC sound system. \item\end{CompactList}\item 
+\hypertarget{classTelephonyIfc_54799c28302aba6f7adb8c8ef438503e}{
+PString \hyperlink{classTelephonyIfc_54799c28302aba6f7adb8c8ef438503e}{wavToken}}
+\label{classTelephonyIfc_54799c28302aba6f7adb8c8ef438503e}
+
+\begin{CompactList}\small\item\em Call token used to reference the WAV file that is currently playing. \item\end{CompactList}\item 
+\hypertarget{classTelephonyIfc_616675027eef53f520b9ac96b81a56b0}{
+PString \hyperlink{classTelephonyIfc_616675027eef53f520b9ac96b81a56b0}{recordToken}}
+\label{classTelephonyIfc_616675027eef53f520b9ac96b81a56b0}
+
+\begin{CompactList}\small\item\em Call token for the connection from telekarma to the recording device. \item\end{CompactList}\item 
+\hypertarget{classTelephonyIfc_b4e274c6a138a5e08ead646eda38613e}{
+PString \textbf{aor}}
+\label{classTelephonyIfc_b4e274c6a138a5e08ead646eda38613e}
+
+\item 
+\hypertarget{classTelephonyIfc_0ffb35f802c55694b5729e5bde971483}{
+bool \hyperlink{classTelephonyIfc_0ffb35f802c55694b5729e5bde971483}{dialing}}
+\label{classTelephonyIfc_0ffb35f802c55694b5729e5bde971483}
+
+\begin{CompactList}\small\item\em PTrue if telekarma is dialing a remote party otherwise PFalse. \item\end{CompactList}\item 
+\hypertarget{classTelephonyIfc_377903745950f7376b919c2a4456debd}{
+PBoolean \hyperlink{classTelephonyIfc_377903745950f7376b919c2a4456debd}{ivrMode}}
+\label{classTelephonyIfc_377903745950f7376b919c2a4456debd}
+
+\begin{CompactList}\small\item\em PTrue if telekarma is in IVR mode otherwise PFalse. \item\end{CompactList}\item 
+\hypertarget{classTelephonyIfc_f41ebe765b20a522ebd9c493c3bf77eb}{
+PString \hyperlink{classTelephonyIfc_f41ebe765b20a522ebd9c493c3bf77eb}{why}}
+\label{classTelephonyIfc_f41ebe765b20a522ebd9c493c3bf77eb}
+
+\begin{CompactList}\small\item\em Describes why call was disconnected. \item\end{CompactList}\item 
+\hypertarget{classTelephonyIfc_8c18969f7ee88659b8b118c530f79bcd}{
+char \hyperlink{classTelephonyIfc_8c18969f7ee88659b8b118c530f79bcd}{tones} \mbox{[}DTMF\_\-TONE\_\-MAX\mbox{]}}
+\label{classTelephonyIfc_8c18969f7ee88659b8b118c530f79bcd}
+
+\begin{CompactList}\small\item\em Queue of tones pressed by the remote user. \item\end{CompactList}\item 
+\hypertarget{classTelephonyIfc_b857d1530a322453a8788c9bffbcc833}{
+int \textbf{nextTone}}
+\label{classTelephonyIfc_b857d1530a322453a8788c9bffbcc833}
+
+\item 
+\hypertarget{classTelephonyIfc_692107ad53586332c50b34ea3b51f76d}{
+TkPCSSEndPoint $\ast$ \textbf{pcssEP}}
+\label{classTelephonyIfc_692107ad53586332c50b34ea3b51f76d}
+
+\item 
+\hypertarget{classTelephonyIfc_67fb79d2bcec4cc072421a5b4c2f4e16}{
+SIPEndPoint $\ast$ \textbf{sipEP}}
+\label{classTelephonyIfc_67fb79d2bcec4cc072421a5b4c2f4e16}
+
+\item 
+\hypertarget{classTelephonyIfc_022bae204ef5d791f5ea8184a1928fb9}{
+OpalIVREndPoint $\ast$ \textbf{ivrEP}}
+\label{classTelephonyIfc_022bae204ef5d791f5ea8184a1928fb9}
+
+\item 
+\hypertarget{classTelephonyIfc_f15ba6ddee44e5a1908044ba8a83eaa3}{
+OpalMixerEndPoint $\ast$ \textbf{mixerEP}}
+\label{classTelephonyIfc_f15ba6ddee44e5a1908044ba8a83eaa3}
+
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+This class is the interface between telekarama and the Opal telephony library. 
+
+\subsection{Member Function Documentation}
+\hypertarget{classTelephonyIfc_2e0adbafa63cd9c07a1c1c6ce68bf933}{
+\index{TelephonyIfc@{TelephonyIfc}!Dial@{Dial}}
+\index{Dial@{Dial}!TelephonyIfc@{TelephonyIfc}}
+\subsubsection[{Dial}]{\setlength{\rightskip}{0pt plus 5cm}void TelephonyIfc::Dial (const PString \& {\em ostr})}}
+\label{classTelephonyIfc_2e0adbafa63cd9c07a1c1c6ce68bf933}
+
+
+Initiate a new call. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em ostr}]URL representing the party to call in the form of \mbox{[}proto:\mbox{]}\mbox{[}alias@\mbox{]}\mbox{[}transport\$\mbox{]}address\mbox{[}:port\mbox{]} Here is an example using the SIP protocol: sip:\href{mailto:telekarma@uoregon.edu}{\tt telekarma@uoregon.edu} \end{description}
+\end{Desc}
+\hypertarget{classTelephonyIfc_68160576582be102ace0f4ae277d7129}{
+\index{TelephonyIfc@{TelephonyIfc}!Disconnect@{Disconnect}}
+\index{Disconnect@{Disconnect}!TelephonyIfc@{TelephonyIfc}}
+\subsubsection[{Disconnect}]{\setlength{\rightskip}{0pt plus 5cm}void TelephonyIfc::Disconnect ()}}
+\label{classTelephonyIfc_68160576582be102ace0f4ae277d7129}
+
+
+Disconnect the current call if it exists. 
+
+Disconnect the call currently in progress. \hypertarget{classTelephonyIfc_f9e1672e2302bd86c082070db8cf9b9f}{
+\index{TelephonyIfc@{TelephonyIfc}!Initialise@{Initialise}}
+\index{Initialise@{Initialise}!TelephonyIfc@{TelephonyIfc}}
+\subsubsection[{Initialise}]{\setlength{\rightskip}{0pt plus 5cm}void TelephonyIfc::Initialise (const PString \& {\em stunAddr}, \/  const PString \& {\em user})}}
+\label{classTelephonyIfc_f9e1672e2302bd86c082070db8cf9b9f}
+
+
+Set up the \hyperlink{classTelephonyIfc}{TelephonyIfc} class. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em stunAddr}]Address for the stun server (e.g. stun.ekiga.net) \item[{\em user}]The username that is used to authenticate with the registrar that will be used \end{description}
+\end{Desc}
+\hypertarget{classTelephonyIfc_4acdd44e7af7967ed53cdf9d47dc0c27}{
+\index{TelephonyIfc@{TelephonyIfc}!IsRecording@{IsRecording}}
+\index{IsRecording@{IsRecording}!TelephonyIfc@{TelephonyIfc}}
+\subsubsection[{IsRecording}]{\setlength{\rightskip}{0pt plus 5cm}PBoolean TelephonyIfc::IsRecording ()}}
+\label{classTelephonyIfc_4acdd44e7af7967ed53cdf9d47dc0c27}
+
+
+\begin{Desc}
+\item[Returns:]PTrue if the current call is being recorded 
+
+PFalse if the current call is not being recorded \end{Desc}
+\hypertarget{classTelephonyIfc_7efa2a51fd26f3c5072ee8b7ba09d75c}{
+\index{TelephonyIfc@{TelephonyIfc}!OnClearedCall@{OnClearedCall}}
+\index{OnClearedCall@{OnClearedCall}!TelephonyIfc@{TelephonyIfc}}
+\subsubsection[{OnClearedCall}]{\setlength{\rightskip}{0pt plus 5cm}void TelephonyIfc::OnClearedCall (OpalCall \& {\em call})}}
+\label{classTelephonyIfc_7efa2a51fd26f3c5072ee8b7ba09d75c}
+
+
+Callback invoked when call has been disconnected. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em call}]The call that has been cleared \end{description}
+\end{Desc}
+\hypertarget{classTelephonyIfc_a482ebd5daf3bf5d69ec40a46a0616e9}{
+\index{TelephonyIfc@{TelephonyIfc}!OnEstablishedCall@{OnEstablishedCall}}
+\index{OnEstablishedCall@{OnEstablishedCall}!TelephonyIfc@{TelephonyIfc}}
+\subsubsection[{OnEstablishedCall}]{\setlength{\rightskip}{0pt plus 5cm}void TelephonyIfc::OnEstablishedCall (OpalCall \& {\em call})}}
+\label{classTelephonyIfc_a482ebd5daf3bf5d69ec40a46a0616e9}
+
+
+Callback invoked when call has been established. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em call}]The call that has been established. \end{description}
+\end{Desc}
+\hypertarget{classTelephonyIfc_f3a2ff3766cf45c203dba5a2260445b1}{
+\index{TelephonyIfc@{TelephonyIfc}!OnOpenMediaStream@{OnOpenMediaStream}}
+\index{OnOpenMediaStream@{OnOpenMediaStream}!TelephonyIfc@{TelephonyIfc}}
+\subsubsection[{OnOpenMediaStream}]{\setlength{\rightskip}{0pt plus 5cm}PBoolean TelephonyIfc::OnOpenMediaStream (OpalConnection \& {\em connection}, \/  OpalMediaStream \& {\em stream})}}
+\label{classTelephonyIfc_f3a2ff3766cf45c203dba5a2260445b1}
+
+
+Callback invoked when a media stream is opened for reading or playing. 
+
+Used to detect end of IVR mode. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em connection}]Connection that owns the stream \item[{\em stream}]The stream that has been opened \end{description}
+\end{Desc}
+\hypertarget{classTelephonyIfc_085ab0d59a990bda8b17cb56b1baaeb1}{
+\index{TelephonyIfc@{TelephonyIfc}!OnUserInputTone@{OnUserInputTone}}
+\index{OnUserInputTone@{OnUserInputTone}!TelephonyIfc@{TelephonyIfc}}
+\subsubsection[{OnUserInputTone}]{\setlength{\rightskip}{0pt plus 5cm}void TelephonyIfc::OnUserInputTone (OpalConnection \& {\em connection}, \/  char {\em tone}, \/  int {\em duration})}}
+\label{classTelephonyIfc_085ab0d59a990bda8b17cb56b1baaeb1}
+
+
+Callback invoked when DTMF tone is detected. 
+
+Tones identified by a key (0-9, $\ast$, \#). Array of tones holds record of unique tones detected since array was last cleared. This method populates the array of tones. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em connection}]The connection that recieved the tone \item[{\em tone}]The tone that was received \item[{\em duration}]of the tone in milliseconds \end{description}
+\end{Desc}
+\hypertarget{classTelephonyIfc_1138529389af3b4712bd11fadd4836ca}{
+\index{TelephonyIfc@{TelephonyIfc}!PlayWAV@{PlayWAV}}
+\index{PlayWAV@{PlayWAV}!TelephonyIfc@{TelephonyIfc}}
+\subsubsection[{PlayWAV}]{\setlength{\rightskip}{0pt plus 5cm}PBoolean TelephonyIfc::PlayWAV (const PString \& {\em path}, \/  int {\em repeat} = {\tt 0}, \/  int {\em delay} = {\tt 0})}}
+\label{classTelephonyIfc_1138529389af3b4712bd11fadd4836ca}
+
+
+Transmit a WAV file to the remote party. 
+
+\begin{Desc}
+\item[Note:]You can only play one WAV file at a time. \end{Desc}
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em path}]WAV file to play \item[{\em repeat}]The number of times to repeat the file \item[{\em delay}]The time in milliseconds to wait between repeated playings of the file \end{description}
+\end{Desc}
+\hypertarget{classTelephonyIfc_ddbfc63168d5e70fd4f83469de4aabb7}{
+\index{TelephonyIfc@{TelephonyIfc}!Register@{Register}}
+\index{Register@{Register}!TelephonyIfc@{TelephonyIfc}}
+\subsubsection[{Register}]{\setlength{\rightskip}{0pt plus 5cm}void TelephonyIfc::Register (const PString \& {\em registrar}, \/  const PString \& {\em user}, \/  const PString \& {\em passwd})}}
+\label{classTelephonyIfc_ddbfc63168d5e70fd4f83469de4aabb7}
+
+
+Register with a service provided. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em registrar}]Address of the registrar (e.g. ekiga.net) \end{description}
+\end{Desc}
+\hypertarget{classTelephonyIfc_ac6179d75a2c623e05ccb345b45741f1}{
+\index{TelephonyIfc@{TelephonyIfc}!SendTone@{SendTone}}
+\index{SendTone@{SendTone}!TelephonyIfc@{TelephonyIfc}}
+\subsubsection[{SendTone}]{\setlength{\rightskip}{0pt plus 5cm}void TelephonyIfc::SendTone (const char {\em tone})}}
+\label{classTelephonyIfc_ac6179d75a2c623e05ccb345b45741f1}
+
+
+Send a DTMF tone to the remote party if connected. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em tone}]Tone to send \end{description}
+\end{Desc}
+\hypertarget{classTelephonyIfc_2cd8176d99232038fbe8718417135b07}{
+\index{TelephonyIfc@{TelephonyIfc}!StartRecording@{StartRecording}}
+\index{StartRecording@{StartRecording}!TelephonyIfc@{TelephonyIfc}}
+\subsubsection[{StartRecording}]{\setlength{\rightskip}{0pt plus 5cm}void TelephonyIfc::StartRecording (const PString \& {\em fname})}}
+\label{classTelephonyIfc_2cd8176d99232038fbe8718417135b07}
+
+
+Begin recording the current call. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em fname}]Path to the file where the recording will be saved. \end{description}
+\end{Desc}
+\hypertarget{classTelephonyIfc_60cba0b92e2f33357c063c251fae2997}{
+\index{TelephonyIfc@{TelephonyIfc}!ToneReceived@{ToneReceived}}
+\index{ToneReceived@{ToneReceived}!TelephonyIfc@{TelephonyIfc}}
+\subsubsection[{ToneReceived}]{\setlength{\rightskip}{0pt plus 5cm}bool TelephonyIfc::ToneReceived (char {\em key}, \/  bool {\em clear} = {\tt true})}}
+\label{classTelephonyIfc_60cba0b92e2f33357c063c251fae2997}
+
+
+Determines whether a DTMF tone has been received. 
+
+DTMF tones are queued, this checks queue and clears it by default. Use clear = false to preserve the queue, for example to check for one of multiple keys of interest.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em key}]The DTMF tone (use '1' not 1 if you are looking for the tone that comes from pressing the one key on a phone). \item[{\em clear}]Clear all entries in the queue for tone key \end{description}
+\end{Desc}
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+telephony.h\item 
+telephony.cpp\end{CompactItemize}

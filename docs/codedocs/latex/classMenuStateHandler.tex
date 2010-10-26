@@ -1,0 +1,108 @@
+\hypertarget{classMenuStateHandler}{
+\section{MenuStateHandler Class Reference}
+\label{classMenuStateHandler}\index{MenuStateHandler@{MenuStateHandler}}
+}
+This class is responsible for displaying the simple menu presenting 'call' or 'quit' options and responding to either command.  
+
+
+{\tt \#include $<$state.h$>$}
+
+Inheritance diagram for MenuStateHandler:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=166pt]{classMenuStateHandler__inherit__graph}
+\end{center}
+\end{figure}
+Collaboration diagram for MenuStateHandler:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=400pt]{classMenuStateHandler__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{classMenuStateHandler_432b787055df296308029da13cbf48e6}{MenuStateHandler} (\hyperlink{classTeleKarma}{TeleKarma} \&tk)
+\begin{CompactList}\small\item\em Constructor. \item\end{CompactList}\item 
+virtual \hyperlink{classMenuStateHandler_e9c7e8689f7264102a347e4c482927b2}{$\sim$MenuStateHandler} ()
+\begin{CompactList}\small\item\em Destructor. \item\end{CompactList}\item 
+void \hyperlink{classMenuStateHandler_b38fbf0fdf66be47ebb7e200a66925ba}{Enter} ()
+\begin{CompactList}\small\item\em Prints UI menu. \item\end{CompactList}\item 
+void \hyperlink{classMenuStateHandler_4254cddbdf883ec3efb2e1d0329d2200}{In} ()
+\begin{CompactList}\small\item\em Listens for user command. \item\end{CompactList}\item 
+void \hyperlink{classMenuStateHandler_57ad1a8b97f4a4aabe30ea007c8afa73}{Exit} ()
+\begin{CompactList}\small\item\em Does nothing. \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+This class is responsible for displaying the simple menu presenting 'call' or 'quit' options and responding to either command. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classMenuStateHandler_432b787055df296308029da13cbf48e6}{
+\index{MenuStateHandler@{MenuStateHandler}!MenuStateHandler@{MenuStateHandler}}
+\index{MenuStateHandler@{MenuStateHandler}!MenuStateHandler@{MenuStateHandler}}
+\subsubsection[{MenuStateHandler}]{\setlength{\rightskip}{0pt plus 5cm}MenuStateHandler::MenuStateHandler ({\bf TeleKarma} \& {\em tk})}}
+\label{classMenuStateHandler_432b787055df296308029da13cbf48e6}
+
+
+Constructor. 
+
+Initialize and print the menu.
+
+Calls superclass constructor. Creates menu string.\hypertarget{classMenuStateHandler_e9c7e8689f7264102a347e4c482927b2}{
+\index{MenuStateHandler@{MenuStateHandler}!$\sim$MenuStateHandler@{$\sim$MenuStateHandler}}
+\index{$\sim$MenuStateHandler@{$\sim$MenuStateHandler}!MenuStateHandler@{MenuStateHandler}}
+\subsubsection[{$\sim$MenuStateHandler}]{\setlength{\rightskip}{0pt plus 5cm}MenuStateHandler::$\sim$MenuStateHandler ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classMenuStateHandler_e9c7e8689f7264102a347e4c482927b2}
+
+
+Destructor. 
+
+Nothing extra to do in the deconstructor.
+
+No action. 
+
+\subsection{Member Function Documentation}
+\hypertarget{classMenuStateHandler_b38fbf0fdf66be47ebb7e200a66925ba}{
+\index{MenuStateHandler@{MenuStateHandler}!Enter@{Enter}}
+\index{Enter@{Enter}!MenuStateHandler@{MenuStateHandler}}
+\subsubsection[{Enter}]{\setlength{\rightskip}{0pt plus 5cm}void MenuStateHandler::Enter ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classMenuStateHandler_b38fbf0fdf66be47ebb7e200a66925ba}
+
+
+Prints UI menu. 
+
+Just a print statement when we enter the MenuState.
+
+Reimplemented from \hyperlink{classStateHandler_c08036e743cf5172d6931cf3b6d321c6}{StateHandler}.\hypertarget{classMenuStateHandler_57ad1a8b97f4a4aabe30ea007c8afa73}{
+\index{MenuStateHandler@{MenuStateHandler}!Exit@{Exit}}
+\index{Exit@{Exit}!MenuStateHandler@{MenuStateHandler}}
+\subsubsection[{Exit}]{\setlength{\rightskip}{0pt plus 5cm}void MenuStateHandler::Exit ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classMenuStateHandler_57ad1a8b97f4a4aabe30ea007c8afa73}
+
+
+Does nothing. 
+
+No action.
+
+Reimplemented from \hyperlink{classStateHandler_5ce0f2cb3d4a9f5aca137d47eac75c1e}{StateHandler}.\hypertarget{classMenuStateHandler_4254cddbdf883ec3efb2e1d0329d2200}{
+\index{MenuStateHandler@{MenuStateHandler}!In@{In}}
+\index{In@{In}!MenuStateHandler@{MenuStateHandler}}
+\subsubsection[{In}]{\setlength{\rightskip}{0pt plus 5cm}void MenuStateHandler::In ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classMenuStateHandler_4254cddbdf883ec3efb2e1d0329d2200}
+
+
+Listens for user command. 
+
+Basic handler while inside the MenuState.
+
+Forwards to dial or exit state as commanded. 
+
+Reimplemented from \hyperlink{classStateHandler_cee16f855e7354d21abafa47acd1046c}{StateHandler}.
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+state.h\item 
+state.cpp\end{CompactItemize}

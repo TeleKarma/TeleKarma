@@ -1,0 +1,8 @@
+<area shape="rect" id="node3" href="$classAutoHoldStateHandler.html" title="This class is responsible for placing a connected call on detect human hold, including..." alt="" coords="5,233,189,442">
+<area shape="rect" id="node5" href="$classConnectedStateHandler.html" title="This class is responsible for user options and connection state handling when in..." alt="" coords="213,249,405,426">
+<area shape="rect" id="node7" href="$classDialStateHandler.html" title="This class is responsible for obtaining a SIP number from the user, initiating dialing..." alt="" coords="429,249,581,426">
+<area shape="rect" id="node9" href="$classDisconnectStateHandler.html" title="This class is responsible for disconnecting a call." alt="" coords="605,249,800,426">
+<area shape="rect" id="node11" href="$classExitStateHandler.html" title="This class does nothing." alt="" coords="824,249,973,426">
+<area shape="rect" id="node13" href="$classHoldStateHandler.html" title="This class is responsible for placing a connected call on standard hold, including..." alt="" coords="997,241,1152,434">
+<area shape="rect" id="node15" href="$classMenuStateHandler.html" title="This class is responsible for displaying the simple menu presenting &#39;call&#39;..." alt="" coords="1176,249,1339,426">
+<area shape="rect" id="node17" href="$classRegisterStateHandler.html" title="This class is responsible for initializing telephony and registering the user with..." alt="" coords="1363,249,1541,426">

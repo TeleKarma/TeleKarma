@@ -1,0 +1,112 @@
+\hypertarget{classHoldStateHandler}{
+\section{HoldStateHandler Class Reference}
+\label{classHoldStateHandler}\index{HoldStateHandler@{HoldStateHandler}}
+}
+This class is responsible for placing a connected call on standard hold, including recording, playing a wav loop, presenting user options, detecting user commands and responding those commands and connection state appropriately.  
+
+
+{\tt \#include $<$state.h$>$}
+
+Inheritance diagram for HoldStateHandler:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=160pt]{classHoldStateHandler__inherit__graph}
+\end{center}
+\end{figure}
+Collaboration diagram for HoldStateHandler:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=400pt]{classHoldStateHandler__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{classHoldStateHandler_66a0d60b47d1877c942f1d73cdd51142}{HoldStateHandler} (\hyperlink{classTeleKarma}{TeleKarma} \&tk)
+\begin{CompactList}\small\item\em Constructor. \item\end{CompactList}\item 
+virtual \hyperlink{classHoldStateHandler_f4ae8935de47b0016f9f002dc7737627}{$\sim$HoldStateHandler} ()
+\begin{CompactList}\small\item\em Destructor. \item\end{CompactList}\item 
+void \hyperlink{classHoldStateHandler_29f89f435a48b793e153ede7c5d94397}{Enter} ()
+\begin{CompactList}\small\item\em Prints UI menu. \item\end{CompactList}\item 
+void \hyperlink{classHoldStateHandler_5f9d46a1e14f04831c30399960d43387}{In} ()
+\begin{CompactList}\small\item\em Listens for user commands and checks connection state. \item\end{CompactList}\item 
+void \hyperlink{classHoldStateHandler_eb6c0ab072533f903b0ccb58e957c65a}{Exit} ()
+\begin{CompactList}\small\item\em Does nothing. \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+This class is responsible for placing a connected call on standard hold, including recording, playing a wav loop, presenting user options, detecting user commands and responding those commands and connection state appropriately. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classHoldStateHandler_66a0d60b47d1877c942f1d73cdd51142}{
+\index{HoldStateHandler@{HoldStateHandler}!HoldStateHandler@{HoldStateHandler}}
+\index{HoldStateHandler@{HoldStateHandler}!HoldStateHandler@{HoldStateHandler}}
+\subsubsection[{HoldStateHandler}]{\setlength{\rightskip}{0pt plus 5cm}HoldStateHandler::HoldStateHandler ({\bf TeleKarma} \& {\em tk})}}
+\label{classHoldStateHandler_66a0d60b47d1877c942f1d73cdd51142}
+
+
+Constructor. 
+
+Initialize and display the menu.
+
+Calls superclass constructor. Creates menu.\hypertarget{classHoldStateHandler_f4ae8935de47b0016f9f002dc7737627}{
+\index{HoldStateHandler@{HoldStateHandler}!$\sim$HoldStateHandler@{$\sim$HoldStateHandler}}
+\index{$\sim$HoldStateHandler@{$\sim$HoldStateHandler}!HoldStateHandler@{HoldStateHandler}}
+\subsubsection[{$\sim$HoldStateHandler}]{\setlength{\rightskip}{0pt plus 5cm}HoldStateHandler::$\sim$HoldStateHandler ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classHoldStateHandler_f4ae8935de47b0016f9f002dc7737627}
+
+
+Destructor. 
+
+Nothing extra to do in the deconstructor.
+
+No action. 
+
+\subsection{Member Function Documentation}
+\hypertarget{classHoldStateHandler_29f89f435a48b793e153ede7c5d94397}{
+\index{HoldStateHandler@{HoldStateHandler}!Enter@{Enter}}
+\index{Enter@{Enter}!HoldStateHandler@{HoldStateHandler}}
+\subsubsection[{Enter}]{\setlength{\rightskip}{0pt plus 5cm}void HoldStateHandler::Enter ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classHoldStateHandler_29f89f435a48b793e153ede7c5d94397}
+
+
+Prints UI menu. 
+
+When we enter the HoldState, start the IVR and play the hold wav prompt.
+
+Starts wav playback, recording, etc.
+
+Reimplemented from \hyperlink{classStateHandler_c08036e743cf5172d6931cf3b6d321c6}{StateHandler}.\hypertarget{classHoldStateHandler_eb6c0ab072533f903b0ccb58e957c65a}{
+\index{HoldStateHandler@{HoldStateHandler}!Exit@{Exit}}
+\index{Exit@{Exit}!HoldStateHandler@{HoldStateHandler}}
+\subsubsection[{Exit}]{\setlength{\rightskip}{0pt plus 5cm}void HoldStateHandler::Exit ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classHoldStateHandler_eb6c0ab072533f903b0ccb58e957c65a}
+
+
+Does nothing. 
+
+Just stop the IVR when exiting the HoldState.
+
+Reimplemented from \hyperlink{classStateHandler_5ce0f2cb3d4a9f5aca137d47eac75c1e}{StateHandler}.\hypertarget{classHoldStateHandler_5f9d46a1e14f04831c30399960d43387}{
+\index{HoldStateHandler@{HoldStateHandler}!In@{In}}
+\index{In@{In}!HoldStateHandler@{HoldStateHandler}}
+\subsubsection[{In}]{\setlength{\rightskip}{0pt plus 5cm}void HoldStateHandler::In ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classHoldStateHandler_5f9d46a1e14f04831c30399960d43387}
+
+
+Listens for user commands and checks connection state. 
+
+Very similar to the \hyperlink{classAutoHoldStateHandler}{AutoHoldStateHandler} but sadly the code was not easily modulated from \hyperlink{classAutoHoldStateHandler}{AutoHoldStateHandler} nor from here to \hyperlink{classAutoHoldStateHandler}{AutoHoldStateHandler}.
+
+Forwards to connected, disconnected (menu) or disconnect.
+
+This is the main code for dealing with the HoldState. A wav prompt is played letting the person on hold know that the user will be returning shortly. 
+
+Reimplemented from \hyperlink{classStateHandler_cee16f855e7354d21abafa47acd1046c}{StateHandler}.
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+state.h\item 
+state.cpp\end{CompactItemize}

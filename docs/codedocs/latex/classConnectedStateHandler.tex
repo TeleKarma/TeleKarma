@@ -1,0 +1,110 @@
+\hypertarget{classConnectedStateHandler}{
+\section{ConnectedStateHandler Class Reference}
+\label{classConnectedStateHandler}\index{ConnectedStateHandler@{ConnectedStateHandler}}
+}
+This class is responsible for user options and connection state handling when in a normal call connection (as opposed to one of the hold modes).  
+
+
+{\tt \#include $<$state.h$>$}
+
+Inheritance diagram for ConnectedStateHandler:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=188pt]{classConnectedStateHandler__inherit__graph}
+\end{center}
+\end{figure}
+Collaboration diagram for ConnectedStateHandler:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=400pt]{classConnectedStateHandler__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{classConnectedStateHandler_6f13492d7dfdb368376b4c5fb801b95f}{ConnectedStateHandler} (\hyperlink{classTeleKarma}{TeleKarma} \&tk)
+\begin{CompactList}\small\item\em Constructor. \item\end{CompactList}\item 
+virtual \hyperlink{classConnectedStateHandler_4e2a09e93f69af0a10196a4d3a188d5d}{$\sim$ConnectedStateHandler} ()
+\begin{CompactList}\small\item\em Destructor. \item\end{CompactList}\item 
+void \hyperlink{classConnectedStateHandler_3eb15025f62e77147d7e20590daabf3e}{Enter} ()
+\begin{CompactList}\small\item\em Prints UI menu. \item\end{CompactList}\item 
+void \hyperlink{classConnectedStateHandler_7a0669af69bd884c9c816e153ed2610c}{In} ()
+\begin{CompactList}\small\item\em Listens for user commands and checks connection state. \item\end{CompactList}\item 
+void \hyperlink{classConnectedStateHandler_f685982d68b383cf8f4e5f5c19dc419c}{Exit} ()
+\begin{CompactList}\small\item\em Does nothing. \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+This class is responsible for user options and connection state handling when in a normal call connection (as opposed to one of the hold modes). 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classConnectedStateHandler_6f13492d7dfdb368376b4c5fb801b95f}{
+\index{ConnectedStateHandler@{ConnectedStateHandler}!ConnectedStateHandler@{ConnectedStateHandler}}
+\index{ConnectedStateHandler@{ConnectedStateHandler}!ConnectedStateHandler@{ConnectedStateHandler}}
+\subsubsection[{ConnectedStateHandler}]{\setlength{\rightskip}{0pt plus 5cm}ConnectedStateHandler::ConnectedStateHandler ({\bf TeleKarma} \& {\em tk})}}
+\label{classConnectedStateHandler_6f13492d7dfdb368376b4c5fb801b95f}
+
+
+Constructor. 
+
+Initialize and send things to the menu.
+
+Calls superclass constructor. Creates menu.\hypertarget{classConnectedStateHandler_4e2a09e93f69af0a10196a4d3a188d5d}{
+\index{ConnectedStateHandler@{ConnectedStateHandler}!$\sim$ConnectedStateHandler@{$\sim$ConnectedStateHandler}}
+\index{$\sim$ConnectedStateHandler@{$\sim$ConnectedStateHandler}!ConnectedStateHandler@{ConnectedStateHandler}}
+\subsubsection[{$\sim$ConnectedStateHandler}]{\setlength{\rightskip}{0pt plus 5cm}ConnectedStateHandler::$\sim$ConnectedStateHandler ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classConnectedStateHandler_4e2a09e93f69af0a10196a4d3a188d5d}
+
+
+Destructor. 
+
+Nothing extra done in the deconstructor.
+
+No action. 
+
+\subsection{Member Function Documentation}
+\hypertarget{classConnectedStateHandler_3eb15025f62e77147d7e20590daabf3e}{
+\index{ConnectedStateHandler@{ConnectedStateHandler}!Enter@{Enter}}
+\index{Enter@{Enter}!ConnectedStateHandler@{ConnectedStateHandler}}
+\subsubsection[{Enter}]{\setlength{\rightskip}{0pt plus 5cm}void ConnectedStateHandler::Enter ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classConnectedStateHandler_3eb15025f62e77147d7e20590daabf3e}
+
+
+Prints UI menu. 
+
+Just a print statement when you enter the ConnectedState.
+
+Reimplemented from \hyperlink{classStateHandler_c08036e743cf5172d6931cf3b6d321c6}{StateHandler}.\hypertarget{classConnectedStateHandler_f685982d68b383cf8f4e5f5c19dc419c}{
+\index{ConnectedStateHandler@{ConnectedStateHandler}!Exit@{Exit}}
+\index{Exit@{Exit}!ConnectedStateHandler@{ConnectedStateHandler}}
+\subsubsection[{Exit}]{\setlength{\rightskip}{0pt plus 5cm}void ConnectedStateHandler::Exit ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classConnectedStateHandler_f685982d68b383cf8f4e5f5c19dc419c}
+
+
+Does nothing. 
+
+No action.
+
+Reimplemented from \hyperlink{classStateHandler_5ce0f2cb3d4a9f5aca137d47eac75c1e}{StateHandler}.\hypertarget{classConnectedStateHandler_7a0669af69bd884c9c816e153ed2610c}{
+\index{ConnectedStateHandler@{ConnectedStateHandler}!In@{In}}
+\index{In@{In}!ConnectedStateHandler@{ConnectedStateHandler}}
+\subsubsection[{In}]{\setlength{\rightskip}{0pt plus 5cm}void ConnectedStateHandler::In ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classConnectedStateHandler_7a0669af69bd884c9c816e153ed2610c}
+
+
+Listens for user commands and checks connection state. 
+
+This is the main block of code for the ConnectedState.
+
+Forwards to menu (on remote disconnect), standard hold, human detection hold, disconnect.
+
+Here the basic menu is displayed which provides our main functionality 
+
+Reimplemented from \hyperlink{classStateHandler_cee16f855e7354d21abafa47acd1046c}{StateHandler}.
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+state.h\item 
+state.cpp\end{CompactItemize}

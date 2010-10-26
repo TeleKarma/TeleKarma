@@ -1,0 +1,108 @@
+\hypertarget{classDisconnectStateHandler}{
+\section{DisconnectStateHandler Class Reference}
+\label{classDisconnectStateHandler}\index{DisconnectStateHandler@{DisconnectStateHandler}}
+}
+This class is responsible for disconnecting a call.  
+
+
+{\tt \#include $<$state.h$>$}
+
+Inheritance diagram for DisconnectStateHandler:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=190pt]{classDisconnectStateHandler__inherit__graph}
+\end{center}
+\end{figure}
+Collaboration diagram for DisconnectStateHandler:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=400pt]{classDisconnectStateHandler__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{classDisconnectStateHandler_b709ff60114f2c969990472c0ff4c7fd}{DisconnectStateHandler} (\hyperlink{classTeleKarma}{TeleKarma} \&tk)
+\begin{CompactList}\small\item\em Constructor. \item\end{CompactList}\item 
+virtual \hyperlink{classDisconnectStateHandler_a0192a1bd52d0d9b8838e121af27bba5}{$\sim$DisconnectStateHandler} ()
+\begin{CompactList}\small\item\em Destructor. \item\end{CompactList}\item 
+void \hyperlink{classDisconnectStateHandler_29fb86c820ff7ff183051170161347eb}{Enter} ()
+\begin{CompactList}\small\item\em Initiate disconnection. \item\end{CompactList}\item 
+void \hyperlink{classDisconnectStateHandler_7c8ad84d526c43376d480ce6dc1e8cc3}{In} ()
+\begin{CompactList}\small\item\em Detect connected state; forward to menu state when disconnected. \item\end{CompactList}\item 
+void \hyperlink{classDisconnectStateHandler_3b5e52496b753f788c886808dae652b9}{Exit} ()
+\begin{CompactList}\small\item\em Does nothing. \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+This class is responsible for disconnecting a call. 
+
+Forwards to the menu state. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classDisconnectStateHandler_b709ff60114f2c969990472c0ff4c7fd}{
+\index{DisconnectStateHandler@{DisconnectStateHandler}!DisconnectStateHandler@{DisconnectStateHandler}}
+\index{DisconnectStateHandler@{DisconnectStateHandler}!DisconnectStateHandler@{DisconnectStateHandler}}
+\subsubsection[{DisconnectStateHandler}]{\setlength{\rightskip}{0pt plus 5cm}DisconnectStateHandler::DisconnectStateHandler ({\bf TeleKarma} \& {\em tk})}}
+\label{classDisconnectStateHandler_b709ff60114f2c969990472c0ff4c7fd}
+
+
+Constructor. 
+
+Calls superclass constructor.
+
+.. \hypertarget{classDisconnectStateHandler_a0192a1bd52d0d9b8838e121af27bba5}{
+\index{DisconnectStateHandler@{DisconnectStateHandler}!$\sim$DisconnectStateHandler@{$\sim$DisconnectStateHandler}}
+\index{$\sim$DisconnectStateHandler@{$\sim$DisconnectStateHandler}!DisconnectStateHandler@{DisconnectStateHandler}}
+\subsubsection[{$\sim$DisconnectStateHandler}]{\setlength{\rightskip}{0pt plus 5cm}DisconnectStateHandler::$\sim$DisconnectStateHandler ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classDisconnectStateHandler_a0192a1bd52d0d9b8838e121af27bba5}
+
+
+Destructor. 
+
+No action.
+
+.. 
+
+\subsection{Member Function Documentation}
+\hypertarget{classDisconnectStateHandler_29fb86c820ff7ff183051170161347eb}{
+\index{DisconnectStateHandler@{DisconnectStateHandler}!Enter@{Enter}}
+\index{Enter@{Enter}!DisconnectStateHandler@{DisconnectStateHandler}}
+\subsubsection[{Enter}]{\setlength{\rightskip}{0pt plus 5cm}void DisconnectStateHandler::Enter ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classDisconnectStateHandler_29fb86c820ff7ff183051170161347eb}
+
+
+Initiate disconnection. 
+
+Just call Disonnect when you enter the DisconnectState.
+
+Reimplemented from \hyperlink{classStateHandler_c08036e743cf5172d6931cf3b6d321c6}{StateHandler}.\hypertarget{classDisconnectStateHandler_3b5e52496b753f788c886808dae652b9}{
+\index{DisconnectStateHandler@{DisconnectStateHandler}!Exit@{Exit}}
+\index{Exit@{Exit}!DisconnectStateHandler@{DisconnectStateHandler}}
+\subsubsection[{Exit}]{\setlength{\rightskip}{0pt plus 5cm}void DisconnectStateHandler::Exit ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classDisconnectStateHandler_3b5e52496b753f788c886808dae652b9}
+
+
+Does nothing. 
+
+No extra actions taken when Exiting the DisconnectState.
+
+Reimplemented from \hyperlink{classStateHandler_5ce0f2cb3d4a9f5aca137d47eac75c1e}{StateHandler}.\hypertarget{classDisconnectStateHandler_7c8ad84d526c43376d480ce6dc1e8cc3}{
+\index{DisconnectStateHandler@{DisconnectStateHandler}!In@{In}}
+\index{In@{In}!DisconnectStateHandler@{DisconnectStateHandler}}
+\subsubsection[{In}]{\setlength{\rightskip}{0pt plus 5cm}void DisconnectStateHandler::In ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classDisconnectStateHandler_7c8ad84d526c43376d480ce6dc1e8cc3}
+
+
+Detect connected state; forward to menu state when disconnected. 
+
+Finish disonnecting.
+
+Reimplemented from \hyperlink{classStateHandler_cee16f855e7354d21abafa47acd1046c}{StateHandler}.
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+state.h\item 
+state.cpp\end{CompactItemize}

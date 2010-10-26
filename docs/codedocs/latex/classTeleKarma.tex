@@ -1,0 +1,430 @@
+\hypertarget{classTeleKarma}{
+\section{TeleKarma Class Reference}
+\label{classTeleKarma}\index{TeleKarma@{TeleKarma}}
+}
+{\tt \#include $<$telekarma.h$>$}
+
+Collaboration diagram for TeleKarma:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=400pt]{classTeleKarma__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{classTeleKarma_e51315e12cf9e918a0eacce8333e298e}{TeleKarma} ()
+\begin{CompactList}\small\item\em Constructor. \item\end{CompactList}\item 
+virtual \hyperlink{classTeleKarma_5486e84d7320be3da1139e9d48d02401}{$\sim$TeleKarma} ()
+\begin{CompactList}\small\item\em Destructor. \item\end{CompactList}\item 
+void \hyperlink{classTeleKarma_addd554bf6335422cc896c894005a031}{Main} ()
+\item 
+void \hyperlink{classTeleKarma_22107597af9789cf4162ac2bb32f0482}{EnterState} (int stateId)
+\begin{CompactList}\small\item\em Called by state handler to transition to a new state. \item\end{CompactList}\item 
+void \hyperlink{classTeleKarma_94f24d2895a64c49d1d5daf9a5a40c7e}{Initialize} (const PString \&stun, const PString \&user)
+\begin{CompactList}\small\item\em Instantiates the \hyperlink{classTelephonyIfc}{TelephonyIfc}. \item\end{CompactList}\item 
+PString \hyperlink{classTeleKarma_394f0108ecd1628e510c79a5f84a8d7d}{GetSTUNType} ()
+\begin{CompactList}\small\item\em Returns a description of the STUN server type. \item\end{CompactList}\item 
+void \hyperlink{classTeleKarma_94c53557510b5373b400128ded8cb7a6}{Register} (const PString \&registrar, const PString \&user, const PString \&password)
+\begin{CompactList}\small\item\em Registers the user with an SIP registrar. \item\end{CompactList}\item 
+void \hyperlink{classTeleKarma_2fe3ca9129b35b8543a1ecdb88740e3d}{Dial} (const PString \&destination)
+\begin{CompactList}\small\item\em Dials an SIP phone number. \item\end{CompactList}\item 
+void \hyperlink{classTeleKarma_318d959306b0c1e5a39c531be100387c}{Disconnect} ()
+\begin{CompactList}\small\item\em Disconnects a phone call. \item\end{CompactList}\item 
+bool \hyperlink{classTeleKarma_ac8cc89975dcba9feefeb0f79684836e}{IsRegistered} ()
+\begin{CompactList}\small\item\em Returns true if the user is registered with an SIP service. \item\end{CompactList}\item 
+bool \hyperlink{classTeleKarma_4c060e114d5e1d4f7ec2b4532a843443}{IsDialing} ()
+\begin{CompactList}\small\item\em Returns true if a call is in the process of being dialed. \item\end{CompactList}\item 
+bool \hyperlink{classTeleKarma_d971a263dc085039322afa915a6ff350}{IsConnected} ()
+\begin{CompactList}\small\item\em Returns true if a call is connected. \item\end{CompactList}\item 
+PString \hyperlink{classTeleKarma_be2a73dfd1cdae97ef435325ab74c7db}{DisconnectReason} ()
+\begin{CompactList}\small\item\em Returns a user-friendly description of the reason why the most recent call in the current session was disconnected. \item\end{CompactList}\item 
+bool \hyperlink{classTeleKarma_4b4ffc065dbc11f5b0afa9ba30c9620d}{IsPlayingWAV} (bool onLine=true, bool onSpeakers=false)
+\begin{CompactList}\small\item\em Indicates whether a WAV is or has been played since the current call began. \item\end{CompactList}\item 
+void \hyperlink{classTeleKarma_ca737d1deeb1da27f12d84f8c4b6819b}{PlayWAV} (const PString \&src, int repeat=0, int delay=0)
+\begin{CompactList}\small\item\em Plays a WAV file over the current call. \item\end{CompactList}\item 
+void \hyperlink{classTeleKarma_ecc8d8bd546be13afb320151a0c5014b}{SetMicVolume} (unsigned int volume)
+\begin{CompactList}\small\item\em Inoperative. \item\end{CompactList}\item 
+void \hyperlink{classTeleKarma_3b434ca4effe173e19b9334da432a79f}{SetSpeakerVolume} (unsigned int volume)
+\begin{CompactList}\small\item\em Inoperative. \item\end{CompactList}\item 
+void \hyperlink{classTeleKarma_e7fa2e0e51af227908ddf46de42732f2}{StartIVR} (const PString \&fname)
+\begin{CompactList}\small\item\em Called upon entry of standard hold and detect human hold modes. \item\end{CompactList}\item 
+void \hyperlink{classTeleKarma_9b93b7a0b3af465d07a5facaa445344f}{StopIVR} ()
+\begin{CompactList}\small\item\em Called upon termination of standard hold and detect human hold modes. \item\end{CompactList}\item 
+\hypertarget{classTeleKarma_9f928ce40bb1f6663772e07022783b7a}{
+void \hyperlink{classTeleKarma_9f928ce40bb1f6663772e07022783b7a}{StopWAV} ()}
+\label{classTeleKarma_9f928ce40bb1f6663772e07022783b7a}
+
+\begin{CompactList}\small\item\em Invokes \hyperlink{}{TelephonyIfc\#StopWav()}. \item\end{CompactList}\item 
+void \hyperlink{classTeleKarma_e5de07b5de99a85c3703be973e7230df}{ToggleRecording} ()
+\begin{CompactList}\small\item\em Inverts the recording state. \item\end{CompactList}\item 
+void \hyperlink{classTeleKarma_724b39dce3dd92f25a7de9e4a39ccfa7}{StartRecording} ()
+\begin{CompactList}\small\item\em Begins recording of the call. \item\end{CompactList}\item 
+bool \hyperlink{classTeleKarma_2799e28d5e0736a0149c5a212b24e6c0}{ToneReceived} (char key, bool clear=true)
+\begin{CompactList}\small\item\em Indicates whether the touch tone associated with the given character has been received since the last time the touch tone queue was cleared, and optionally clears the touch tone queue. \item\end{CompactList}\item 
+void \hyperlink{classTeleKarma_5d1ced337173e7260efdb3f13fe54bf9}{ClearTones} ()
+\begin{CompactList}\small\item\em Clears the contents of the touch tone queue. \item\end{CompactList}\item 
+void \hyperlink{classTeleKarma_85b9f9bf83876f3fa9cc326a7124f6d5}{SendTone} (char key)
+\begin{CompactList}\small\item\em Sends the DTMF tone associated with the given key to the remote party. \item\end{CompactList}\item 
+char \hyperlink{classTeleKarma_5dd175d49c7a2f9f36ff9c3c7c34d230}{GetChar} ()
+\begin{CompactList}\small\item\em Obtains a single character of input from the console. \item\end{CompactList}\item 
+void \hyperlink{classTeleKarma_8f93d5531f5914eb77d7f0fe341e20cf}{Backspace} (int n)
+\begin{CompactList}\small\item\em Prints the given number of backspaces to the console. \item\end{CompactList}\item 
+void \hyperlink{classTeleKarma_523695bc8f4ab8c3f6cb950c53efc026}{Space} (int n)
+\begin{CompactList}\small\item\em Prints the given number of spaces to the console. \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+The \hyperlink{classTeleKarma}{TeleKarma} class provides the \char`\"{}main\char`\"{} function for the \hyperlink{classTeleKarma}{TeleKarma} application and provides the interface through which state handler objects access information and take action. 
+
+The Main function, which is invoked by PTLib tools from main.cpp, sets up state handler objects, sets the initial state, and enters a loop that invokes the \hyperlink{classStateHandler_cee16f855e7354d21abafa47acd1046c}{StateHandler\#In()} method and sleeps for \hyperlink{}{SLEEP\_\-DURATION} milliseconds. 
+
+All other methods support state handler methods, which for the sake of modularity have access to this class, but are not provided direct access to the telephony interface or other resources.  
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classTeleKarma_e51315e12cf9e918a0eacce8333e298e}{
+\index{TeleKarma@{TeleKarma}!TeleKarma@{TeleKarma}}
+\index{TeleKarma@{TeleKarma}!TeleKarma@{TeleKarma}}
+\subsubsection[{TeleKarma}]{\setlength{\rightskip}{0pt plus 5cm}TeleKarma::TeleKarma ()}}
+\label{classTeleKarma_e51315e12cf9e918a0eacce8333e298e}
+
+
+Constructor. 
+
+Initializes fields. \hypertarget{classTeleKarma_5486e84d7320be3da1139e9d48d02401}{
+\index{TeleKarma@{TeleKarma}!$\sim$TeleKarma@{$\sim$TeleKarma}}
+\index{$\sim$TeleKarma@{$\sim$TeleKarma}!TeleKarma@{TeleKarma}}
+\subsubsection[{$\sim$TeleKarma}]{\setlength{\rightskip}{0pt plus 5cm}TeleKarma::$\sim$TeleKarma ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classTeleKarma_5486e84d7320be3da1139e9d48d02401}
+
+
+Destructor. 
+
+Heap memory cleanup and delay of \hyperlink{}{EXIT\_\-DELAY} milliseconds before returning. 
+
+\subsection{Member Function Documentation}
+\hypertarget{classTeleKarma_8f93d5531f5914eb77d7f0fe341e20cf}{
+\index{TeleKarma@{TeleKarma}!Backspace@{Backspace}}
+\index{Backspace@{Backspace}!TeleKarma@{TeleKarma}}
+\subsubsection[{Backspace}]{\setlength{\rightskip}{0pt plus 5cm}void TeleKarma::Backspace (int {\em n})}}
+\label{classTeleKarma_8f93d5531f5914eb77d7f0fe341e20cf}
+
+
+Prints the given number of backspaces to the console. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em n}]the number of backspaces to print \end{description}
+\end{Desc}
+\hypertarget{classTeleKarma_5d1ced337173e7260efdb3f13fe54bf9}{
+\index{TeleKarma@{TeleKarma}!ClearTones@{ClearTones}}
+\index{ClearTones@{ClearTones}!TeleKarma@{TeleKarma}}
+\subsubsection[{ClearTones}]{\setlength{\rightskip}{0pt plus 5cm}void TeleKarma::ClearTones ()}}
+\label{classTeleKarma_5d1ced337173e7260efdb3f13fe54bf9}
+
+
+Clears the contents of the touch tone queue. 
+
+Resets the array of received tones.
+
+Prevents historical touch tones from corrupting current input detection. \hypertarget{classTeleKarma_2fe3ca9129b35b8543a1ecdb88740e3d}{
+\index{TeleKarma@{TeleKarma}!Dial@{Dial}}
+\index{Dial@{Dial}!TeleKarma@{TeleKarma}}
+\subsubsection[{Dial}]{\setlength{\rightskip}{0pt plus 5cm}void TeleKarma::Dial (const PString \& {\em sipAddr})}}
+\label{classTeleKarma_2fe3ca9129b35b8543a1ecdb88740e3d}
+
+
+Dials an SIP phone number. 
+
+Dial the indicated SIP address.
+
+This method is non-blocking. Initiation of the call takes place in a separate thread. The caller is responsible for determing call state using \hyperlink{classTeleKarma_4c060e114d5e1d4f7ec2b4532a843443}{IsDialing()} and \hyperlink{classTeleKarma_d971a263dc085039322afa915a6ff350}{IsConnected()}. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em destination}]an SIP-formatted address, including sip: prefix\end{description}
+\end{Desc}
+Format sipAddr as sip:user. \hypertarget{classTeleKarma_318d959306b0c1e5a39c531be100387c}{
+\index{TeleKarma@{TeleKarma}!Disconnect@{Disconnect}}
+\index{Disconnect@{Disconnect}!TeleKarma@{TeleKarma}}
+\subsubsection[{Disconnect}]{\setlength{\rightskip}{0pt plus 5cm}void TeleKarma::Disconnect ()}}
+\label{classTeleKarma_318d959306b0c1e5a39c531be100387c}
+
+
+Disconnects a phone call. 
+
+Disconnect the current call.
+
+This method is non-blocking. Disconnection is carried out in a separate thread. The caller is responsible for determing call state using \hyperlink{classTeleKarma_d971a263dc085039322afa915a6ff350}{IsConnected()}.\hypertarget{classTeleKarma_be2a73dfd1cdae97ef435325ab74c7db}{
+\index{TeleKarma@{TeleKarma}!DisconnectReason@{DisconnectReason}}
+\index{DisconnectReason@{DisconnectReason}!TeleKarma@{TeleKarma}}
+\subsubsection[{DisconnectReason}]{\setlength{\rightskip}{0pt plus 5cm}PString TeleKarma::DisconnectReason ()}}
+\label{classTeleKarma_be2a73dfd1cdae97ef435325ab74c7db}
+
+
+Returns a user-friendly description of the reason why the most recent call in the current session was disconnected. 
+
+\begin{Desc}
+\item[Returns:]a description of the reason for the most recent call disconnection. \end{Desc}
+\hypertarget{classTeleKarma_22107597af9789cf4162ac2bb32f0482}{
+\index{TeleKarma@{TeleKarma}!EnterState@{EnterState}}
+\index{EnterState@{EnterState}!TeleKarma@{TeleKarma}}
+\subsubsection[{EnterState}]{\setlength{\rightskip}{0pt plus 5cm}void TeleKarma::EnterState (int {\em stateId})}}
+\label{classTeleKarma_22107597af9789cf4162ac2bb32f0482}
+
+
+Called by state handler to transition to a new state. 
+
+Exit the current state (if any) and enter a new specified state.
+
+Calls the current state handler's \hyperlink{classStateHandler_5ce0f2cb3d4a9f5aca137d47eac75c1e}{StateHandler\#Exit()} method, then replaces the current state handler with an instance of the new state handler and calls that object's \hyperlink{classStateHandler_c08036e743cf5172d6931cf3b6d321c6}{StateHandler\#Enter()} method. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em stateId}]one of the state identifiers from \hyperlink{state_8h-source}{state.h}. \end{description}
+\end{Desc}
+\hypertarget{classTeleKarma_5dd175d49c7a2f9f36ff9c3c7c34d230}{
+\index{TeleKarma@{TeleKarma}!GetChar@{GetChar}}
+\index{GetChar@{GetChar}!TeleKarma@{TeleKarma}}
+\subsubsection[{GetChar}]{\setlength{\rightskip}{0pt plus 5cm}char TeleKarma::GetChar ()}}
+\label{classTeleKarma_5dd175d49c7a2f9f36ff9c3c7c34d230}
+
+
+Obtains a single character of input from the console. 
+
+Obtain one character of keyboard input if present.
+
+Non-blocking. If there is no input available on the console, returns NULL. Consumes the input. \begin{Desc}
+\item[Returns:]one character of input from console or NULL.\end{Desc}
+Convert to lowercase and return. If no input, return the NULL character. Guaranteed not to block. \hypertarget{classTeleKarma_394f0108ecd1628e510c79a5f84a8d7d}{
+\index{TeleKarma@{TeleKarma}!GetSTUNType@{GetSTUNType}}
+\index{GetSTUNType@{GetSTUNType}!TeleKarma@{TeleKarma}}
+\subsubsection[{GetSTUNType}]{\setlength{\rightskip}{0pt plus 5cm}PString TeleKarma::GetSTUNType ()}}
+\label{classTeleKarma_394f0108ecd1628e510c79a5f84a8d7d}
+
+
+Returns a description of the STUN server type. 
+
+Output STUN type identification message.
+
+Not meaningful until \hyperlink{classTeleKarma_94f24d2895a64c49d1d5daf9a5a40c7e}{Initialize(const PString \&, const PString \&)} has been called. \begin{Desc}
+\item[Returns:]a description of the STUN server type.\end{Desc}
+\hypertarget{classTeleKarma_94f24d2895a64c49d1d5daf9a5a40c7e}{
+\index{TeleKarma@{TeleKarma}!Initialize@{Initialize}}
+\index{Initialize@{Initialize}!TeleKarma@{TeleKarma}}
+\subsubsection[{Initialize}]{\setlength{\rightskip}{0pt plus 5cm}void TeleKarma::Initialize (const PString \& {\em stun}, \/  const PString \& {\em user})}}
+\label{classTeleKarma_94f24d2895a64c49d1d5daf9a5a40c7e}
+
+
+Instantiates the \hyperlink{classTelephonyIfc}{TelephonyIfc}. 
+
+Initialize the telephony API.
+
+Expected to be called from a state handler object. Must be called prior to calling \hyperlink{}{Register(const PString \&, const PString \&, const Pstring \&)}. This is a blocking method. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em stun}]STUN server address (may be set to empty) \item[{\em user}]required username\end{description}
+\end{Desc}
+Blocks. \hypertarget{classTeleKarma_d971a263dc085039322afa915a6ff350}{
+\index{TeleKarma@{TeleKarma}!IsConnected@{IsConnected}}
+\index{IsConnected@{IsConnected}!TeleKarma@{TeleKarma}}
+\subsubsection[{IsConnected}]{\setlength{\rightskip}{0pt plus 5cm}bool TeleKarma::IsConnected ()}}
+\label{classTeleKarma_d971a263dc085039322afa915a6ff350}
+
+
+Returns true if a call is connected. 
+
+\begin{Desc}
+\item[Returns:]true if a call is connected, false if not connected or dialing. \end{Desc}
+\hypertarget{classTeleKarma_4c060e114d5e1d4f7ec2b4532a843443}{
+\index{TeleKarma@{TeleKarma}!IsDialing@{IsDialing}}
+\index{IsDialing@{IsDialing}!TeleKarma@{TeleKarma}}
+\subsubsection[{IsDialing}]{\setlength{\rightskip}{0pt plus 5cm}bool TeleKarma::IsDialing ()}}
+\label{classTeleKarma_4c060e114d5e1d4f7ec2b4532a843443}
+
+
+Returns true if a call is in the process of being dialed. 
+
+This method will return false once \hyperlink{classTeleKarma_d971a263dc085039322afa915a6ff350}{IsConnected()} begins returning true. \begin{Desc}
+\item[Returns:]true if a call is in the process of being dialed. \end{Desc}
+\hypertarget{classTeleKarma_4b4ffc065dbc11f5b0afa9ba30c9620d}{
+\index{TeleKarma@{TeleKarma}!IsPlayingWAV@{IsPlayingWAV}}
+\index{IsPlayingWAV@{IsPlayingWAV}!TeleKarma@{TeleKarma}}
+\subsubsection[{IsPlayingWAV}]{\setlength{\rightskip}{0pt plus 5cm}bool TeleKarma::IsPlayingWAV (bool {\em onLine} = {\tt true}, \/  bool {\em onSpeakers} = {\tt false})}}
+\label{classTeleKarma_4b4ffc065dbc11f5b0afa9ba30c9620d}
+
+
+Indicates whether a WAV is or has been played since the current call began. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em onLine}]true by default; false not supported. \item[{\em onSpeakers}]ignored. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]true if the current call has had a WAV played on it. \end{Desc}
+\hypertarget{classTeleKarma_ac8cc89975dcba9feefeb0f79684836e}{
+\index{TeleKarma@{TeleKarma}!IsRegistered@{IsRegistered}}
+\index{IsRegistered@{IsRegistered}!TeleKarma@{TeleKarma}}
+\subsubsection[{IsRegistered}]{\setlength{\rightskip}{0pt plus 5cm}bool TeleKarma::IsRegistered ()}}
+\label{classTeleKarma_ac8cc89975dcba9feefeb0f79684836e}
+
+
+Returns true if the user is registered with an SIP service. 
+
+Determine whether user is registered with SIP service.
+
+This method reflects actual registration state. \begin{Desc}
+\item[Returns:]true if the user is registered with their SIP registrar, false otherwise. \end{Desc}
+\hypertarget{classTeleKarma_addd554bf6335422cc896c894005a031}{
+\index{TeleKarma@{TeleKarma}!Main@{Main}}
+\index{Main@{Main}!TeleKarma@{TeleKarma}}
+\subsubsection[{Main}]{\setlength{\rightskip}{0pt plus 5cm}void TeleKarma::Main ()}}
+\label{classTeleKarma_addd554bf6335422cc896c894005a031}
+
+
+Main program logic. Verifies existance of required subfolders, sets up log files, instantiate state handler objects, sets the initial state handler and enters main control loop. 
+
+Main control loop simply calls the \hyperlink{classStateHandler_cee16f855e7354d21abafa47acd1046c}{StateHandler\#In()} method, then sleeps, then repeats, until the state handler is set to an instance of \hyperlink{classExitStateHandler}{ExitStateHandler}. States call the \hyperlink{classTeleKarma_22107597af9789cf4162ac2bb32f0482}{EnterState(int)} method to change TeleKarma's state.  \hypertarget{classTeleKarma_ca737d1deeb1da27f12d84f8c4b6819b}{
+\index{TeleKarma@{TeleKarma}!PlayWAV@{PlayWAV}}
+\index{PlayWAV@{PlayWAV}!TeleKarma@{TeleKarma}}
+\subsubsection[{PlayWAV}]{\setlength{\rightskip}{0pt plus 5cm}void TeleKarma::PlayWAV (const PString \& {\em filename}, \/  int {\em repeat} = {\tt 0}, \/  int {\em delay} = {\tt 0})}}
+\label{classTeleKarma_ca737d1deeb1da27f12d84f8c4b6819b}
+
+
+Plays a WAV file over the current call. 
+
+Play a WAV file over phone connection.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em src}]path (relative to telekarma.exe folder) and filename of wav to play. \item[{\em repeat}]number of times to play the WAV. Defaults to zero. \item[{\em delay}]how long (in milliseconds) to wait between repeats. defaults to zero.\end{description}
+\end{Desc}
+\hypertarget{classTeleKarma_94c53557510b5373b400128ded8cb7a6}{
+\index{TeleKarma@{TeleKarma}!Register@{Register}}
+\index{Register@{Register}!TeleKarma@{TeleKarma}}
+\subsubsection[{Register}]{\setlength{\rightskip}{0pt plus 5cm}void TeleKarma::Register (const PString \& {\em registrar}, \/  const PString \& {\em user}, \/  const PString \& {\em password})}}
+\label{classTeleKarma_94c53557510b5373b400128ded8cb7a6}
+
+
+Registers the user with an SIP registrar. 
+
+Initiate registration with a SIP service provider.
+
+This method is non-blocking. Registration process continues in another thread. Caller must use \hyperlink{classTeleKarma_ac8cc89975dcba9feefeb0f79684836e}{IsRegistered()} to verify success. Registration can take time. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em registrar}]an SIP registrar \item[{\em user}]user name registered with the registrar \item[{\em password}]user's password\end{description}
+\end{Desc}
+This method is non-blocking. \hypertarget{classTeleKarma_85b9f9bf83876f3fa9cc326a7124f6d5}{
+\index{TeleKarma@{TeleKarma}!SendTone@{SendTone}}
+\index{SendTone@{SendTone}!TeleKarma@{TeleKarma}}
+\subsubsection[{SendTone}]{\setlength{\rightskip}{0pt plus 5cm}void TeleKarma::SendTone (char {\em key})}}
+\label{classTeleKarma_85b9f9bf83876f3fa9cc326a7124f6d5}
+
+
+Sends the DTMF tone associated with the given key to the remote party. 
+
+Play a DTMF tone over phone connection.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em key}]the label of the key associated with a touch tone\end{description}
+\end{Desc}
+\hypertarget{classTeleKarma_ecc8d8bd546be13afb320151a0c5014b}{
+\index{TeleKarma@{TeleKarma}!SetMicVolume@{SetMicVolume}}
+\index{SetMicVolume@{SetMicVolume}!TeleKarma@{TeleKarma}}
+\subsubsection[{SetMicVolume}]{\setlength{\rightskip}{0pt plus 5cm}void TeleKarma::SetMicVolume (unsigned int {\em volume})}}
+\label{classTeleKarma_ecc8d8bd546be13afb320151a0c5014b}
+
+
+Inoperative. 
+
+Reserved for future development. \hypertarget{classTeleKarma_3b434ca4effe173e19b9334da432a79f}{
+\index{TeleKarma@{TeleKarma}!SetSpeakerVolume@{SetSpeakerVolume}}
+\index{SetSpeakerVolume@{SetSpeakerVolume}!TeleKarma@{TeleKarma}}
+\subsubsection[{SetSpeakerVolume}]{\setlength{\rightskip}{0pt plus 5cm}void TeleKarma::SetSpeakerVolume (unsigned int {\em volume})}}
+\label{classTeleKarma_3b434ca4effe173e19b9334da432a79f}
+
+
+Inoperative. 
+
+Reserved for future development. \hypertarget{classTeleKarma_523695bc8f4ab8c3f6cb950c53efc026}{
+\index{TeleKarma@{TeleKarma}!Space@{Space}}
+\index{Space@{Space}!TeleKarma@{TeleKarma}}
+\subsubsection[{Space}]{\setlength{\rightskip}{0pt plus 5cm}void TeleKarma::Space (int {\em n})}}
+\label{classTeleKarma_523695bc8f4ab8c3f6cb950c53efc026}
+
+
+Prints the given number of spaces to the console. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em n}]the number of spaces to print \end{description}
+\end{Desc}
+\hypertarget{classTeleKarma_e7fa2e0e51af227908ddf46de42732f2}{
+\index{TeleKarma@{TeleKarma}!StartIVR@{StartIVR}}
+\index{StartIVR@{StartIVR}!TeleKarma@{TeleKarma}}
+\subsubsection[{StartIVR}]{\setlength{\rightskip}{0pt plus 5cm}void TeleKarma::StartIVR (const PString \& {\em fname})}}
+\label{classTeleKarma_e7fa2e0e51af227908ddf46de42732f2}
+
+
+Called upon entry of standard hold and detect human hold modes. 
+
+Disables the microphone, plays a notice of recording, begins recording, and calls \hyperlink{}{PlayWav(const PString \&, int, int)}. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em fname}]path (relative to telekarma.exe folder) and filename of wav to play. \end{description}
+\end{Desc}
+\hypertarget{classTeleKarma_724b39dce3dd92f25a7de9e4a39ccfa7}{
+\index{TeleKarma@{TeleKarma}!StartRecording@{StartRecording}}
+\index{StartRecording@{StartRecording}!TeleKarma@{TeleKarma}}
+\subsubsection[{StartRecording}]{\setlength{\rightskip}{0pt plus 5cm}void TeleKarma::StartRecording ()}}
+\label{classTeleKarma_724b39dce3dd92f25a7de9e4a39ccfa7}
+
+
+Begins recording of the call. 
+
+Recordings are generated in WAV format and dumped in a timestamped file in the recordings subdirectory of the folder that holds the telekarma executable. \hypertarget{classTeleKarma_9b93b7a0b3af465d07a5facaa445344f}{
+\index{TeleKarma@{TeleKarma}!StopIVR@{StopIVR}}
+\index{StopIVR@{StopIVR}!TeleKarma@{TeleKarma}}
+\subsubsection[{StopIVR}]{\setlength{\rightskip}{0pt plus 5cm}void TeleKarma::StopIVR ()}}
+\label{classTeleKarma_9b93b7a0b3af465d07a5facaa445344f}
+
+
+Called upon termination of standard hold and detect human hold modes. 
+
+Enables the microphone and calls \hyperlink{}{StopWav()}. \hypertarget{classTeleKarma_e5de07b5de99a85c3703be973e7230df}{
+\index{TeleKarma@{TeleKarma}!ToggleRecording@{ToggleRecording}}
+\index{ToggleRecording@{ToggleRecording}!TeleKarma@{TeleKarma}}
+\subsubsection[{ToggleRecording}]{\setlength{\rightskip}{0pt plus 5cm}void TeleKarma::ToggleRecording ()}}
+\label{classTeleKarma_e5de07b5de99a85c3703be973e7230df}
+
+
+Inverts the recording state. 
+
+If recording, recording is stopped. If no recording, recording is initiated. Provided for debugging purposes only. \hypertarget{classTeleKarma_2799e28d5e0736a0149c5a212b24e6c0}{
+\index{TeleKarma@{TeleKarma}!ToneReceived@{ToneReceived}}
+\index{ToneReceived@{ToneReceived}!TeleKarma@{TeleKarma}}
+\subsubsection[{ToneReceived}]{\setlength{\rightskip}{0pt plus 5cm}bool TeleKarma::ToneReceived (char {\em key}, \/  bool {\em clear} = {\tt true})}}
+\label{classTeleKarma_2799e28d5e0736a0149c5a212b24e6c0}
+
+
+Indicates whether the touch tone associated with the given character has been received since the last time the touch tone queue was cleared, and optionally clears the touch tone queue. 
+
+Determine whether a DTMF tone has been recieved and optionally reset the array of received tones.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em key}]the label of the key associated with a touch tone \item[{\em clear}]true (default) to clear the touch tone queue. \end{description}
+\end{Desc}
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+telekarma.h\item 
+telekarma.cpp\end{CompactItemize}

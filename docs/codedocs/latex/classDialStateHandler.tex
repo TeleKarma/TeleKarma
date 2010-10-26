@@ -1,0 +1,108 @@
+\hypertarget{classDialStateHandler}{
+\section{DialStateHandler Class Reference}
+\label{classDialStateHandler}\index{DialStateHandler@{DialStateHandler}}
+}
+This class is responsible for obtaining a SIP number from the user, initiating dialing, and confirming success or failure of the connection.  
+
+
+{\tt \#include $<$state.h$>$}
+
+Inheritance diagram for DialStateHandler:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=158pt]{classDialStateHandler__inherit__graph}
+\end{center}
+\end{figure}
+Collaboration diagram for DialStateHandler:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=400pt]{classDialStateHandler__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{classDialStateHandler_f0dfbbd00faaa0acd869655c510b6e72}{DialStateHandler} (\hyperlink{classTeleKarma}{TeleKarma} \&tk)
+\begin{CompactList}\small\item\em Constructor. \item\end{CompactList}\item 
+virtual \hyperlink{classDialStateHandler_e2ea834e79a07ec0083b08e51b5f0b25}{$\sim$DialStateHandler} ()
+\begin{CompactList}\small\item\em Destructor. \item\end{CompactList}\item 
+void \hyperlink{classDialStateHandler_945709f5589569cf5441b1c779efed7c}{Enter} ()
+\begin{CompactList}\small\item\em Acquires number to dial; initates dialing. \item\end{CompactList}\item 
+void \hyperlink{classDialStateHandler_94e5a408fd9758b535ec28780b53b7a8}{In} ()
+\begin{CompactList}\small\item\em Detects still dialing, disconnected, or connected. \item\end{CompactList}\item 
+void \hyperlink{classDialStateHandler_5ad70749559b320cb64db1e04db04622}{Exit} ()
+\begin{CompactList}\small\item\em Does nothing. \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+This class is responsible for obtaining a SIP number from the user, initiating dialing, and confirming success or failure of the connection. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classDialStateHandler_f0dfbbd00faaa0acd869655c510b6e72}{
+\index{DialStateHandler@{DialStateHandler}!DialStateHandler@{DialStateHandler}}
+\index{DialStateHandler@{DialStateHandler}!DialStateHandler@{DialStateHandler}}
+\subsubsection[{DialStateHandler}]{\setlength{\rightskip}{0pt plus 5cm}DialStateHandler::DialStateHandler ({\bf TeleKarma} \& {\em tk})}}
+\label{classDialStateHandler_f0dfbbd00faaa0acd869655c510b6e72}
+
+
+Constructor. 
+
+Nothing extra to do here.
+
+Calls superclass constructor.\hypertarget{classDialStateHandler_e2ea834e79a07ec0083b08e51b5f0b25}{
+\index{DialStateHandler@{DialStateHandler}!$\sim$DialStateHandler@{$\sim$DialStateHandler}}
+\index{$\sim$DialStateHandler@{$\sim$DialStateHandler}!DialStateHandler@{DialStateHandler}}
+\subsubsection[{$\sim$DialStateHandler}]{\setlength{\rightskip}{0pt plus 5cm}DialStateHandler::$\sim$DialStateHandler ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classDialStateHandler_e2ea834e79a07ec0083b08e51b5f0b25}
+
+
+Destructor. 
+
+Nothing extra to do in the deconstructor.
+
+No action.
+
+\subsection{Member Function Documentation}
+\hypertarget{classDialStateHandler_945709f5589569cf5441b1c779efed7c}{
+\index{DialStateHandler@{DialStateHandler}!Enter@{Enter}}
+\index{Enter@{Enter}!DialStateHandler@{DialStateHandler}}
+\subsubsection[{Enter}]{\setlength{\rightskip}{0pt plus 5cm}void DialStateHandler::Enter ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classDialStateHandler_945709f5589569cf5441b1c779efed7c}
+
+
+Acquires number to dial; initates dialing. 
+
+Basic handler when we enter the DialState.
+
+Reimplemented from \hyperlink{classStateHandler_c08036e743cf5172d6931cf3b6d321c6}{StateHandler}.\hypertarget{classDialStateHandler_5ad70749559b320cb64db1e04db04622}{
+\index{DialStateHandler@{DialStateHandler}!Exit@{Exit}}
+\index{Exit@{Exit}!DialStateHandler@{DialStateHandler}}
+\subsubsection[{Exit}]{\setlength{\rightskip}{0pt plus 5cm}void DialStateHandler::Exit ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classDialStateHandler_5ad70749559b320cb64db1e04db04622}
+
+
+Does nothing. 
+
+.. 
+
+Reimplemented from \hyperlink{classStateHandler_5ce0f2cb3d4a9f5aca137d47eac75c1e}{StateHandler}.\hypertarget{classDialStateHandler_94e5a408fd9758b535ec28780b53b7a8}{
+\index{DialStateHandler@{DialStateHandler}!In@{In}}
+\index{In@{In}!DialStateHandler@{DialStateHandler}}
+\subsubsection[{In}]{\setlength{\rightskip}{0pt plus 5cm}void DialStateHandler::In ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classDialStateHandler_94e5a408fd9758b535ec28780b53b7a8}
+
+
+Detects still dialing, disconnected, or connected. 
+
+Basic handler while in the DialState.
+
+Forwards to menu or connected. 
+
+Reimplemented from \hyperlink{classStateHandler_cee16f855e7354d21abafa47acd1046c}{StateHandler}.
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+state.h\item 
+state.cpp\end{CompactItemize}
