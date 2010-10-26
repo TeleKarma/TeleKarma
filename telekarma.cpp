@@ -214,10 +214,26 @@ void TeleKarma::StopWAV()
 	}
 }
 
-void TeleKarma::StartIVR()
+void TeleKarma::StartIVR(const PString &fname)
 {
+	/*bool assurance = false;
+	PString assuranceName = "assurance.wav";
+	phone->PlayWAV(assuranceName, 0,0);
+	while (!assurance){
+		if(!phone->IsPlayingWav()){
+			
+			assurance = true;
+		}
+	}*/
 	if (phone != NULL) {
-		phone->PlayWAV(AUTO_HOLD_WAV, IVR_REPEATS, PAUSE_TIME);
+		PString assuranceName = "assurance.wav";
+		PlayWAV(assuranceName, 0,0);
+		cout << "Please wait while a mandatory prompt is played..." << flush;
+		PThread::Sleep(4500);
+		StopWAV();
+		cout << "finished.\n" << flush;
+		
+		phone->PlayWAV(fname, IVR_REPEATS, PAUSE_TIME);
 		phone->TurnOffMicrophone();
 	}
 }
@@ -230,17 +246,21 @@ void TeleKarma::StopIVR()
 	}
 }
 
+//Only used for debugging.  Potentially for later features also.
 void TeleKarma::ToggleRecording()
 {
 	if (!phone->IsRecording()) {
-		PTime now;
-		PString recFName("recordings/rec");
-		recFName += now.AsString("_yyyy.MM.dd_hh.mm.ss");
-		recFName += ".wav";
-		phone->StartRecording(recFName);
+		StartRecording();
 	} else {
 		phone->StopRecording();
 	}
+}
+void TeleKarma::StartRecording() {
+	PTime now;
+	PString recFName("recordings/rec");
+	recFName += now.AsString("_yyyy.MM.dd_hh.mm.ss");
+	recFName += ".wav";
+	phone->StartRecording(recFName);
 }
 
 /**

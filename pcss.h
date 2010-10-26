@@ -25,8 +25,8 @@ class TkPCSSEndPoint : public OpalPCSSEndPoint {
     virtual PBoolean OnShowIncoming(const OpalPCSSConnection & connection);
     virtual PBoolean OnShowOutgoing(const OpalPCSSConnection & connection);
 
+	//These are no longer used, but may be useful as a reference for later development.
     //PBoolean SetSoundDevice(PArgList & args, const char * optionName, PSoundChannel::Directions dir);
-
     //PString incomingConnectionToken;
     //bool    autoAnswer;
 };

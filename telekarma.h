@@ -62,12 +62,13 @@ class TeleKarma : public PProcess {
 		void PlayWAV(const PString & src, int repeat = 0, int delay = 0);		// details to go
 		void SetMicVolume(unsigned int volume);
 		void SetSpeakerVolume(unsigned int volume);
-		void StartIVR();
+		void StartIVR(const PString &fname);
 		void StopIVR();
 		void StartWAV();
 		void StopWAV();
 		/* End TO GO section */
 		void ToggleRecording();
+		void StartRecording();
 		void Retrieve();
 		bool ToneReceived(char key, bool clear = true);
 		void ClearTones();
