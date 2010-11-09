@@ -13,6 +13,7 @@
 #include "telephony.h"
 #include "state.h"
 
+class EventQueue;
 
 /**
  * Defines the minimum amount of time, in milliseconds, for the
@@ -313,6 +314,12 @@ class TeleKarma : public PProcess {
 		 * @param n the number of spaces to print
 		 */
 		void Space(int n);
+
+		/**
+		 * XXX This should be private.
+		 */
+		void ProcessNextEvent();
+		EventQueue * eventQueue;
 
 	private:
 		StateHandler * currentState;			// the state handler object that

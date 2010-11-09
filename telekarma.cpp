@@ -20,6 +20,7 @@
 #include <sys/types.h>  		// for struct stat
 #include <sys/stat.h>   		// for struct stat
 #include "telekarma.h"
+#include "eventqueue.h"
 
 #ifdef WIN32
 	#define ACCESS _access		// MSFT proprietary version of C-standard access function
@@ -33,7 +34,8 @@ using namespace std;
 TeleKarma::TeleKarma() :
 	PProcess("TeleKarma"),
 	phone(NULL),
-	currentState(NULL)
+	currentState(NULL),
+	eventQueue(new EventQueue(*this))
 {
 	for (int i = 0; i < STATE_COUNT; ++i) states[i] = NULL;
 }
@@ -46,6 +48,7 @@ TeleKarma::~TeleKarma()
 	for (int i = 0; i < STATE_COUNT; ++i)
 		if (states[i] != NULL) delete states[i];
 	if (phone != NULL) delete phone;
+	if (eventQueue != NULL) delete eventQueue;
 	cout << "Thank you for using TeleKarma." << endl << flush;
 	PThread::Sleep(EXIT_DELAY);
 }
@@ -354,5 +357,10 @@ void TeleKarma::SetSpeakerVolume(unsigned int volume)
 	if (phone != NULL) return phone->SetSpeakerVolume(volume);
 }
 
+void TeleKarma::ProcessNextEvent() {
+	Action * action = eventQueue->GetNext();
+	action->Do(*phone);
+	delete action;
+}
 
 // End of File ///////////////////////////////////////////////////////////////

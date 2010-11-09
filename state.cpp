@@ -7,6 +7,8 @@
 #include "state.h"
 #include "conf.h"
 #include "telekarma.h"
+#include "action.h"
+#include "eventqueue.h"
 
 using namespace std;
 
@@ -141,7 +143,8 @@ void RegisterStateHandler::Enter() {
 
 	// Initiate registration (non-blocking)
 	cout << "Registering with " << registrar << " as " << user << "... " << flush;
-	tk->Register(registrar, user, passwd);
+	RegisterAction * registerAction = new RegisterAction(registrar, user, passwd);
+	tk->eventQueue->Add(registerAction);
 }
 
 /** Attempt to register when we are in the RegisterState **/
