@@ -20,6 +20,9 @@
 #include <sys/types.h>  		// for struct stat
 #include <sys/stat.h>   		// for struct stat
 #include "telekarma.h"
+
+#include "action.h"
+#include "cliview.h"
 #include "eventqueue.h"
 
 #ifdef WIN32
@@ -35,7 +38,8 @@ TeleKarma::TeleKarma() :
 	PProcess("TeleKarma"),
 	phone(NULL),
 	currentState(NULL),
-	eventQueue(new EventQueue(*this))
+	eventQueue(new EventQueue(*this)),
+	view(new CLIView(this))
 {
 	for (int i = 0; i < STATE_COUNT; ++i) states[i] = NULL;
 }
@@ -57,7 +61,7 @@ TeleKarma::~TeleKarma()
 // Main program
 void TeleKarma::Main() {
 
-	cout << "Welcome to TeleKarma!" << endl << endl << flush;
+
 
 	// verify existence and type of 'logs' and 'recordings' folders
 	const char * strPath1 = "logs";
@@ -83,7 +87,7 @@ void TeleKarma::Main() {
 	logFName += ".txt";
 	PTrace::Initialise(5, logFName);
 
-	// initialize states
+/*	// initialize states
 	states[REGISTER]       = new RegisterStateHandler(*this);
 	states[MENU]           = new MenuStateHandler(*this);
 	states[DIAL]           = new DialStateHandler(*this);
@@ -101,10 +105,21 @@ void TeleKarma::Main() {
 		currentState->In();
 		PThread::Sleep(SLEEP_DURATION);
 	}
-
+*/
 	// exit the application
 	cout << "Cleaning up... (this may take a few moments)" << endl << flush;
 
+	view->Run();
+
+	while (true) {
+		PThread::Sleep(3000);
+		if (phone->IsRegistered()) {
+			fprintf(stderr, "Registered\n");
+		}
+		if (phone->IsConnected()) {
+			fprintf(stderr, "Connected\n");
+		}
+	}
 }
 
 
@@ -146,9 +161,11 @@ PString TeleKarma::GetSTUNType()
  * Initiate registration with a SIP service provider.
  * This method is non-blocking.
  */
-void TeleKarma::Register(const PString & registrar, const PString & user, const PString & password)
+void TeleKarma::Register(RegisterAction * params)
 {
-	if (phone != NULL) phone->Register(registrar, user, password);
+	if (phone != NULL) {
+		phone->Register(params->registrar, params->user, params->password);
+	}
 }
 
 
@@ -162,9 +179,11 @@ bool TeleKarma::IsRegistered()
 
 
 /** Dial the indicated SIP address. Format sipAddr as sip:user@domain. */
-void TeleKarma::Dial(const PString & sipAddr)
+void TeleKarma::Dial(DialAction * params)
 {
-	if (phone != NULL) phone->Dial(sipAddr);
+	if (phone != NULL) {
+		phone->Dial(params->dest);
+	}
 }
 
 
@@ -359,7 +378,40 @@ void TeleKarma::SetSpeakerVolume(unsigned int volume)
 
 void TeleKarma::ProcessNextEvent() {
 	Action * action = eventQueue->GetNext();
-	action->Do(*phone);
+
+	switch(action->id) {
+
+	case ACTION_REGISTER:
+	{
+		RegisterAction * registerAction = (RegisterAction *)action;
+		Register(registerAction);
+		break;
+	}
+
+	case ACTION_DIAL:
+	{
+		DialAction * dialAction = (DialAction *)action;
+		Dial(dialAction);
+		break;
+	}
+
+	case ACTION_HOLD:
+		StartIVR(HOLD_WAV);
+		break;
+
+	case ACTION_AUTOHOLD:
+		StartIVR(AUTO_HOLD_WAV);
+		break;
+
+	case ACTION_DISCONNECT:
+		Disconnect();
+		break;
+
+	case ACTION_QUIT:
+		/*XXX Do something here? */
+		break;
+	}
+
 	delete action;
 }
 

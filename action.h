@@ -7,26 +7,62 @@ class PString;
 class TelephonyIfc;
 
 enum ActionID {
-	ACTION_REGISTER
+	ACTION_REGISTER,
+	ACTION_DIAL,
+	ACTION_HOLD,
+	ACTION_AUTOHOLD,
+	ACTION_DISCONNECT,
+	ACTION_QUIT
 };
 
 class Action {
 	public:
 		Action(const enum ActionID id):id(id) { }
 		const enum ActionID id;
-
-		virtual void Do(TelephonyIfc & phone) = 0;
 };
 
 class RegisterAction : public Action {
 	public:
-		RegisterAction(const PString & registrar, const PString & user, const PString & passwd);
-		~RegisterAction();
-		void Do(TelephonyIfc & phone);
-	private:
+		RegisterAction(const PString & registrar, const PString & user, const PString & password) :
+			Action(ACTION_REGISTER),
+			registrar(registrar),
+			user(user),
+			password(password)
+			{ }
+
 		const PString & registrar;
 		const PString & user;
-		const PString & passwd;
+		const PString & password;
 };
 
-#endif // _TELEKARMA_H_
+class DialAction : public Action {
+	public:
+		DialAction(const PString & dest) :
+			Action(ACTION_DIAL),
+			dest(dest)
+			{ }
+
+		const PString & dest;
+};
+
+class HoldAction : public Action {
+	public:
+		HoldAction() : Action(ACTION_HOLD) { }
+};
+
+class AutoHoldAction : public Action {
+	public:
+		AutoHoldAction() : Action(ACTION_AUTOHOLD) { }
+};
+
+class DisconnectAction : public Action {
+	public:
+		DisconnectAction() : Action(ACTION_DISCONNECT) { }
+};
+
+class QuitAction : public Action {
+	public:
+		QuitAction() : Action(ACTION_QUIT) { }
+};
+
+#endif // _ACTION_H_

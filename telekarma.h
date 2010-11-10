@@ -9,11 +9,15 @@
 #ifndef _TELEKARMA_H_
 #define _TELEKARMA_H_
 
+#include <ptlib.h>
 #include <ptlib/pprocess.h>
 #include "telephony.h"
 #include "state.h"
 
+class DialAction;
 class EventQueue;
+class RegisterAction;
+class View;
 
 /**
  * Defines the minimum amount of time, in milliseconds, for the
@@ -163,7 +167,7 @@ class TeleKarma : public PProcess {
 		 * @param user user name registered with the registrar
 		 * @param password user's password
 		 */
-		void Register(const PString & registrar, const PString & user, const PString & password);
+		void Register(RegisterAction * params);
 
 		/**
 		 * Dials an SIP phone number. This method is non-blocking. Initiation
@@ -171,7 +175,7 @@ class TeleKarma : public PProcess {
 		 * for determing call state using {@link #IsDialing()} and {@link #IsConnected()}.
 		 * @param destination an SIP-formatted address, including sip: prefix
 		 */
-		void Dial(const PString & destination);
+		void Dial(DialAction * params);
 
 		/**
 		 * Disconnects a phone call. This method is non-blocking. Disconnection
@@ -325,6 +329,7 @@ class TeleKarma : public PProcess {
 		StateHandler * currentState;			// the state handler object that
 		StateHandler * states[STATE_COUNT];		// an array of state handler objects, pre-instantiated
 		TelephonyIfc * phone;					// telephony services
+		View * view;
 
 		// disabled assignment operator & copy constructor
 		TeleKarma & operator=(const TeleKarma & rhs);

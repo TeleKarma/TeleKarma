@@ -234,7 +234,7 @@ void DialStateHandler::Enter() {
 	cout << endl << "Dialing... " << flush;
 
 	// attempt to call the provided SIP address (non-blocking)
-	tk->Dial(dest);
+//	tk->Dial(dest);
 
 }
 

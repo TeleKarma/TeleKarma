@@ -10,6 +10,11 @@ RegisterAction::RegisterAction(const PString & registrar, const PString & user, 
 	passwd(passwd)
 	{ }
 
-void RegisterAction::Do(TelephonyIfc & phone ) {
-	phone.Register(registrar, user, passwd);
+DialAction::DialAction(const Pstring & dest) : dest(dest) { }
+
+DialAction::Do(TelephonyIfc * phone) {
+	phone.Dial(dest);
 }
+
+HoldAction::Do(TelephonyIfc * phone) {
+	phone.
