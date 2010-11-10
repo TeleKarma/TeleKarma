@@ -403,6 +403,10 @@ void TeleKarma::ProcessNextEvent() {
 		StartIVR(AUTO_HOLD_WAV);
 		break;
 
+	case ACTION_RETRIEVE:
+		StopIVR();
+		break;
+
 	case ACTION_DISCONNECT:
 		Disconnect();
 		break;

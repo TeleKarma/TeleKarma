@@ -20,6 +20,7 @@ class CLIView : public PCLIStandard,  public View {
 //		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Dial);
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Hold);
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, AutoHold);
+		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Retrieve);
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Disconnect);
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Quit);
 

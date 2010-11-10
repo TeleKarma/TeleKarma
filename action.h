@@ -11,6 +11,7 @@ enum ActionID {
 	ACTION_DIAL,
 	ACTION_HOLD,
 	ACTION_AUTOHOLD,
+	ACTION_RETRIEVE,
 	ACTION_DISCONNECT,
 	ACTION_QUIT
 };
@@ -53,6 +54,11 @@ class HoldAction : public Action {
 class AutoHoldAction : public Action {
 	public:
 		AutoHoldAction() : Action(ACTION_AUTOHOLD) { }
+};
+
+class RetrieveAction : public Action {
+	public:
+		RetrieveAction() : Action(ACTION_RETRIEVE) { }
 };
 
 class DisconnectAction : public Action {

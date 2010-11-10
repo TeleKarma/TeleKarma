@@ -113,6 +113,7 @@ void CLIView::Run() {
 
 //	SetCommand("c", PCREATE_NOTIFIER(Dial), "Place a call");
 	SetCommand("q", PCREATE_NOTIFIER(Quit), "Quit");
+	SetCommand("r", PCREATE_NOTIFIER(Retrieve), "Retrieve call");
 //	menu << "  0-9 : touch tones" << endl;
 //	menu << "  *,# : touch tones" << endl;
 	SetCommand("h", PCREATE_NOTIFIER(Hold), "Hold call");
@@ -121,24 +122,21 @@ void CLIView::Run() {
 	Start();
 }
 
-//void CLIView::Dial(PCLI::Arguments & args, INT) {
-//
-//}
 void CLIView::Hold(PCLI::Arguments & args, INT) {
-	fprintf(stderr, "HOLD\n");
+	View::Hold();
 }
-void CLIView::AutoHold(PCLI::Arguments & args, INT) {
 
+void CLIView::AutoHold(PCLI::Arguments & args, INT) {
+	View::AutoHold();
+}
+
+void CLIView::Retrieve(PCLI::Arguments & args, INT) {
+	View::Retrieve();
 }
 void CLIView::Disconnect(PCLI::Arguments & args, INT) {
-
+	View::Disconnect();
 }
+
 void CLIView::Quit(PCLI::Arguments & args, INT) {
-
+	View::Quit();
 }
-//		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Register);
-//		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Dial);
-//		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Hold);
-//		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, AutoHold);
-//		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Disconnect);
-//		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Quit);
