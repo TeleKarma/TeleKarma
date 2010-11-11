@@ -19,7 +19,9 @@ enum ActionID {
 class Action {
 	public:
 		Action(const enum ActionID id):id(id) { }
+		virtual ~Action() { }
 		const enum ActionID id;
+		const int turn;
 };
 
 class RegisterAction : public Action {
