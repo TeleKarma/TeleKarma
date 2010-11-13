@@ -1,3 +1,19 @@
+/*
+ * model.h
+ *
+ * Definition of Model superclass.
+ *
+ */
+
+#ifndef _MODEL_H_
+#define _MODEL_H_
+
+/** The default capacity of the action and error message queues. */
+#define QUEUE_SIZE 50
+
+class Action;
+class State;
+
 /**
  * <p>
  * The TeleKarma NG Model superclass.
@@ -39,16 +55,6 @@
  * returned.
  * </p>
  */
-
-#ifndef _MODEL_H_
-#define _MODEL_H_
-
-/** The default capacity of the action and error message queues. */
-#define QUEUE_SIZE 50
-
-class Action;
-class State;
-
 class Model
 {
 
