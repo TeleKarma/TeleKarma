@@ -17,6 +17,9 @@ class CLIView : public PCLIStandard,  public View {
 		void Run();
 
 	private:
+		void Register(const PString & registrar, const PString & user, const PString & password);
+		void Dial(const PString & dest);
+
 //		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Dial);
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Hold);
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, AutoHold);

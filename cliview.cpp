@@ -1,6 +1,8 @@
 #include "cliview.h"
 
+#include "action.h"
 #include "conf.h"
+#include "eventqueue.h"
 #include "telekarma.h"
 
 void CLIView::Run() {
@@ -122,21 +124,30 @@ void CLIView::Run() {
 	Start();
 }
 
+void CLIView::Register(const PString & registrar, const PString & user, const PString & password) {
+	DoAction(new RegisterAction(registrar, user, password));
+}
+
+void CLIView::Dial(const PString & dest) {
+	DoAction(new DialAction(dest));
+}
+
 void CLIView::Hold(PCLI::Arguments & args, INT) {
-	View::Hold();
+	DoAction(new HoldAction());
 }
 
 void CLIView::AutoHold(PCLI::Arguments & args, INT) {
-	View::AutoHold();
+	DoAction(new AutoHoldAction());
 }
 
 void CLIView::Retrieve(PCLI::Arguments & args, INT) {
-	View::Retrieve();
+	DoAction(new RetrieveAction());
 }
+
 void CLIView::Disconnect(PCLI::Arguments & args, INT) {
-	View::Disconnect();
+	DoAction(new DisconnectAction());
 }
 
 void CLIView::Quit(PCLI::Arguments & args, INT) {
-	View::Quit();
+	DoAction(new QuitAction());
 }
