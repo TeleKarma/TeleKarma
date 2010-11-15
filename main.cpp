@@ -1,5 +1,5 @@
 #include <ptlib.h>
-#include "telekarma.h"
+#include "cliview.h"
 
 /**
  * The PCREATE_PROCESS macro...
@@ -10,4 +10,4 @@
  * 5. instance->InternalMain() calls instance->Main() which must be
  *    defined in TeleKarma.
  */
-PCREATE_PROCESS(TeleKarma);
+PCREATE_PROCESS(CLIView);

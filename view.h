@@ -1,19 +1,25 @@
 
 #ifndef _VIEW_H_
 #define _VIEW_H_
+#include <stdlib.h>
 
 class Action;
-class PString;
-class TeleKarma;
+class Controller;
+class Model;
+class State;
 
 class View {
 	public:
-		View(TeleKarma * controller) : controller(controller) { }
-		virtual void Run() = 0;
+		View() : controller(NULL), model(NULL) { }
+		~View();
+		virtual void Main() = 0;
+		virtual State * GetState();
 
 	protected:
 		void DoAction(Action * action);
-		TeleKarma * controller;
+
+		Model * model;
+		Controller * controller;
 };
 
 #endif //_VIEW_H_

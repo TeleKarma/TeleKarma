@@ -3,21 +3,27 @@
 #include "action.h"
 #include "conf.h"
 #include "eventqueue.h"
+#include "model.h"
+#include "controller.h"
 #include "telekarma.h"
 
-CLIView::CLIView(TeleKarma * controller) :
-	View(controller),
+CLIView::CLIView() :
+	View(),
 	inputState(CLIVIEW_INPUT_AUTO),
 	dest(PString(DEST))
 	{ }
 
-void CLIView::Run() {
+void CLIView::Main() {
 
 	PString registrar(REGISTRAR);
 	PString stunServer(STUN);
 	PString user(ACCOUNT);
 	PString passwd(PASSWORD);
 	PString line;
+
+
+	model = new Model();
+	controller = new TeleKarma(model);
 
 	cout << "Welcome to TeleKarma!" << endl << endl << flush;
 
