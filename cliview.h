@@ -8,24 +8,38 @@
 
 class TeleKarma;
 
+class CLIView;
+
+enum CLIViewInputState {
+	CLIVIEW_INPUT_AUTO,
+	CLIVIEW_INPUT_DEST
+};
+
 class CLIView : public PCLIStandard,  public View {
 
 	PCLASSINFO(CLIView, PCLIStandard);
 
 	public:
-		CLIView(TeleKarma * controller) : View(controller) { }
+		CLIView(TeleKarma * controller); 
 		void Run();
 
 	private:
-		void Register(const PString & registrar, const PString & user, const PString & password);
-		void Dial(const PString & dest);
 
-//		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Dial);
+		void OnReceivedLine(Arguments & line);
+		void Register(const PString & registrar, const PString & user, const PString & password);
+		void Dial(PString & dest);
+
+		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Dial);
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Hold);
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, AutoHold);
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Retrieve);
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Disconnect);
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Quit);
+
+		enum CLIViewInputState inputState;
+		PString dest;
+
+		void EnterState(CLIViewInputState state);
 
 };
 

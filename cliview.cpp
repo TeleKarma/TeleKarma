@@ -5,6 +5,12 @@
 #include "eventqueue.h"
 #include "telekarma.h"
 
+CLIView::CLIView(TeleKarma * controller) :
+	View(controller),
+	inputState(CLIVIEW_INPUT_AUTO),
+	dest(PString(DEST))
+	{ }
+
 void CLIView::Run() {
 
 	PString registrar(REGISTRAR);
@@ -97,23 +103,8 @@ void CLIView::Run() {
 	cout << "Registering with " << registrar << " as " << user << "... " << flush;
 	Register(registrar, user, passwd);
 
-	PString dest(DEST);
-
-	// obtain SIP address to call
-	cout << "Enter SIP address [" << dest << "]: " << flush;
-	cin >> line;
-	line = line.Trim();
-	if (!line.IsEmpty()) dest = line;
-	// May be used in future development.
-	//if (!dest.MatchesRegEx("^sip:")) {
-	//	dest = "sip:" + dest;
-	//}
-	cout << endl << "Dialing... " << flush;
-
-	// attempt to call the provided SIP address (non-blocking)
-	Dial(dest);
-
-//	SetCommand("c", PCREATE_NOTIFIER(Dial), "Place a call");
+	EnterState(CLIVIEW_INPUT_AUTO);
+	SetCommand("c", PCREATE_NOTIFIER(Dial), "Place a call");
 	SetCommand("q", PCREATE_NOTIFIER(Quit), "Quit");
 	SetCommand("r", PCREATE_NOTIFIER(Retrieve), "Retrieve call");
 //	menu << "  0-9 : touch tones" << endl;
@@ -124,12 +115,46 @@ void CLIView::Run() {
 	Start();
 }
 
+void CLIView::OnReceivedLine(Arguments & line) {
+
+	cout << "Line='" << line[0] << "'\n";
+	/*XXX: Maybe use a state pattern here? */
+	switch(inputState) {
+	case CLIVIEW_INPUT_DEST:
+		Dial(dest);
+		EnterState(CLIVIEW_INPUT_AUTO);
+		break;
+	default:
+		PCLIStandard::OnReceivedLine(line);
+	}
+}
+
+void CLIView::EnterState(CLIViewInputState state) {
+
+	/*XXX: Use a state pattern here. */
+	cout << "Enter state = " << state << "\n";
+	switch(state) {
+	case CLIVIEW_INPUT_DEST:
+		SetPrompt("Enter SIP address [" DEST "]: ");
+		break;
+
+	default:
+		SetPrompt("TeleKarma>");
+		break;
+	}
+	inputState = state;
+}
+
 void CLIView::Register(const PString & registrar, const PString & user, const PString & password) {
 	DoAction(new RegisterAction(registrar, user, password));
 }
 
-void CLIView::Dial(const PString & dest) {
+void CLIView::Dial(PString & dest) {
 	DoAction(new DialAction(dest));
+}
+
+void CLIView::Dial(PCLI::Arguments & args, INT) {
+	EnterState(CLIVIEW_INPUT_DEST);
 }
 
 void CLIView::Hold(PCLI::Arguments & args, INT) {
@@ -151,3 +176,4 @@ void CLIView::Disconnect(PCLI::Arguments & args, INT) {
 void CLIView::Quit(PCLI::Arguments & args, INT) {
 	DoAction(new QuitAction());
 }
+
