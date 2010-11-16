@@ -24,6 +24,7 @@
 #include "action.h"
 #include "cliview.h"
 #include "eventqueue.h"
+#include "state.h"
 
 #ifdef WIN32
 	#define ACCESS _access		// MSFT proprietary version of C-standard access function
@@ -37,22 +38,14 @@ using namespace std;
 TeleKarma::TeleKarma() :
 	PProcess("TeleKarma"),
 	phone(NULL),
-	currentState(NULL),
-	eventQueue(new EventQueue(*this)),
-	view(new CLIView(this))
-{
-	for (int i = 0; i < STATE_COUNT; ++i) states[i] = NULL;
-}
+	eventQueue(new EventQueue(*this))
+	{ }
 
 // Destructor - heap memory management, delay prior to exit,
 // and final message to console.
 TeleKarma::~TeleKarma()
 {
-	currentState = NULL;
-	for (int i = 0; i < STATE_COUNT; ++i)
-		if (states[i] != NULL) delete states[i];
 	if (phone != NULL) delete phone;
-	if (eventQueue != NULL) delete eventQueue;
 	cout << "Thank you for using TeleKarma." << endl << flush;
 	PThread::Sleep(EXIT_DELAY);
 }
@@ -60,7 +53,6 @@ TeleKarma::~TeleKarma()
 
 // Main program
 void TeleKarma::Main() {
-
 
 
 	// verify existence and type of 'logs' and 'recordings' folders
@@ -87,29 +79,8 @@ void TeleKarma::Main() {
 	logFName += ".txt";
 	PTrace::Initialise(5, logFName);
 
-/*	// initialize states
-	states[REGISTER]       = new RegisterStateHandler(*this);
-	states[MENU]           = new MenuStateHandler(*this);
-	states[DIAL]           = new DialStateHandler(*this);
-	states[CONNECTED]      = new ConnectedStateHandler(*this);
-	states[HOLD]           = new HoldStateHandler(*this);
-	states[AUTO_HOLD]      = new AutoHoldStateHandler(*this);
-	states[EXIT]           = new ExitStateHandler(*this);
-	states[DISCONNECT]     = new DisconnectStateHandler(*this);
-
-	// enter REGISTER state
-	EnterState(REGISTER);
-
-	// enter running loop
-	while (currentState != states[EXIT]) {
-		currentState->In();
-		PThread::Sleep(SLEEP_DURATION);
-	}
-*/
 	// exit the application
 	cout << "Cleaning up... (this may take a few moments)" << endl << flush;
-
-	view->Run();
 
 	while (true) {
 		PThread::Sleep(3000);
@@ -129,12 +100,8 @@ void TeleKarma::Main() {
  */
 void TeleKarma::EnterState(int stateId)
 {
-	if (currentState == states[stateId]) return;
-	PTRACE(3, "DEBUG: TeleKarma.EnterState(" << stateId << ")");
-	if (currentState != NULL) currentState->Exit();
-	currentState = states[stateId];
-	currentState->Enter();
 }
+
 
 
 /** Initialize the telephony API. Blocks. */

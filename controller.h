@@ -5,17 +5,21 @@
  *
  */
 
- #ifndef _CONTROLLER_H_
+#ifndef _CONTROLLER_H_
 #define _CONTROLLER_H_
+
+class Model;
 
 class Controller{
 	public:
 	
-	Controller(View * view, Model * model);
+	Controller(Model * model);
 	virtual ~Controller();
 	virtual void Main();
 	
 	private:
+	
+		virtual void ProcessNextEvent();
 	/**
 		 * Explicitely disabled copy constructor.
 		 * No implementation, by design.
@@ -27,5 +31,8 @@ class Controller{
 		 * No implementation, by design.
 		 */
 		Controller & operator=(const Controller & rhs);
-	
+		
+		Model * model;	
 };
+
+#endif // _CONTROLLER_H_

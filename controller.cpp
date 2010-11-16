@@ -10,7 +10,7 @@
  #include "view.h"
  
  //Only constructor for the Controller class?
- Controller::Controller(View * view, Model * model) {
+ Controller::Controller(Model * model) : model(model) {
 	 
  }
  
@@ -31,6 +31,6 @@
 			} //end NULL case
 		}//end switch */
 
-		Telekarma::ProcessNextEvent();
+		ProcessNextEvent();
 	}//end while
  }//end Main

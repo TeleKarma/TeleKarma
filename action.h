@@ -18,7 +18,7 @@ enum ActionID {
 
 class Action {
 	public:
-		Action(const enum ActionID id):id(id) { }
+		Action(const enum ActionID id):id(id), turn(0) { }
 		virtual ~Action() { }
 		const enum ActionID id;
 		const int turn;

@@ -326,10 +326,7 @@ class TeleKarma : public PProcess {
 		EventQueue * eventQueue;
 
 	private:
-		StateHandler * currentState;			// the state handler object that
-		StateHandler * states[STATE_COUNT];		// an array of state handler objects, pre-instantiated
 		TelephonyIfc * phone;					// telephony services
-		View * view;
 
 		// disabled assignment operator & copy constructor
 		TeleKarma & operator=(const TeleKarma & rhs);
