@@ -35,10 +35,9 @@
 using namespace std;
 
 // Constructor - best practices in field initialization.
-TeleKarma::TeleKarma() :
-	PProcess("TeleKarma"),
-	phone(NULL),
-	eventQueue(new EventQueue(*this))
+TeleKarma::TeleKarma(Model * model) :
+	Controller(model),
+	phone(NULL)
 	{ }
 
 // Destructor - heap memory management, delay prior to exit,
@@ -83,6 +82,7 @@ void TeleKarma::Main() {
 	cout << "Cleaning up... (this may take a few moments)" << endl << flush;
 
 	while (true) {
+		ProcessNextEvent();
 		PThread::Sleep(3000);
 		if (phone->IsRegistered()) {
 			fprintf(stderr, "Registered\n");
@@ -344,20 +344,31 @@ void TeleKarma::SetSpeakerVolume(unsigned int volume)
 }
 
 void TeleKarma::ProcessNextEvent() {
-	Action * action = eventQueue->GetNext();
+	Action * action = model->DequeueAction();
+	
+	if (!action) {
+		return;
+	}
 
 	switch(action->id) {
 
 	case ACTION_REGISTER:
 	{
-		RegisterAction * registerAction = (RegisterAction *)action;
+		RegisterAction * registerAction = dynamic_cast<RegisterAction *>(action);
+		/* XXX Handle this better? */
+		if (!registerAction) {
+			return;
+		}
 		Register(registerAction);
 		break;
 	}
 
 	case ACTION_DIAL:
 	{
-		DialAction * dialAction = (DialAction *)action;
+		DialAction * dialAction = dynamic_cast<DialAction *>(action);
+		if (!dialAction) {
+			return;
+		}
 		Dial(dialAction);
 		break;
 	}

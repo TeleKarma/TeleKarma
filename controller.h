@@ -8,6 +8,8 @@
 #ifndef _CONTROLLER_H_
 #define _CONTROLLER_H_
 
+#include <ptlib.h>
+
 class Model;
 
 class Controller : public PThread

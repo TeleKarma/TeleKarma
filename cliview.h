@@ -38,9 +38,8 @@ class CLIView : public PCLIStandard,  public View {
 
 		enum CLIViewInputState inputState;
 		PString dest;
-
 		void EnterState(CLIViewInputState state);
-
+		
 };
 
 #endif //_CLIVIEW_H_

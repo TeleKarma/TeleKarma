@@ -97,12 +97,12 @@ void CLIView::Main() {
 	*/
 
 	cout << "Initializing telephony system... (this may take a moment)" << flush;
-	controller->Initialize(stunServer, user);
-	controller->Backspace(24);
+//	controller->Initialize(stunServer, user);
+//	controller->Backspace(24);
 	cout << "done.";
-	controller->Space(19);
+//	controller->Space(19);
 	cout << endl;
-	cout << "Identifying STUN client type... " << controller->GetSTUNType() << "." << endl;
+//	cout << "Identifying STUN client type... " << controller->GetSTUNType() << "." << endl;
 	cout << flush;
 
 	// Initiate registration (non-blocking)
@@ -152,11 +152,11 @@ void CLIView::EnterState(CLIViewInputState state) {
 }
 
 void CLIView::Register(const PString & registrar, const PString & user, const PString & password) {
-	DoAction(new RegisterAction(registrar, user, password));
+	DoAction(new RegisterAction(registrar, user, password, 0));
 }
 
 void CLIView::Dial(PString & dest) {
-	DoAction(new DialAction(dest));
+	DoAction(new DialAction(dest, 0));
 }
 
 void CLIView::Dial(PCLI::Arguments & args, INT) {
@@ -164,22 +164,22 @@ void CLIView::Dial(PCLI::Arguments & args, INT) {
 }
 
 void CLIView::Hold(PCLI::Arguments & args, INT) {
-	DoAction(new HoldAction());
+	DoAction(new HoldAction(0));
 }
 
 void CLIView::AutoHold(PCLI::Arguments & args, INT) {
-	DoAction(new AutoHoldAction());
+	DoAction(new AutoHoldAction(0));
 }
 
 void CLIView::Retrieve(PCLI::Arguments & args, INT) {
-	DoAction(new RetrieveAction());
+	DoAction(new RetrieveAction(0));
 }
 
 void CLIView::Disconnect(PCLI::Arguments & args, INT) {
-	DoAction(new DisconnectAction());
+	DoAction(new DisconnectAction(0));
 }
 
 void CLIView::Quit(PCLI::Arguments & args, INT) {
-	DoAction(new QuitAction());
+	DoAction(new QuitAction(0));
 }
 

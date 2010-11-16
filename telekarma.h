@@ -11,6 +11,8 @@
 
 #include <ptlib.h>
 #include <ptlib/pprocess.h>
+#include "controller.h"
+#include "model.h"
 #include "telephony.h"
 #include "state.h"
 
@@ -97,17 +99,17 @@ class View;
  * other resources.
  * </p>
  */
-class TeleKarma : public PProcess {
+class TeleKarma : public Controller {
 
 	// PTLib macro for setting up methods required by the PProcess class.
-	PCLASSINFO(TeleKarma, PProcess);
+	//PCLASSINFO(TeleKarma, PProcess);
 
 	public:
 
 		/**
 		 * Constructor. Initializes fields.
 		 */
-		TeleKarma();
+		TeleKarma(Model * model);
 
 		/**
 		 * Destructor. Heap memory cleanup and delay of {@link EXIT_DELAY}

@@ -2,6 +2,7 @@
 #ifndef _VIEW_H_
 #define _VIEW_H_
 #include <stdlib.h>
+#include <ptlib/pprocess.h>
 
 class Action;
 class Controller;
