@@ -15,7 +15,7 @@ class View : public PProcess {
 	
 	public:
 		View() : controller(NULL), model(NULL) { }
-		~View();
+		~View() { }
 		virtual State * GetState();
 
 	protected:

@@ -24,7 +24,8 @@ void CLIView::Main() {
 
 	model = new Model();
 	controller = new TeleKarma(model);
-
+	controller->Resume();
+	TeleKarma * tk = (TeleKarma*)controller;
 	cout << "Welcome to TeleKarma!" << endl << endl << flush;
 
 	//Very self-explanitory.
@@ -97,7 +98,7 @@ void CLIView::Main() {
 	*/
 
 	cout << "Initializing telephony system... (this may take a moment)" << flush;
-//	controller->Initialize(stunServer, user);
+	tk->Initialize(stunServer, user);
 //	controller->Backspace(24);
 	cout << "done.";
 //	controller->Space(19);
@@ -119,6 +120,8 @@ void CLIView::Main() {
 	SetCommand("w", PCREATE_NOTIFIER(AutoHold), "Hold until human detected");
 	SetCommand("d", PCREATE_NOTIFIER(Disconnect), "Disconnect");
 	Start();
+	
+	while(true);
 }
 
 void CLIView::OnReceivedLine(Arguments & line) {

@@ -21,6 +21,7 @@ class CLIView : public PCLIStandard,  public View {
 
 	public:
 		CLIView(); 
+		~CLIView() { }
 		void Main();
 
 	private:

@@ -79,15 +79,16 @@ void TeleKarma::Main() {
 	PTrace::Initialise(5, logFName);
 
 	// exit the application
-	cout << "Cleaning up... (this may take a few moments)" << endl << flush;
+//	cout << "Cleaning up... (this may take a few moments)" << endl << flush;
 
 	while (true) {
+		cout << "looping" <<"\n";
 		ProcessNextEvent();
 		PThread::Sleep(3000);
-		if (phone->IsRegistered()) {
+		if (phone && phone->IsRegistered()) {
 			fprintf(stderr, "Registered\n");
 		}
-		if (phone->IsConnected()) {
+		if (phone && phone->IsConnected()) {
 			fprintf(stderr, "Connected\n");
 		}
 	}
