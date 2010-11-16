@@ -68,8 +68,16 @@ Model::Model(int queueSize) :
 Model::~Model() {
 	delete state;
 	state = NULL;
+	for (int i = 0; i < aqsize; ++i) {
+		delete aqueue[i];
+		aqueue[i] = NULL;
+	}
 	delete [] aqueue;
 	aqueue = NULL;
+	for (int i = 0; i < mqsize; ++i) {
+		delete mqueue[i];
+		mqueue[i] = NULL;
+	}
 	delete [] mqueue;
 	mqueue = NULL;
 }
@@ -83,7 +91,7 @@ bool Model::EnqueueAction(Action * action)
 	aqMutex.Wait();
 	// enqueue
 	if (aqhead == aqtail) {
-		if (aqhead == NULL) {
+		if (aqueue[aqhead] == NULL) {
 			// the queue is empty
 			aqueue[aqtail] = action;
 			aqtail = (aqtail + 1) % aqsize;
@@ -109,7 +117,7 @@ Action * Model::DequeueAction()
 	// enter mutex
 	aqMutex.Wait();
 	// dequeue
-	if (aqhead != NULL) {
+	if (aqueue[aqhead] != NULL) {
 		result = aqueue[aqhead];
 		aqueue[aqhead] = NULL;
 		aqhead = (aqhead + 1) % aqsize;
@@ -128,7 +136,7 @@ bool Model::EnqueueErrMsg(PString * msg)
 	mqMutex.Wait();
 	// enqueue
 	if (mqhead == mqtail) {
-		if (mqhead == NULL) {
+		if (mqueue[mqhead] == NULL) {
 			// the queue is empty
 			mqueue[mqtail] = msg;
 			mqtail = (mqtail + 1) % mqsize;
@@ -154,7 +162,7 @@ PString * Model::DequeueErrMsg()
 	// enter mutex
 	mqMutex.Wait();
 	// dequeue
-	if (mqhead != NULL) {
+	if (mqueue[mqhead] != NULL) {
 		result = mqueue[mqhead];
 		mqueue[mqhead] = NULL;
 		mqhead = (mqhead + 1) % mqsize;
@@ -180,6 +188,8 @@ State * Model::GetState()
 void Model::SetState(State * newState)
 {
 	sMutex.Wait();
+	State * oldState = state;
 	state = newState;
+	delete oldState;
 	sMutex.Signal();
 }

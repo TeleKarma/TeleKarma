@@ -303,13 +303,13 @@ class Model
 		PSemaphore sMutex;	// mutex for current state
 
 		/**
-		 * Explicitely disabled copy constructor.
+		 * Explicitly disabled copy constructor.
 		 * No implementation, by design.
 		 */
 		Model(const Model & source);
 
 		/**
-		 * Explicitely disabled assignment operator.
+		 * Explicitly disabled assignment operator.
 		 * No implementation, by design.
 		 */
 		Model & operator=(const Model & rhs);
