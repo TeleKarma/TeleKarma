@@ -15,7 +15,7 @@ enum CLIViewInputState {
 	CLIVIEW_INPUT_DEST
 };
 
-class CLIView : public PCLIStandard,  public View, public PProcess {
+class CLIView : public PCLIStandard,  public View {
 
 	PCLASSINFO(CLIView, PCLIStandard);
 

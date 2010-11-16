@@ -8,11 +8,13 @@ class Controller;
 class Model;
 class State;
 
-class View {
+class View : public PProcess {
+	
+	PCLASSINFO(View, PProcess);
+	
 	public:
 		View() : controller(NULL), model(NULL) { }
 		~View();
-		virtual void Main() = 0;
 		virtual State * GetState();
 
 	protected:
