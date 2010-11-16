@@ -1,4 +1,4 @@
-PREFIX=/home/users/tstellar/install
+PREFIX=/usr/local/
 CXXFLAGS=-I$(PREFIX)/include/opal -I$(PREFIX)/include/ptclib -I$(PREFIX)/include -I$(PREFIX)/ptlib -g
 CPPFLAGS=-D__LINUX__ -DDISABLE_VIDEO
 

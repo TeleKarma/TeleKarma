@@ -78,11 +78,13 @@ void TeleKarma::Main() {
 	logFName += ".txt";
 	PTrace::Initialise(5, logFName);
 
+	phone = new TelephonyIfc();
+	phone->Initialise();
+	fprintf(stderr, "Initialized...\n");
 	// exit the application
 //	cout << "Cleaning up... (this may take a few moments)" << endl << flush;
 
 	while (true) {
-		cout << "looping" <<"\n";
 		ProcessNextEvent();
 		PThread::Sleep(3000);
 		if (phone && phone->IsRegistered()) {
@@ -108,8 +110,8 @@ void TeleKarma::EnterState(int stateId)
 /** Initialize the telephony API. Blocks. */
 void TeleKarma::Initialize(const PString & stun, const PString & user)
 {
-	phone = new TelephonyIfc();
-	phone->Initialise(stun, user);
+//	phone = new TelephonyIfc();
+//	phone->Initialise(stun, user);
 }
 
 

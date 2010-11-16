@@ -98,7 +98,7 @@ void CLIView::Main() {
 	*/
 
 	cout << "Initializing telephony system... (this may take a moment)" << flush;
-	tk->Initialize(stunServer, user);
+//	tk->Initialize(stunServer, user);
 //	controller->Backspace(24);
 	cout << "done.";
 //	controller->Space(19);
