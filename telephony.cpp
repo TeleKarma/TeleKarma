@@ -42,7 +42,7 @@ TelephonyIfc::~TelephonyIfc()
 }
 
 
-void TelephonyIfc::Initialise()//const PString & stunAddr, const PString & user)
+void TelephonyIfc::Initialise(const PString & stunAddr)
 {
 
 	///////////////////////////////////////
@@ -72,7 +72,6 @@ void TelephonyIfc::Initialise()//const PString & stunAddr, const PString & user)
 	// SIP protocol handler
 
 	sipEP = new TkSIPEndPoint(*this);
-//	sipEP->SetDefaultLocalPartyName("tstellar");
 	sipEP->SetRetryTimeouts(10000, 30000);
 	sipEP->StartListeners(sipEP->GetDefaultListeners());
 	

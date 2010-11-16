@@ -42,7 +42,7 @@ class TelephonyIfc : public OpalManager {
 		 * @param user The username that is used to authenticate with
 		 * the registrar that will be used
 		 */
-		void Initialise();//const PString & stunAddr, const PString & user);
+		void Initialise(const PString & stunAddr);
 
 		/**
 		 * Register with a service provided

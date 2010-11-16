@@ -22,6 +22,7 @@
 #include "telekarma.h"
 
 #include "action.h"
+#include "conf.h"	/* XXX For STUN variable, we might want to do something different with this. */
 #include "cliview.h"
 #include "eventqueue.h"
 #include "state.h"
@@ -37,7 +38,7 @@ using namespace std;
 // Constructor - best practices in field initialization.
 TeleKarma::TeleKarma(Model * model) :
 	Controller(model),
-	phone(NULL)
+	phone(new TelephonyIfc())
 	{ }
 
 // Destructor - heap memory management, delay prior to exit,
@@ -52,7 +53,6 @@ TeleKarma::~TeleKarma()
 
 // Main program
 void TeleKarma::Main() {
-
 
 	// verify existence and type of 'logs' and 'recordings' folders
 	const char * strPath1 = "logs";
@@ -78,8 +78,7 @@ void TeleKarma::Main() {
 	logFName += ".txt";
 	PTrace::Initialise(5, logFName);
 
-	phone = new TelephonyIfc();
-	phone->Initialise();
+	phone->Initialise(STUN);
 	fprintf(stderr, "Initialized...\n");
 	// exit the application
 //	cout << "Cleaning up... (this may take a few moments)" << endl << flush;
