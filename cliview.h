@@ -15,13 +15,13 @@ enum CLIViewInputState {
 	CLIVIEW_INPUT_DEST
 };
 
-class CLIView : public PCLIStandard,  public View {
+class CLIView : public PCLIStandard,  public View, public PProcess {
 
 	PCLASSINFO(CLIView, PCLIStandard);
 
 	public:
-		CLIView(TeleKarma * controller); 
-		void Run();
+		CLIView(); 
+		void Main();
 
 	private:
 
