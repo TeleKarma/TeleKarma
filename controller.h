@@ -10,28 +10,30 @@
 
 class Model;
 
-class Controller{
+class Controller : public PThread
+{
+	PCLASSINFO(Controller, PThread); //maybe subclasses need this
 	public:
 	
-	Controller(Model * model);
-	virtual ~Controller();
-	virtual void Main();
+		Controller(Model * model);
+		virtual ~Controller();
+		virtual void Main()=0;
 	
 	private:
 	
-		virtual void ProcessNextEvent();
-	/**
-		 * Explicitely disabled copy constructor.
+		/**
+		 * Explicitly disabled copy constructor.
 		 * No implementation, by design.
 		 */
 		Controller(const Controller & source);
 
 		/**
-		 * Explicitely disabled assignment operator.
+		 * Explicitly disabled assignment operator.
 		 * No implementation, by design.
 		 */
 		Controller & operator=(const Controller & rhs);
-		
+	
+	protected:
 		Model * model;	
 };
 

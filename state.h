@@ -2,14 +2,13 @@
 #ifndef _STATE_H_
 #define _STATE_H_
 
-class State{
+class State
+{
 	public:
 		const int turn;
 		const int id;
-		State(const int id, const int turn);
-		
-	private:
-	//nothing
+		State(int id, int turn);
+		virtual State * Clone() const;
 };
 
 #endif //_STATE_H

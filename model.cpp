@@ -178,7 +178,7 @@ State * Model::GetState()
 	State * result = NULL;
 	sMutex.Wait();
 	if (state != NULL) {
-		result = state->clone();
+		result = state->Clone();
 	}
 	sMutex.Signal();
 	return result;

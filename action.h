@@ -4,9 +4,8 @@
 
 class PString;
 
-class TelephonyIfc;
-
-enum ActionID {
+enum ActionID
+{
 	ACTION_REGISTER,
 	ACTION_DIAL,
 	ACTION_HOLD,
@@ -16,18 +15,20 @@ enum ActionID {
 	ACTION_QUIT
 };
 
-class Action {
+class Action
+{
 	public:
-		Action(const enum ActionID id):id(id), turn(0) { }
+		Action(enum ActionID id, int turn):id(id), turn(turn) { }
 		virtual ~Action() { }
 		const enum ActionID id;
 		const int turn;
 };
 
-class RegisterAction : public Action {
+class RegisterAction : public Action
+{
 	public:
-		RegisterAction(const PString & registrar, const PString & user, const PString & password) :
-			Action(ACTION_REGISTER),
+		RegisterAction(const PString & registrar, const PString & user, const PString & password, int turn) :
+			Action(ACTION_REGISTER, turn),
 			registrar(registrar),
 			user(user),
 			password(password)
@@ -38,39 +39,45 @@ class RegisterAction : public Action {
 		const PString & password;
 };
 
-class DialAction : public Action {
+class DialAction : public Action
+{
 	public:
-		DialAction(const PString & dest) :
-			Action(ACTION_DIAL),
+		DialAction(const PString & dest, int turn) :
+			Action(ACTION_DIAL, turn),
 			dest(dest)
 			{ }
 
 		const PString & dest;
 };
 
-class HoldAction : public Action {
+class HoldAction : public Action
+{
 	public:
-		HoldAction() : Action(ACTION_HOLD) { }
+		HoldAction(int turn) : Action(ACTION_HOLD, turn) { }
 };
 
-class AutoHoldAction : public Action {
+class AutoHoldAction : public Action
+{
 	public:
-		AutoHoldAction() : Action(ACTION_AUTOHOLD) { }
+		AutoHoldAction(int turn) : Action(ACTION_AUTOHOLD, turn) { }
 };
 
-class RetrieveAction : public Action {
+class RetrieveAction : public Action
+{
 	public:
-		RetrieveAction() : Action(ACTION_RETRIEVE) { }
+		RetrieveAction(int turn) : Action(ACTION_RETRIEVE, turn) { }
 };
 
-class DisconnectAction : public Action {
+class DisconnectAction : public Action
+{
 	public:
-		DisconnectAction() : Action(ACTION_DISCONNECT) { }
+		DisconnectAction(int turn) : Action(ACTION_DISCONNECT, turn) { }
 };
 
-class QuitAction : public Action {
+class QuitAction : public Action
+{
 	public:
-		QuitAction() : Action(ACTION_QUIT) { }
+		QuitAction(int turn) : Action(ACTION_QUIT, turn) { }
 };
 
 #endif // _ACTION_H_
