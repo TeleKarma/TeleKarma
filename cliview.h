@@ -8,8 +8,6 @@
 
 class TeleKarma;
 
-class CLIView;
-
 enum CLIViewInputState {
 	CLIVIEW_INPUT_AUTO,
 	CLIVIEW_INPUT_DEST
@@ -23,6 +21,9 @@ class CLIView : public PCLIStandard,  public View {
 		CLIView(); 
 		~CLIView() { }
 		void Main();
+
+	protected:
+		PCLI::Context * CreateContext();
 
 	private:
 
@@ -40,7 +41,7 @@ class CLIView : public PCLIStandard,  public View {
 		enum CLIViewInputState inputState;
 		PString dest;
 		void EnterState(CLIViewInputState state);
-		
+		PString parseArgument(Arguments & line, PString defaultValue);
 };
 
 #endif //_CLIVIEW_H_

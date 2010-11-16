@@ -1,6 +1,10 @@
 #include "cliview.h"
 
+#ifdef WIN32
+#include <conio.h>			// for MS-specific _kbhit() and _getch()
+#endif
 #include "action.h"
+#include "clicontext.h"
 #include "conf.h"
 #include "eventqueue.h"
 #include "model.h"
@@ -25,7 +29,7 @@ void CLIView::Main() {
 	model = new Model();
 	controller = new TeleKarma(model);
 	controller->Resume();
-	TeleKarma * tk = (TeleKarma*)controller;
+
 	cout << "Welcome to TeleKarma!" << endl << endl << flush;
 
 	//Very self-explanitory.
@@ -98,7 +102,6 @@ void CLIView::Main() {
 	*/
 
 	cout << "Initializing telephony system... (this may take a moment)" << flush;
-//	tk->Initialize(stunServer, user);
 //	controller->Backspace(24);
 	cout << "done.";
 //	controller->Space(19);
@@ -120,16 +123,18 @@ void CLIView::Main() {
 	SetCommand("w", PCREATE_NOTIFIER(AutoHold), "Hold until human detected");
 	SetCommand("d", PCREATE_NOTIFIER(Disconnect), "Disconnect");
 	Start();
-	
+
+	/* XXX HACK If we pass false to start() it won't create a new thread,
+	 * so this while true won't be necessary. */
 	while(true);
 }
 
 void CLIView::OnReceivedLine(Arguments & line) {
 
-	cout << "Line='" << line[0] << "'\n";
 	/*XXX: Maybe use a state pattern here? */
 	switch(inputState) {
 	case CLIVIEW_INPUT_DEST:
+		dest = parseArgument(line, PString(DEST));
 		Dial(dest);
 		EnterState(CLIVIEW_INPUT_AUTO);
 		break;
@@ -141,7 +146,6 @@ void CLIView::OnReceivedLine(Arguments & line) {
 void CLIView::EnterState(CLIViewInputState state) {
 
 	/*XXX: Use a state pattern here. */
-	cout << "Enter state = " << state << "\n";
 	switch(state) {
 	case CLIVIEW_INPUT_DEST:
 		SetPrompt("Enter SIP address [" DEST "]: ");
@@ -152,6 +156,15 @@ void CLIView::EnterState(CLIViewInputState state) {
 		break;
 	}
 	inputState = state;
+}
+
+PString CLIView::parseArgument(Arguments & line, PString defaultValue)
+{
+	if (line.GetCount() == 0) {
+		return defaultValue;
+	} else {
+		return line[0];
+	}
 }
 
 void CLIView::Register(const PString & registrar, const PString & user, const PString & password) {
@@ -186,3 +199,7 @@ void CLIView::Quit(PCLI::Arguments & args, INT) {
 	DoAction(new QuitAction(0));
 }
 
+PCLI::Context * CLIView::CreateContext()
+{
+	return new CLIContext(*this);
+}
