@@ -45,4 +45,5 @@ class State
 	// disable copy & assignment later...
 };
 
+
 #endif //_STATE_H
