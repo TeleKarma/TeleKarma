@@ -83,7 +83,7 @@ CLIView::PasswordInputHandler::PasswordInputHandler(CLIView & cli, PString defau
 
 void CLIView::PasswordInputHandler::WaitForInput()
 {
-	cli.SetPrompt("Please enter your SIP password:");
+	cli.SetPrompt("Please enter your SIP password: ");
 }
 
 void CLIView::PasswordInputHandler::ReceiveInput(PString input)
