@@ -31,6 +31,52 @@ void CLIViewInputHandler::ReceiveInput(PString input)
 	}
 }
 
+CLIViewSTUNInputHandler::CLIViewSTUNInputHandler(CLIView & cli, PString defaultValue) :
+	CLIViewInputHandler(cli, defaultValue)
+	{ }
+
+void CLIViewSTUNInputHandler::WaitForInput()
+{
+	cli.SetPrompt("Please enter your SIP Registrar's STUN address [" + inputValue + "]: ");
+}
+
+void CLIViewSTUNInputHandler::ReceiveInput(PString input)
+{
+	CLIViewInputHandler::ReceiveInput(input);
+	cli.SetInputHandler(cli.registrarInputHandler);
+}
+
+CLIViewRegistrarInputHandler::CLIViewRegistrarInputHandler(CLIView & cli, PString defaultValue) :
+	CLIViewInputHandler(cli, defaultValue)
+	{ }
+
+void CLIViewRegistrarInputHandler::WaitForInput()
+{
+	cli.SetPrompt("Please enter your SIP Registrar's address [" + inputValue + "]: ");
+
+}
+
+void CLIViewRegistrarInputHandler::ReceiveInput(PString input)
+{
+	CLIViewInputHandler::ReceiveInput(input);
+	cli.SetInputHandler(cli.userInputHandler);
+}
+
+CLIViewUserInputHandler::CLIViewUserInputHandler(CLIView & cli, PString defaultValue) :
+	CLIViewInputHandler(cli, defaultValue)
+	{ }
+
+void CLIViewUserInputHandler::WaitForInput()
+{
+	cli.SetPrompt("Please enter your SIP user name: ");
+}
+
+void CLIViewUserInputHandler::ReceiveInput(PString input)
+{
+	CLIViewInputHandler::ReceiveInput(input);
+	cli.SetInputHandler(cli.passwordInputHandler);
+}
+
 CLIViewPasswordInputHandler::CLIViewPasswordInputHandler(CLIView & cli, PString defaultValue) :
 	CLIViewInputHandler(cli, defaultValue)
 	{ }
@@ -43,7 +89,9 @@ void CLIViewPasswordInputHandler::WaitForInput()
 void CLIViewPasswordInputHandler::ReceiveInput(PString input)
 {
 	CLIViewInputHandler::ReceiveInput(input);
-	cli.Register(cli.registrar, cli.user, inputValue);
+	cli.Register(cli.registrarInputHandler->inputValue,
+		     cli.userInputHandler->inputValue,
+		     this->inputValue);
 	cli.SetInputHandler(cli.defaultInputHandler);
 }
 
@@ -73,49 +121,17 @@ CLIView::CLIView() :
 
 void CLIView::Main() {
 
-	registrar = REGISTRAR;
-	PString stunServer(STUN);
-	user = ACCOUNT;
-	PString passwd(PASSWORD);
-	PString line;
-
-
 	model = new Model();
 	controller = new TeleKarma(model);
 	controller->Resume();
 
 	/* Setup input handlers. */
 	defaultInputHandler = new CLIViewInputHandler(*this);
+	stunInputHandler = new CLIViewSTUNInputHandler(*this, STUN);
+	registrarInputHandler = new CLIViewRegistrarInputHandler(*this, REGISTRAR);
+	userInputHandler = new CLIViewUserInputHandler(*this, ACCOUNT);
 	passwordInputHandler = new CLIViewPasswordInputHandler(*this);
 	destInputHandler = new CLIViewDestInputHandler(*this, DEST);
-
-	cout << "Welcome to TeleKarma!" << endl << endl << flush;
-
-	//Very self-explanitory.
-	cout << "Please enter your SIP Registrar's address [" << registrar << "]: ";
-	line.MakeEmpty();
-	cin >> line;
-	line = line.Trim();
-	if (!line.IsEmpty()) registrar = line;
-
-	cout << "Please enter your SIP Registrar's STUN address [" << stunServer << "]: ";
-	line.MakeEmpty();
-	cin >> line;
-	line = line.Trim();
-	if (!line.IsEmpty()) stunServer = line;
-
-	cout << "Please enter your SIP user name" << flush;
-	if (user.IsEmpty()) {
-		cout << ": ";
-	} else {
-		cout << " [" << user << "]: ";
-	}
-	line.MakeEmpty();
-	cin >> line;
-	line = line.Trim();
-	if (!line.IsEmpty()) user = line;
-
-
 
 	SetCommand("c", PCREATE_NOTIFIER(Dial), "Place a call");
 	SetCommand("q", PCREATE_NOTIFIER(Quit), "Quit");
@@ -126,7 +142,7 @@ void CLIView::Main() {
 	SetCommand("w", PCREATE_NOTIFIER(AutoHold), "Hold until human detected");
 	SetCommand("d", PCREATE_NOTIFIER(Disconnect), "Disconnect");
 
-	SetInputHandler(passwordInputHandler);
+	SetInputHandler(stunInputHandler);
 
 	Start();
 

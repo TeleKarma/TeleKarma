@@ -25,6 +25,27 @@ class CLIViewInputHandler {
 		CLIView & cli;
 };
 
+class CLIViewSTUNInputHandler : public CLIViewInputHandler {
+	public:
+		CLIViewSTUNInputHandler(CLIView & cli, PString defaultValue = PString::Empty());
+		void WaitForInput();
+		void ReceiveInput(PString input);
+};
+
+class CLIViewRegistrarInputHandler : public CLIViewInputHandler {
+	public:
+		CLIViewRegistrarInputHandler(CLIView & cli, PString defaultValue = PString::Empty());
+		void WaitForInput();
+		void ReceiveInput(PString input);
+};
+
+class CLIViewUserInputHandler : public CLIViewInputHandler {
+	public:
+		CLIViewUserInputHandler(CLIView & cli, PString defaultValue = PString::Empty());
+		void WaitForInput();
+		void ReceiveInput(PString input);
+};
+
 class CLIViewPasswordInputHandler : public CLIViewInputHandler {
 	public:
 		CLIViewPasswordInputHandler(CLIView &cli, PString defaultValue = PString::Empty());
@@ -49,13 +70,6 @@ class CLIView : public PCLIStandard,  public View {
 		void Main();
 		void SetInputHandler(CLIViewInputHandler * handler);
 
-		CLIViewPasswordInputHandler * passwordInputHandler;
-		CLIViewDestInputHandler * destInputHandler;
-		CLIViewInputHandler * defaultInputHandler;
-		CLIViewInputHandler * currentInputHandler;
-		PString registrar;
-		PString user;
-
 	protected:
 		PCLI::Context * CreateContext();
 
@@ -72,8 +86,20 @@ class CLIView : public PCLIStandard,  public View {
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Disconnect);
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Quit);
 
-	friend class CLIViewDestInputHandler;
+		CLIViewInputHandler * defaultInputHandler;
+		CLIViewSTUNInputHandler * stunInputHandler;
+		CLIViewRegistrarInputHandler * registrarInputHandler;
+		CLIViewUserInputHandler * userInputHandler;
+		CLIViewPasswordInputHandler * passwordInputHandler;
+		CLIViewDestInputHandler * destInputHandler;
+		CLIViewInputHandler * currentInputHandler;
+
+	friend class CLIViewInputHandler;
+	friend class CLIViewSTUNInputHandler;
+	friend class CLIViewRegistrarInputHandler;
+	friend class CLIViewUserInputHandler;
 	friend class CLIViewPasswordInputHandler;
+	friend class CLIViewDestInputHandler;
 };
 
 #endif //_CLIVIEW_H_
