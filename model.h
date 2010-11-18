@@ -250,8 +250,11 @@ class Model
 		 * a distinct copy of the state for the queue.
 		 * </p>
 		 * @param newState the new state.
+		 * @return if the new state was successfully enqueued; false
+		 *         indicates the current state was set but could not
+		 *         be enqueued (the state queue is full).
 		 */
-		virtual void SetState(State * newState);
+		virtual bool SetState(State * newState);
 
 	private:
 		Action ** aqueue;	// array implementation of action queue

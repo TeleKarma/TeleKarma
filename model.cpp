@@ -16,13 +16,12 @@ Model::Model() :
 	aqhead(0),
 	aqtail(0),
 	aqsize(QUEUE_SIZE),
-	mqueue(NULL),
-	mqhead(0),
-	mqtail(0),
-	mqsize(QUEUE_SIZE),
+	squeue(NULL),
+	sqhead(0),
+	sqtail(0),
+	sqsize(QUEUE_SIZE),
 	state(NULL),
-	aqMutex(1,1),
-	mqMutex(1,1),
+	aMutex(1,1),
 	sMutex(1,1)
 {
 	// Action queue allocation & initialization
@@ -30,10 +29,10 @@ Model::Model() :
 	for (int i = 0; i < aqsize; ++i) {
 		aqueue[i] = NULL;
 	}
-	// Error message queue allocation & initialization
-	mqueue = new PString *[mqsize];
-	for (int i = 0; i < mqsize; ++i) {
-		mqueue[i] = NULL;
+	// state queue allocation & initialization
+	squeue = new State *[sqsize];
+	for (int i = 0; i < sqsize; ++i) {
+		squeue[i] = NULL;
 	}
 }
 
@@ -43,13 +42,12 @@ Model::Model(int queueSize) :
 	aqhead(0),
 	aqtail(0),
 	aqsize(queueSize),
-	mqueue(NULL),
-	mqhead(0),
-	mqtail(0),
-	mqsize(queueSize),
+	squeue(NULL),
+	sqhead(0),
+	sqtail(0),
+	sqsize(queueSize),
 	state(NULL),
-	aqMutex(1,1),
-	mqMutex(1,1),
+	aMutex(1,1),
 	sMutex(1,1)
 {
 	// Action queue allocation & initialization
@@ -57,10 +55,10 @@ Model::Model(int queueSize) :
 	for (int i = 0; i < aqsize; ++i) {
 		aqueue[i] = NULL;
 	}
-	// Error message queue allocation & initialization
-	mqueue = new PString *[mqsize];
-	for (int i = 0; i < mqsize; ++i) {
-		mqueue[i] = NULL;
+	// state queue allocation & initialization
+	squeue = new State *[sqsize];
+	for (int i = 0; i < sqsize; ++i) {
+		squeue[i] = NULL;
 	}
 }
 
@@ -74,12 +72,12 @@ Model::~Model() {
 	}
 	delete [] aqueue;
 	aqueue = NULL;
-	for (int i = 0; i < mqsize; ++i) {
-		delete mqueue[i];
-		mqueue[i] = NULL;
+	for (int i = 0; i < sqsize; ++i) {
+		delete squeue[i];
+		squeue[i] = NULL;
 	}
-	delete [] mqueue;
-	mqueue = NULL;
+	delete [] squeue;
+	squeue = NULL;
 }
 
 // Add an action to the queue.
@@ -88,7 +86,7 @@ bool Model::EnqueueAction(Action * action)
 	// create result
 	bool result = true;
 	// enter mutex
-	aqMutex.Wait();
+	aMutex.Wait();
 	// enqueue
 	if (aqhead == aqtail) {
 		if (aqueue[aqhead] == NULL) {
@@ -105,7 +103,7 @@ bool Model::EnqueueAction(Action * action)
 		aqtail = (aqtail + 1) % aqsize;
 	}
 	// exit mutex
-	aqMutex.Signal();
+	aMutex.Signal();
 	return result;
 }
 
@@ -115,7 +113,7 @@ Action * Model::DequeueAction()
 	// set up result
 	Action * result = NULL;
 	// enter mutex
-	aqMutex.Wait();
+	aMutex.Wait();
 	// dequeue
 	if (aqueue[aqhead] != NULL) {
 		result = aqueue[aqhead];
@@ -123,52 +121,25 @@ Action * Model::DequeueAction()
 		aqhead = (aqhead + 1) % aqsize;
 	}
 	// exit mutex
-	aqMutex.Signal();
+	aMutex.Signal();
 	return result;
 }
 
-// Add an error message to the queue.
-bool Model::EnqueueErrMsg(PString * msg)
-{
-	// create result
-	bool result = true;
-	// enter mutex
-	mqMutex.Wait();
-	// enqueue
-	if (mqhead == mqtail) {
-		if (mqueue[mqhead] == NULL) {
-			// the queue is empty
-			mqueue[mqtail] = msg;
-			mqtail = (mqtail + 1) % mqsize;
-		} else {
-			// the queue is full
-			result = false;
-		}
-	} else {
-		// the queue is neither empty nor full
-		mqueue[mqtail] = msg;
-		mqtail = (mqtail + 1) % mqsize;
-	}
-	// exit mutex
-	mqMutex.Signal();
-	return result;
-}
-
-// Remove an error message from the queue
-PString * Model::DequeueErrMsg()
+// Remove a state from the queue
+State * Model::DequeueState()
 {
 	// set up result
-	PString * result = NULL;
+	State * result = NULL;
 	// enter mutex
-	mqMutex.Wait();
+	sMutex.Wait();
 	// dequeue
-	if (mqueue[mqhead] != NULL) {
-		result = mqueue[mqhead];
-		mqueue[mqhead] = NULL;
-		mqhead = (mqhead + 1) % mqsize;
+	if (squeue[sqhead] != NULL) {
+		result = squeue[sqhead];
+		squeue[sqhead] = NULL;
+		sqhead = (sqhead + 1) % sqsize;
 	}
 	// exit mutex
-	mqMutex.Signal();
+	sMutex.Signal();
 	return result;
 }
 
@@ -185,11 +156,30 @@ State * Model::GetState()
 }
 
 // Set the current state.
-void Model::SetState(State * newState)
+bool Model::SetState(State * newState)
 {
+	// create result
+	bool result = true;
 	sMutex.Wait();
 	State * oldState = state;
 	state = newState;
+	// enqueue
+	State * scopy = newState->Clone();
+	if (sqhead == sqtail) {
+		if (squeue[sqhead] == NULL) {
+			// the queue is empty
+			squeue[sqtail] = scopy;
+			sqtail = (sqtail + 1) % sqsize;
+		} else {
+			// the queue is full
+			result = false;
+		}
+	} else {
+		// the queue is neither empty nor full
+		squeue[sqtail] = scopy;
+		sqtail = (sqtail + 1) % sqsize;
+	}
 	delete oldState;
 	sMutex.Signal();
+	return result;
 }

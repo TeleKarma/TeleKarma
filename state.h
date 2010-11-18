@@ -27,7 +27,7 @@ enum StatusID
 	STATUS_IN_PROCESS,
 	STATUS_FAILED,
 	STATUS_SUCCEEDED
-}
+};
 
 class State
 {
@@ -37,9 +37,11 @@ class State
 		const StatusID status;
 		const PString message;
 		State(StateID id, int turn);
+		State(StateID id, int turn, StatusID status);
 		State(StateID id, int turn, StatusID status, const char * msg);
 		State(StateID id, int turn, StatusID status, const PString & msg);
 		virtual State * Clone() const;
+	// disable copy & assignment later...
 };
 
 #endif //_STATE_H
