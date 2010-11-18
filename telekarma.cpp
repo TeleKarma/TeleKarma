@@ -38,22 +38,70 @@ using namespace std;
 // Constructor - best practices in field initialization.
 TeleKarma::TeleKarma(Model * model) :
 	Controller(model),
+	countdown(0),
 	phone(new TelephonyIfc())
-	{ }
+{	
+	model->SetState(new State(STATE_UNINITIALIZED, 0)); //initialize model's state
+}
 
 // Destructor - heap memory management, delay prior to exit,
 // and final message to console.
 TeleKarma::~TeleKarma()
 {
 	if (phone != NULL) delete phone;
-	cout << "Thank you for using TeleKarma." << endl << flush;
-	PThread::Sleep(EXIT_DELAY);
+	//cout << "Thank you for using TeleKarma." << endl << flush;
 }
 
 
 // Main program
 void TeleKarma::Main() {
+	//Action * a = NULL;
+	State * currentState = model->GetState();
+	while (currentState && currentState->id != STATE_TERMINATE) {
+		/*
+		if(currentState == STATE_UNINITIALIZED) {
+			a = model->DequeueAction();
+			if(a != NULL && a->id == ACTION_INITIALIZE){
+				currentState = new State(STATE_INITIALIZING, currentState->turn+1);
+				model->SetState(currentState);
+			}
+			delete a;
+			continue;
+		}
+		*/
+		currentState = UpdateState(currentState);
+		currentState = DoAction(model->DequeueAction(), currentState);
+		PThread::Sleep(SLEEP_DURATION);
+		/*
+		State * newState = updateTelephonyState(currentState);
+		if(newS != currentState) {
+			currentState = newS;
+			model->SetState(currentState);
+		}
+		a = model->DequeueAction();
+		if(a != NULL){
+			if(a->turn == currentState->turn){
+				newS = DoAction(a, currentState);
+				if(newS != currentState){
+					currentState = newS;
+					model->SetState(currentState);
+				}
+			}
+		}
+		delete a;	
+	} //end main while loop
 
+	//do some cleanup?
+
+	if (!currentState) {
+		ChangeState(new State(STATE_ERROR, -1, STATUS_UNSPECIFIED, "NULL State detected"));
+		ChangeState(new State(STATE_TERMINATING, -2));
+	}
+
+	// final step - put nothing after this -
+	ChangeState(new State(STATE_TERMINATED, -3));
+
+	/*
 	// verify existence and type of 'logs' and 'recordings' folders
 	const char * strPath1 = "logs";
 	struct stat status;
@@ -92,9 +140,147 @@ void TeleKarma::Main() {
 		if (phone && phone->IsConnected()) {
 			fprintf(stderr, "Connected\n");
 		}
-	}
+	}*/
 }
 
+State * TeleKarma::UpdateState(State * s)
+{
+	State * result = s;
+	switch (result) {
+		case STATE_UNINITIALIZED:
+			// no state change possible
+			break;
+		case STATE_INITIALIZED:
+			// no state change possible
+			break;
+		case STATE_REGISTERING:
+			if (phone && phone->IsRegistered()) {
+				result = ChangeState(new State(STATE_REGISTERED, result->turn+1));
+			} else {
+				if (countdown == 0) {
+					// timeout
+					result = ChangeState(new State(result->id, result->turn, STATUS_FAILED);
+					result = ChangeState(new State(STATE_INITIALIZED, result->turn+1);
+				} else {
+					--countdown;
+				}
+			}
+			break;
+		case STATE_REGISTERED:
+			if (!phone) {
+				result = ChangeState(new State(STATE_ERROR, result->turn+1, STATUS_UNSPECIFIED, "Telephony service failed"));
+				result = ChangeState(new State(STATE_UNINITIALIZED, result->turn+1));
+			} else if (!phone->IsRegistered())) {
+				// might do better with a more specific error
+				result = ChangeState(new State(result->id, result->turn, STATUS_FAILED, "No longer registered"));
+				result = ChangeState(new State(STATE_INITIALIZED, result->turn+1));
+			}
+			break;
+		case STATE_DIALING:
+			if (!phone) {
+				result = ChangeState(new State(STATE_ERROR, result->turn+1, STATUS_UNSPECIFIED, "Telephony service failed"));
+				result = ChangeState(new State(STATE_UNINITIALIZED, result->turn+1));
+			} else if (!phone->IsRegistered()) {
+				// might do better with a more specific error
+				result = ChangeState(new State(result->id, result->turn, STATUS_FAILED, "No longer registered"));
+				result = ChangeState(new State(STATE_INITIALIZED, result->turn+1));
+			} else if (phone->IsConnected()) {
+				result = ChangeState(new State(STATE_CONNECTED, result->turn+1));
+			} else if (!phone->IsDialing()) {
+				// concurrency kludge - note expectation in TelephonyIfc:
+				// IsConnected true before IsDialing false
+				if (!phone->IsConnected()) {
+					result = ChangeState(new State(STATE_DIALING, result->turn, STATUS_FAILED, "Call failed");
+					result = ChangeState(new State(STATE_REGISTERED, result->turn+1);
+				}
+			}
+			break;
+		case STATE_CONNECTED:
+			if (!phone) {
+				result = ChangeState(new State(STATE_ERROR, result->turn+1, STATUS_UNSPECIFIED, "Telephony service failed"));
+				result = ChangeState(new State(STATE_UNINITIALIZED, result->turn+1));
+			} else if (!phone->IsRegistered()) {
+				result = ChangeState(new State(result->id, result->turn, STATUS_FAILED, "No longer registered"));
+				result = ChangeState(new State(STATE_INITIALIZED, result->turn+1));
+			} else if (!phone->IsConnected()) {
+				result = ChangeState(new State(STATE_DISCONNECTED, result->turn+1, STATUS_UNSPECIFIED, phone->DisconnectReason());
+			}
+			break;
+		case STATE_DISCONNECTING:
+			if (!phone) {
+				result = ChangeState(new State(STATE_ERROR, result->turn+1, STATUS_UNSPECIFIED, "Telephony service failed"));
+				result = ChangeState(new State(STATE_UNINITIALIZED, result->turn+1));
+			} else if (!phone->IsRegistered()) {
+				result = ChangeState(new State(result->id, result->turn, STATUS_FAILED, "No longer registered"));
+				result = ChangeState(new State(STATE_INITIALIZED, result->turn+1));
+			} else if (!phone->IsConnected()) {
+				result = ChangeState(new State(STATE_REGISTERED, result->turn+1);
+			}
+			break;
+		case STATE_DISCONNECTED:
+			if (!phone) {
+				result = ChangeState(new State(STATE_ERROR, result->turn+1, STATUS_UNSPECIFIED, "Telephony service failed"));
+				result = ChangeState(new State(STATE_UNINITIALIZED, result->turn+1));
+			} else if (!phone->IsRegistered()) {
+				result = ChangeState(new State(result->id, result->turn, STATUS_FAILED, "No longer registered"));
+				result = ChangeState(new State(STATE_INITIALIZED, result->turn+1));
+			} else if (!phone->IsConnected()) {
+				result = ChangeState(new State(STATE_REGISTERED, result->turn+1);
+			}
+			break;
+		case STATE_AUTOHOLD:
+		case STATE_MUTEAUTOHOLD:
+			if (!phone) {
+				result = ChangeState(new State(STATE_ERROR, result->turn+1, STATUS_UNSPECIFIED, "Telephony service failed"));
+				result = ChangeState(new State(STATE_UNINITIALIZED, result->turn+1));
+			} else if (!phone->IsRegistered()) {
+				result = ChangeState(new State(result->id, result->turn, STATUS_FAILED, "No longer registered"));
+				result = ChangeState(new State(STATE_INITIALIZED, result->turn+1));
+			} else if (!phone->IsConnected()) {
+				result = ChangeState(new State(STATE_DISCONNECTED, result->turn+1);
+			} else if (phone->ToneReceived(IS_HUMAN_TONE)) {
+				result = ChangeState(new State(result->id, result->turn, STATUS_AUTO_RETRIEVE, "Human detected");
+				result = ChangeState(new State(STATE_CONNECTED, result->turn+1);
+			}
+			break;
+		case STATE_HOLD:
+			if (!phone) {
+				result = ChangeState(new State(STATE_ERROR, result->turn+1, STATUS_UNSPECIFIED, "Telephony service failed"));
+				result = ChangeState(new State(STATE_UNINITIALIZED, result->turn+1));
+			} else if (!phone->IsRegistered()) {
+				result = ChangeState(new State(result->id, result->turn, STATUS_FAILED, "No longer registered"));
+				result = ChangeState(new State(STATE_INITIALIZED, result->turn+1));
+			} else if (!phone->IsConnected()) {
+				result = ChangeState(new State(STATE_DISCONNECTED, result->turn+1);
+			}
+			break;
+		case STATE_TERMINATING:
+			// cannot change
+			break;
+		case STATE_TERMINATED:
+			// cannot change
+			break;
+		case STATE_INITIALIZING:
+			// initialization is blocking - if we get here, it's an error
+			// fall through to default & exit with message
+		default:
+			result = ChangeState(new State(STATE_ERROR, result->turn+1, STATUS_UNSPECIFIED, "Illegal state"));
+			result = ChangeState(new State(STATE_TERMINATING, result->turn+1));
+	}
+	return result;
+}
+
+State * Model::DoAction(Action * a, State * s)
+{
+	if (a == NULL) return s;
+	if (a->turn != s->turn) return s;
+	State * result = s;
+	switch (a->id)
+	{
+		// TO GO
+	}
+	return result;
+}
 
 /**
  * Exit the current state (if any) and enter a new

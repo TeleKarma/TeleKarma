@@ -131,7 +131,8 @@ class TeleKarma : public Controller {
 		 * </p>
 		 */
 		void Main();
-
+		
+	private:
 		/**
 		 * Called by state handler to transition to a new state. Calls
 		 * the current state handler's {@link StateHandler#Exit()} method,
@@ -140,7 +141,7 @@ class TeleKarma : public Controller {
 		 * {@link StateHandler#Enter()} method.
 		 * @param stateId one of the state identifiers from state.h.
 		 */
-		void EnterState(int stateId);
+		void EnterState(int stateId); //change private XXX HACK
 
 		/**
 		 * Instantiates the {@link TelephonyIfc}. Expected to be called
@@ -215,7 +216,7 @@ class TeleKarma : public Controller {
 		 * @return a description of the reason for the most recent
 		 *         call disconnection.
 		 */
-		PString DisconnectReason();
+		PString DisconnectReason(); //change later
 
 		/**
 		 * Indicates whether a WAV is or has been played since
@@ -234,7 +235,7 @@ class TeleKarma : public Controller {
 		 * @param delay how long (in milliseconds) to wait between repeats.
 		 *            defaults to zero.
 		 */
-		void PlayWAV(const PString & src, int repeat = 0, int delay = 0);
+		void PlayWAV(const PString & src, int repeat = 0, int delay = 0); //ptlib delay doesn't work
 
 		/**
 		 * Inoperative. Reserved for future development.
@@ -301,38 +302,23 @@ class TeleKarma : public Controller {
 		 */
 		void SendTone(char key);
 
-		/**
-		 * Obtains a single character of input from the console. Non-blocking. If
-		 * there is no input available on the console, returns NULL. Consumes the
-		 * input.
-		 * @return one character of input from console or NULL.
-		 */
-		char GetChar();
-
-		/**
-		 * Prints the given number of backspaces to the console.
-		 * @param n the number of backspaces to print
-		 */
-		void Backspace(int n);
-
-		/**
-		 * Prints the given number of spaces to the console.
-		 * @param n the number of spaces to print
-		 */
-		void Space(int n);
-
-		/**
-		 * XXX This should be private.
-		 */
 		void ProcessNextEvent();
-		EventQueue * eventQueue;
+		
 
 	private:
+		int countdown;
 		TelephonyIfc * phone;					// telephony services
-
 		// disabled assignment operator & copy constructor
 		TeleKarma & operator=(const TeleKarma & rhs);
 		TeleKarma(const TeleKarma & rhs);
+
+		State * DoAction(Action * a, State * s);
+		/**
+		* Comparing controller's state to Telephony's state and returning what the current state should be.
+		* @param s The current state.
+		* @return The new state (same as current state if no change).
+		*/
+		State * UpdateState(State * s);
 
 };
 
