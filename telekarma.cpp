@@ -355,25 +355,25 @@ State * TeleKarma::SendTone(Action * a, State * s)
 }
 
 // XXX implementation to go
-State * Hold(Action * a, State * s)
+State * TeleKarma::Hold(Action * a, State * s)
 {
 
 }
 
 // XXX implementation to go
-State * AutoHold(Action * a, State * s)
+State * TeleKarma::AutoHold(Action * a, State * s)
 {
 
 }
 
 // XXX implementation to go
-State * MuteAutoHold(Action * a, State * s)
+State * TeleKarma::MuteAutoHold(Action * a, State * s)
 {
 
 }
 
 // XXX implementation to go
-State * Retrieve(Action * a, State * s)
+State * TeleKarma::Retrieve(Action * a, State * s)
 {
 
 }
