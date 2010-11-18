@@ -163,46 +163,8 @@ class Model
 
 		/**
 		 * <p>
-		 * Enqueues an error message.
-		 * </p><p>
-		 * <strong>Memory Management</strong>
-		 * </p><p>
-		 * This class assumes responsibility for deallocating the
-		 * memory addressed by the msg parameter if and only if
-		 * this method returns true. The caller retains 
-		 * responsibility for deallocating the memory addressed by
-		 * the msg parameter if this method returns false, and
-		 * is free to do so at a time of the caller's choosing.
-		 * </p><p>
-		 * </p><p>
-		 * <strong>Thread Safety</strong>
-		 * </p><p>
-		 * This method is intended for use by a single producer
-		 * thread (the Controller). It may be used by multiple 
-		 * producer threads without endangering its thread safety 
-		 * features.
-		 * Callers <strong>must not modify or deallocate</strong>
-		 * the memory allocated to the pointer passed into this
-		 * method after calling this method. The pointer passed 
-		 * into this method must be a pointer to memory on the 
-		 * heap. Failure to adhere to these guidelines may defeat 
-		 * the thread safety features of this class.
-		 * </p><p>
-		 * This class stores the pointer passed to this method and 
-		 * may share that pointer with another thread. This method 
-		 * does not copy the memory addressed by the pointer.
-		 * </p><p>
-		 * Override this method at your own risk!!
-		 * </p>
-		 * @param msg pointer to a PString object on the heap.
-		 * @return false if the message cannot be enqueued because
-		 *         the queue is full; true otherwise.
-		 */
-		virtual bool EnqueueErrMsg(PString * msg);
-
-		/**
-		 * <p>
-		 * Dequeues and returns a pointer to an error message.
+		 * Dequeues and returns a pointer to a state. States are
+		 * dequeued in the order they were set.
 		 * </p><p>
 		 * <strong>Memory Management</strong>
 		 * </p><p>
@@ -228,10 +190,10 @@ class Model
 		 * </p><p>
 		 * Override this method at your own risk!!
 		 * </p>
-		 * @return a pointer to a previously enqueued error message
+		 * @return a pointer to a previously enqueued state
 		 *         or NULL if the queue is empty.
 		 */
-		virtual PString * DequeueErrMsg();
+		virtual State * DequeueState();
 
 		/**
 		 * <p>
@@ -265,7 +227,7 @@ class Model
 
 		/**
 		 * <p>
-		 * Sets the current state.
+		 * Sets and enqueues the current state.
 		 * </p><p>
 		 * <strong>Memory Management</strong>
 		 * </p><p>
@@ -282,9 +244,10 @@ class Model
 		 * heap. Failure to adhere to these guidelines may defeat 
 		 * the thread safety features of this class.
 		 * </p><p>
-		 * This class stores the pointer passed to this method. 
-		 * This method does not copy the memory addressed by the 
-		 * pointer.
+		 * This class stores the pointer passed to this method
+		 * and makes that pointer available via GetState(). This
+		 * call also invokes the clone() method of State to make
+		 * a distinct copy of the state for the queue.
 		 * </p>
 		 * @param newState the new state.
 		 */
@@ -294,13 +257,12 @@ class Model
 		Action ** aqueue;	// array implementation of action queue
 		int aqhead, aqtail;	// pointers into the array of actions
 		int aqsize;			// size of the array implementing the aqueue
-		PString ** mqueue;	// array implementation of message queue
-		int mqhead, mqtail;	// pointers into the array of messages
-		int mqsize;			// size of the array implementing the mqueue
+		State ** squeue;	// array implementation of state queue
+		int sqhead, sqtail;	// pointers into the array of states
+		int sqsize;			// size of the array implementing the squeue
 		State * state;		// current state
-		PSemaphore aqMutex;	// mutex for action queue
-		PSemaphore mqMutex;	// mutex for message queue
-		PSemaphore sMutex;	// mutex for current state
+		PSemaphore aMutex;	// mutex for action queue
+		PSemaphore sMutex;	// mutex for state & state queue
 
 		/**
 		 * Explicitly disabled copy constructor.
