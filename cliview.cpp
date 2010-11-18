@@ -13,82 +13,82 @@
 #include "controller.h"
 #include "telekarma.h"
 
-CLIViewInputHandler::CLIViewInputHandler(CLIView & cli, PString defaultValue) :
+CLIView::InputHandler::InputHandler(CLIView & cli, PString defaultValue) :
 	cli(cli),
 	inputValue(defaultValue)
 	{ }
 
-void CLIViewInputHandler::WaitForInput()
+void CLIView::InputHandler::WaitForInput()
 {
 	cli.SetPrompt("Telekarma>");
 	cli.SetInputHandler(NULL);
 }
 
-void CLIViewInputHandler::ReceiveInput(PString input)
+void CLIView::InputHandler::ReceiveInput(PString input)
 {
 	if (!input.IsEmpty()) {
 		inputValue = input;
 	}
 }
 
-CLIViewSTUNInputHandler::CLIViewSTUNInputHandler(CLIView & cli, PString defaultValue) :
-	CLIViewInputHandler(cli, defaultValue)
+CLIView::STUNInputHandler::STUNInputHandler(CLIView & cli, PString defaultValue) :
+	InputHandler(cli, defaultValue)
 	{ }
 
-void CLIViewSTUNInputHandler::WaitForInput()
+void CLIView::STUNInputHandler::WaitForInput()
 {
 	cli.SetPrompt("Please enter your SIP Registrar's STUN address [" + inputValue + "]: ");
 }
 
-void CLIViewSTUNInputHandler::ReceiveInput(PString input)
+void CLIView::STUNInputHandler::ReceiveInput(PString input)
 {
-	CLIViewInputHandler::ReceiveInput(input);
+	InputHandler::ReceiveInput(input);
 	cli.SetInputHandler(cli.registrarInputHandler);
 }
 
-CLIViewRegistrarInputHandler::CLIViewRegistrarInputHandler(CLIView & cli, PString defaultValue) :
-	CLIViewInputHandler(cli, defaultValue)
+CLIView::RegistrarInputHandler::RegistrarInputHandler(CLIView & cli, PString defaultValue) :
+	InputHandler(cli, defaultValue)
 	{ }
 
-void CLIViewRegistrarInputHandler::WaitForInput()
+void CLIView::RegistrarInputHandler::WaitForInput()
 {
 	cli.SetPrompt("Please enter your SIP Registrar's address [" + inputValue + "]: ");
 
 }
 
-void CLIViewRegistrarInputHandler::ReceiveInput(PString input)
+void CLIView::RegistrarInputHandler::ReceiveInput(PString input)
 {
-	CLIViewInputHandler::ReceiveInput(input);
+	InputHandler::ReceiveInput(input);
 	cli.SetInputHandler(cli.userInputHandler);
 }
 
-CLIViewUserInputHandler::CLIViewUserInputHandler(CLIView & cli, PString defaultValue) :
-	CLIViewInputHandler(cli, defaultValue)
+CLIView::UserInputHandler::UserInputHandler(CLIView & cli, PString defaultValue) :
+	InputHandler(cli, defaultValue)
 	{ }
 
-void CLIViewUserInputHandler::WaitForInput()
+void CLIView::UserInputHandler::WaitForInput()
 {
 	cli.SetPrompt("Please enter your SIP user name: ");
 }
 
-void CLIViewUserInputHandler::ReceiveInput(PString input)
+void CLIView::UserInputHandler::ReceiveInput(PString input)
 {
-	CLIViewInputHandler::ReceiveInput(input);
+	InputHandler::ReceiveInput(input);
 	cli.SetInputHandler(cli.passwordInputHandler);
 }
 
-CLIViewPasswordInputHandler::CLIViewPasswordInputHandler(CLIView & cli, PString defaultValue) :
-	CLIViewInputHandler(cli, defaultValue)
+CLIView::PasswordInputHandler::PasswordInputHandler(CLIView & cli, PString defaultValue) :
+	InputHandler(cli, defaultValue)
 	{ }
 
-void CLIViewPasswordInputHandler::WaitForInput()
+void CLIView::PasswordInputHandler::WaitForInput()
 {
 	cli.SetPrompt("Please enter your SIP password:");
 }
 
-void CLIViewPasswordInputHandler::ReceiveInput(PString input)
+void CLIView::PasswordInputHandler::ReceiveInput(PString input)
 {
-	CLIViewInputHandler::ReceiveInput(input);
+	InputHandler::ReceiveInput(input);
 	cli.Register(cli.registrarInputHandler->inputValue,
 		     cli.userInputHandler->inputValue,
 		     this->inputValue);
@@ -96,18 +96,18 @@ void CLIViewPasswordInputHandler::ReceiveInput(PString input)
 }
 
 
-CLIViewDestInputHandler::CLIViewDestInputHandler(CLIView & cli, PString defaultValue) :
-	CLIViewInputHandler(cli, defaultValue)
+CLIView::DestInputHandler::DestInputHandler(CLIView & cli, PString defaultValue) :
+	InputHandler(cli, defaultValue)
 	{ }
 
-void CLIViewDestInputHandler::WaitForInput()
+void CLIView::DestInputHandler::WaitForInput()
 {
 	cli.SetPrompt("Enter SIP address [" + inputValue + "]: ");
 }
 
-void CLIViewDestInputHandler::ReceiveInput(PString input)
+void CLIView::DestInputHandler::ReceiveInput(PString input)
 {
-	CLIViewInputHandler::ReceiveInput(input);
+	InputHandler::ReceiveInput(input);
 	cli.Dial(inputValue);
 	cli.SetInputHandler(cli.defaultInputHandler);
 }
@@ -126,12 +126,12 @@ void CLIView::Main() {
 	controller->Resume();
 
 	/* Setup input handlers. */
-	defaultInputHandler = new CLIViewInputHandler(*this);
-	stunInputHandler = new CLIViewSTUNInputHandler(*this, STUN);
-	registrarInputHandler = new CLIViewRegistrarInputHandler(*this, REGISTRAR);
-	userInputHandler = new CLIViewUserInputHandler(*this, ACCOUNT);
-	passwordInputHandler = new CLIViewPasswordInputHandler(*this);
-	destInputHandler = new CLIViewDestInputHandler(*this, DEST);
+	defaultInputHandler = new InputHandler(*this);
+	stunInputHandler = new STUNInputHandler(*this, STUN);
+	registrarInputHandler = new RegistrarInputHandler(*this, REGISTRAR);
+	userInputHandler = new UserInputHandler(*this, ACCOUNT);
+	passwordInputHandler = new PasswordInputHandler(*this);
+	destInputHandler = new DestInputHandler(*this, DEST);
 
 	SetCommand("c", PCREATE_NOTIFIER(Dial), "Place a call");
 	SetCommand("q", PCREATE_NOTIFIER(Quit), "Quit");
@@ -164,7 +164,7 @@ void CLIView::OnReceivedLine(Arguments & line)
 	}
 }
 
-void CLIView::SetInputHandler(CLIViewInputHandler * handler)
+void CLIView::SetInputHandler(InputHandler * handler)
 {
 	currentInputHandler = handler;
 	if (currentInputHandler) {
