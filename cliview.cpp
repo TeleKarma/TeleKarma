@@ -191,7 +191,6 @@ void CLIView::Initialize(PString & stunServer)
 }
 
 void CLIView::Register(const PString & registrar, const PString & user, const PString & password) {
-	fprintf(stderr, "registering... %d\n", turn);
 	DoAction(new RegisterAction(registrar, user, password, turn));
 }
 
