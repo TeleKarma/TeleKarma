@@ -70,6 +70,7 @@ class CLIView : public PCLIStandard,  public View {
 	private:
 		void SetInputHandler(InputHandler * handler);
 		void OnReceivedLine(Arguments & line);
+		void Initialize(PString & stunServer);
 		void Register(const PString & registrar, const PString & user, const PString & password);
 		void Dial(PString & dest);
 
@@ -88,6 +89,7 @@ class CLIView : public PCLIStandard,  public View {
 		DestInputHandler * destInputHandler;
 		InputHandler * currentInputHandler;
 
+		int turn;
 	friend class InputHandler;
 	friend class STUNInputHandler;
 	friend class RegistrarInputHandler;

@@ -10,6 +10,7 @@
 #include "conf.h"
 #include "eventqueue.h"
 #include "model.h"
+#include "state.h"
 #include "controller.h"
 #include "telekarma.h"
 
@@ -43,6 +44,7 @@ void CLIView::STUNInputHandler::WaitForInput()
 void CLIView::STUNInputHandler::ReceiveInput(PString input)
 {
 	InputHandler::ReceiveInput(input);
+	cli.Initialize(inputValue);
 	cli.SetInputHandler(cli.registrarInputHandler);
 }
 
@@ -116,7 +118,8 @@ CLIView::CLIView() :
 	View(),
 	destInputHandler(NULL),
 	defaultInputHandler(NULL),
-	currentInputHandler(NULL)
+	currentInputHandler(NULL),
+	turn(0)
 	{ }
 
 void CLIView::Main() {
@@ -146,9 +149,24 @@ void CLIView::Main() {
 
 	Start();
 
-	/* XXX HACK If we pass false to start() it won't create a new thread,
-	 * so this while true won't be necessary. */
-	while(true);
+	while(true) {
+		State * state = model->DequeueState();
+		if(state) {
+			switch(state->id) {
+			case STATE_REGISTERED:
+				cout << "Registered\n";
+				break;
+			case STATE_INITIALIZED:
+				cout << "Initialized\n";
+				break;
+			case STATE_CONNECTED:
+				cout << "Connected\n";
+			}
+			/* XXX We probably need a mutex here: */
+			turn = state->turn;
+		}
+		PThread::Sleep(500);
+	}
 }
 
 void CLIView::OnReceivedLine(Arguments & line)
@@ -172,12 +190,18 @@ void CLIView::SetInputHandler(InputHandler * handler)
 	}
 }
 
+void CLIView::Initialize(PString & stunServer)
+{
+	DoAction(new InitializeAction(stunServer, turn));
+}
+
 void CLIView::Register(const PString & registrar, const PString & user, const PString & password) {
-	DoAction(new RegisterAction(registrar, user, password, 0));
+	fprintf(stderr, "registering... %d\n", turn);
+	DoAction(new RegisterAction(registrar, user, password, turn));
 }
 
 void CLIView::Dial(PString & dest) {
-	DoAction(new DialAction(dest, 0));
+	DoAction(new DialAction(dest, turn));
 }
 
 void CLIView::Dial(PCLI::Arguments & args, INT) 
@@ -186,23 +210,23 @@ void CLIView::Dial(PCLI::Arguments & args, INT)
 }
 
 void CLIView::Hold(PCLI::Arguments & args, INT) {
-	DoAction(new HoldAction(0));
+	DoAction(new HoldAction(turn));
 }
 
 void CLIView::AutoHold(PCLI::Arguments & args, INT) {
-	DoAction(new AutoHoldAction(0));
+	DoAction(new AutoHoldAction(turn));
 }
 
 void CLIView::Retrieve(PCLI::Arguments & args, INT) {
-	DoAction(new RetrieveAction(0));
+	DoAction(new RetrieveAction(turn));
 }
 
 void CLIView::Disconnect(PCLI::Arguments & args, INT) {
-	DoAction(new DisconnectAction(0));
+	DoAction(new DisconnectAction(turn));
 }
 
 void CLIView::Quit(PCLI::Arguments & args, INT) {
-	DoAction(new QuitAction(0));
+	DoAction(new QuitAction(turn));
 }
 
 PCLI::Context * CLIView::CreateContext()
