@@ -354,6 +354,30 @@ State * TeleKarma::SendTone(Action * a, State * s)
 	return result;
 }
 
+// XXX implementation to go
+State * Hold(Action * a, State * s)
+{
+
+}
+
+// XXX implementation to go
+State * AutoHold(Action * a, State * s)
+{
+
+}
+
+// XXX implementation to go
+State * MuteAutoHold(Action * a, State * s)
+{
+
+}
+
+// XXX implementation to go
+State * Retrieve(Action * a, State * s)
+{
+
+}
+
 // Disconnect the current call. Asynchronous.
 State * TeleKarma::Disconnect(Action * a, State * s)
 {
