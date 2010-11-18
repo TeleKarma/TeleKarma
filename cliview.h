@@ -6,11 +6,37 @@
 
 #include "view.h"
 
+class CLIView;
 class TeleKarma;
 
 enum CLIViewInputState {
 	CLIVIEW_INPUT_AUTO,
 	CLIVIEW_INPUT_DEST
+};
+
+class CLIViewInputHandler {
+	public:
+		CLIViewInputHandler(CLIView & cli, PString defaultValue = PString::Empty());
+		virtual void WaitForInput();
+		virtual void ReceiveInput(PString input);
+		PString inputValue;
+
+	protected:
+		CLIView & cli;
+};
+
+class CLIViewPasswordInputHandler : public CLIViewInputHandler {
+	public:
+		CLIViewPasswordInputHandler(CLIView &cli, PString defaultValue = PString::Empty());
+		void ReceiveInput(PString input);
+		void WaitForInput();
+};
+
+class CLIViewDestInputHandler : public CLIViewInputHandler {
+	public:
+		CLIViewDestInputHandler(CLIView & cli, PString defaultValue = PString::Empty());
+		void ReceiveInput(PString input);
+		void WaitForInput();
 };
 
 class CLIView : public PCLIStandard,  public View {
@@ -21,6 +47,14 @@ class CLIView : public PCLIStandard,  public View {
 		CLIView(); 
 		~CLIView() { }
 		void Main();
+		void SetInputHandler(CLIViewInputHandler * handler);
+
+		CLIViewPasswordInputHandler * passwordInputHandler;
+		CLIViewDestInputHandler * destInputHandler;
+		CLIViewInputHandler * defaultInputHandler;
+		CLIViewInputHandler * currentInputHandler;
+		PString registrar;
+		PString user;
 
 	protected:
 		PCLI::Context * CreateContext();
@@ -38,10 +72,8 @@ class CLIView : public PCLIStandard,  public View {
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Disconnect);
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Quit);
 
-		enum CLIViewInputState inputState;
-		PString dest;
-		void EnterState(CLIViewInputState state);
-		PString parseArgument(Arguments & line, PString defaultValue);
+	friend class CLIViewDestInputHandler;
+	friend class CLIViewPasswordInputHandler;
 };
 
 #endif //_CLIVIEW_H_

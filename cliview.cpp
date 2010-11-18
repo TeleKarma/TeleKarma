@@ -3,6 +3,8 @@
 #ifdef WIN32
 #include <conio.h>			// for MS-specific _kbhit() and _getch()
 #endif
+#include <assert.h>
+
 #include "action.h"
 #include "clicontext.h"
 #include "conf.h"
@@ -11,17 +13,69 @@
 #include "controller.h"
 #include "telekarma.h"
 
+CLIViewInputHandler::CLIViewInputHandler(CLIView & cli, PString defaultValue) :
+	cli(cli),
+	inputValue(defaultValue)
+	{ }
+
+void CLIViewInputHandler::WaitForInput()
+{
+	cli.SetPrompt("Telekarma>");
+	cli.SetInputHandler(NULL);
+}
+
+void CLIViewInputHandler::ReceiveInput(PString input)
+{
+	if (!input.IsEmpty()) {
+		inputValue = input;
+	}
+}
+
+CLIViewPasswordInputHandler::CLIViewPasswordInputHandler(CLIView & cli, PString defaultValue) :
+	CLIViewInputHandler(cli, defaultValue)
+	{ }
+
+void CLIViewPasswordInputHandler::WaitForInput()
+{
+	cli.SetPrompt("Please enter your SIP password:");
+}
+
+void CLIViewPasswordInputHandler::ReceiveInput(PString input)
+{
+	CLIViewInputHandler::ReceiveInput(input);
+	cli.Register(cli.registrar, cli.user, inputValue);
+	cli.SetInputHandler(cli.defaultInputHandler);
+}
+
+
+CLIViewDestInputHandler::CLIViewDestInputHandler(CLIView & cli, PString defaultValue) :
+	CLIViewInputHandler(cli, defaultValue)
+	{ }
+
+void CLIViewDestInputHandler::WaitForInput()
+{
+	cli.SetPrompt("Enter SIP address [" + inputValue + "]: ");
+}
+
+void CLIViewDestInputHandler::ReceiveInput(PString input)
+{
+	CLIViewInputHandler::ReceiveInput(input);
+	cli.Dial(inputValue);
+	cli.SetInputHandler(cli.defaultInputHandler);
+}
+
 CLIView::CLIView() :
 	View(),
-	inputState(CLIVIEW_INPUT_AUTO),
-	dest(PString(DEST))
+	destInputHandler(NULL),
+	defaultInputHandler(NULL),
+	currentInputHandler(NULL)
 	{ }
 
 void CLIView::Main() {
 
-	PString registrar(REGISTRAR);
+	registrar = REGISTRAR;
 	PString stunServer(STUN);
-	PString user(ACCOUNT);
+	user = ACCOUNT;
 	PString passwd(PASSWORD);
 	PString line;
 
@@ -29,6 +83,11 @@ void CLIView::Main() {
 	model = new Model();
 	controller = new TeleKarma(model);
 	controller->Resume();
+
+	/* Setup input handlers. */
+	defaultInputHandler = new CLIViewInputHandler(*this);
+	passwordInputHandler = new CLIViewPasswordInputHandler(*this);
+	destInputHandler = new CLIViewDestInputHandler(*this, DEST);
 
 	cout << "Welcome to TeleKarma!" << endl << endl << flush;
 
@@ -56,64 +115,8 @@ void CLIView::Main() {
 	line = line.Trim();
 	if (!line.IsEmpty()) user = line;
 
-	cout << "Please enter your SIP password";
-	if (passwd.IsEmpty()) {
-		cout << ": ";
-	} else {
-		cout << " [";
-		for (int i = 0; i < passwd.GetLength(); ++i) {
-			cout << "*";
-		}
-		cout << "]: ";
-	}
-	cout << flush;
-	line.MakeEmpty();
-	int c = 0;
-	int a = 0;
-	while (c != 10 && c != 13)	{
-		// protect the cast
-		if (c >= 32 && c <= 255) {
-			line += (char)c;
-			cout << "*" << flush;
-			++a;
-		} else if (c == 8 && a > 0) {
-			// backspace
-			cout << "\b \b" << flush;
-			--a;
-			line = line.Left(a);
-		}
-#ifdef WIN32
-		c = _getch();
-#else //Had a lot of problems with this else being blocking...we need non-blocking.
-		c = getchar();
-#endif
-	}
-	if (!line.IsEmpty()) passwd = line;
-	cout << endl << endl << flush;
 
-	//May be useful for debugging and/or future use.
-	/*
-	cout << "=============================================================" << endl;
-	cout << "SIP Server Address: '" << registrar << "'" << endl;
-	cout << "STUN Server Address: '" << stunServer << "'" << endl;
-	cout << "User name: '" << user << "'" << endl;
-	cout << "Password: '" << passwd << "'" << endl;
-	cout << "=============================================================" << endl;
-	*/
 
-	cout << "Initializing telephony system... (this may take a moment)" << flush;
-//	controller->Backspace(24);
-	cout << "done.";
-//	controller->Space(19);
-	cout << endl;
-//	cout << "Identifying STUN client type... " << controller->GetSTUNType() << "." << endl;
-	cout << flush;
-
-	// Initiate registration (non-blocking)
-	cout << "Registering with " << registrar << " as " << user << "... " << flush;
-	Register(registrar, user, passwd);
-
-	EnterState(CLIVIEW_INPUT_AUTO);
 	SetCommand("c", PCREATE_NOTIFIER(Dial), "Place a call");
 	SetCommand("q", PCREATE_NOTIFIER(Quit), "Quit");
 	SetCommand("r", PCREATE_NOTIFIER(Retrieve), "Retrieve call");
@@ -122,6 +125,9 @@ void CLIView::Main() {
 	SetCommand("h", PCREATE_NOTIFIER(Hold), "Hold call");
 	SetCommand("w", PCREATE_NOTIFIER(AutoHold), "Hold until human detected");
 	SetCommand("d", PCREATE_NOTIFIER(Disconnect), "Disconnect");
+
+	SetInputHandler(passwordInputHandler);
+
 	Start();
 
 	/* XXX HACK If we pass false to start() it won't create a new thread,
@@ -129,41 +135,24 @@ void CLIView::Main() {
 	while(true);
 }
 
-void CLIView::OnReceivedLine(Arguments & line) {
-
-	/*XXX: Maybe use a state pattern here? */
-	switch(inputState) {
-	case CLIVIEW_INPUT_DEST:
-		dest = parseArgument(line, PString(DEST));
-		Dial(dest);
-		EnterState(CLIVIEW_INPUT_AUTO);
-		break;
-	default:
+void CLIView::OnReceivedLine(Arguments & line)
+{
+	if (currentInputHandler) {
+		if (line.GetCount() == 0) {
+			currentInputHandler->ReceiveInput(PString::Empty());
+		} else {
+			currentInputHandler->ReceiveInput(line[0]);
+		}
+	} else {
 		PCLIStandard::OnReceivedLine(line);
 	}
 }
 
-void CLIView::EnterState(CLIViewInputState state) {
-
-	/*XXX: Use a state pattern here. */
-	switch(state) {
-	case CLIVIEW_INPUT_DEST:
-		SetPrompt("Enter SIP address [" DEST "]: ");
-		break;
-
-	default:
-		SetPrompt("TeleKarma>");
-		break;
-	}
-	inputState = state;
-}
-
-PString CLIView::parseArgument(Arguments & line, PString defaultValue)
+void CLIView::SetInputHandler(CLIViewInputHandler * handler)
 {
-	if (line.GetCount() == 0) {
-		return defaultValue;
-	} else {
-		return line[0];
+	currentInputHandler = handler;
+	if (currentInputHandler) {
+		handler->WaitForInput();
 	}
 }
 
@@ -175,8 +164,9 @@ void CLIView::Dial(PString & dest) {
 	DoAction(new DialAction(dest, 0));
 }
 
-void CLIView::Dial(PCLI::Arguments & args, INT) {
-	EnterState(CLIVIEW_INPUT_DEST);
+void CLIView::Dial(PCLI::Arguments & args, INT) 
+{
+	SetInputHandler(destInputHandler);
 }
 
 void CLIView::Hold(PCLI::Arguments & args, INT) {
