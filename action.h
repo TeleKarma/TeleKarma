@@ -6,11 +6,14 @@ class PString;
 
 enum ActionID
 {
+	ACTION_INITIALIZE,
 	ACTION_REGISTER,
 	ACTION_DIAL,
 	ACTION_HOLD,
 	ACTION_AUTOHOLD,
+	ACTION_MUTE,
 	ACTION_RETRIEVE,
+	ACTION_SEND_TONE,
 	ACTION_DISCONNECT,
 	ACTION_QUIT
 };
@@ -22,6 +25,17 @@ class Action
 		virtual ~Action() { }
 		const enum ActionID id;
 		const int turn;
+};
+
+class InitializeAction : public Action
+{
+	public:
+		InitializeAction(const PString & stunServer, int turn) :
+			Action(ACTION_INITIALIZE, turn),
+			stunServer(stunServer)
+			{ }
+
+		const PString & stunServer;
 };
 
 class RegisterAction : public Action
@@ -66,6 +80,13 @@ class RetrieveAction : public Action
 {
 	public:
 		RetrieveAction(int turn) : Action(ACTION_RETRIEVE, turn) { }
+};
+
+class SendToneAction : public Action
+{
+	public:
+		SendToneAction(int turn, char tone) : Action(ACTION_SEND_TONE, turn), tone(tone) { }
+		const char tone;
 };
 
 class DisconnectAction : public Action
