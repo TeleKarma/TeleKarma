@@ -153,14 +153,15 @@ class TeleKarma : public Controller {
 		State * Initialize(Action * a, State * s);
 		State * Register(Action * a, State * s);
 		State * Dial(Action * a, State * s);
-		State * Hold(Action * a, State * s);			// XXX not implemented yet
-		State * AutoHold(Action * a, State * s);		// XXX not implemented yet
-		State * MuteAutoHold(Action * a, State * s);	// XXX not implemented yet
-		State * Retrieve(Action * a, State * s);		// XXX not implemented yet
+		State * Hold(Action * a, State * s);
+		State * AutoHold(Action * a, State * s);
+		State * MuteAutoHold(Action * a, State * s);
+		State * Retrieve(Action * a, State * s);
 		State * SendTone(Action * a, State * s);
 		State * Disconnect(Action * a, State * s);
 		State * Quit(Action * a, State * s);
 		bool    IsConnectedState(State * s);
+		bool    IsHoldingState(State * s);
 
 };
 

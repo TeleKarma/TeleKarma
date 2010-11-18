@@ -27,7 +27,10 @@ enum StatusID
 {
 	STATUS_UNSPECIFIED,			// default: nothing to add
 	STATUS_FAILED,				// failed
-	STATUS_AUTO_RETRIEVE		// human detected, automatically exiting autohold
+	STATUS_AUTO_RETRIEVE,		// human detected, automatically exiting autohold
+	STATUS_NOTIFY_RECORD,
+	STATUS_RECORDING,
+	STATUS_RETRIEVE				// user-initiated exit from hold/autohold/muteautohold
 };
 
 class State

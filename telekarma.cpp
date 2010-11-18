@@ -164,8 +164,11 @@ State * TeleKarma::UpdateState(State * s)
 			} else if (!phone->IsConnected()) {
 				result = SetState(new State(STATE_DISCONNECTED, result->turn+1));
 			} else if (phone->ToneReceived(IS_HUMAN_TONE)) {
-				// XXX action required here (more to this than just updating state)
 				result = SetState(new State(result->id, result->turn, STATUS_AUTO_RETRIEVE, "Human detected"));
+				phone->StopWAV();
+				if (phone->IsRecording()) phone->StopRecording();
+				phone->TurnOnMicrophone();
+				// XXX enable the speaker - implementation to go
 				result = SetState(new State(STATE_CONNECTED, result->turn+1));
 			}
 			break;
@@ -212,7 +215,7 @@ State * TeleKarma::DoAction(Action * a, State * s)
 				s = Dial(a, s);
 				break;
 			case ACTION_HOLD:
-				s = Hold(a, s);				// XXX Not implemented yet
+				s = Hold(a, s);
 				break;
 			case ACTION_AUTOHOLD:
 				s = AutoHold(a, s);			// XXX Not implemented yet
@@ -243,7 +246,7 @@ State * TeleKarma::Initialize(Action * a, State * s)
 {
 	if (s->id != STATE_UNINITIALIZED) return s;
 	bool flag = false;
-	State * result = SetState(new State(STATE_INITIALIZING, result->turn+1));
+	State * result = SetState(new State(STATE_INITIALIZING, s->turn+1));
 	// verify existence and type of 'logs' folder
 	const char * strPath1 = "logs";
 	struct stat status;
@@ -294,7 +297,7 @@ State * TeleKarma::Initialize(Action * a, State * s)
 State * TeleKarma::Register(Action * a, State * s)
 {
 	if (s->id != STATE_INITIALIZED) return s;
-	State * result = SetState(new State(STATE_REGISTERING, result->turn+1));
+	State * result = SetState(new State(STATE_REGISTERING, s->turn+1));
 	RegisterAction * ra = dynamic_cast<RegisterAction *>(a);
 	if (ra == NULL) {
 		result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Programming error: action cast failed"));
@@ -319,7 +322,7 @@ State * TeleKarma::Register(Action * a, State * s)
 State * TeleKarma::Dial(Action * a, State * s)
 {
 	if (s->id != STATE_REGISTERED) return s;
-	State * result = SetState(new State(STATE_DIALING, result->turn+1));
+	State * result = SetState(new State(STATE_DIALING, s->turn+1));
 	DialAction * da = dynamic_cast<DialAction *>(a);
 	if (da == NULL) {
 		result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Programming error: action cast failed"));
@@ -328,6 +331,8 @@ State * TeleKarma::Dial(Action * a, State * s)
 		result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Telephony service failed"));
 		result = SetState(new State(STATE_UNINITIALIZED, result->turn+1));
 	} else {
+		phone->TurnOnMicrophone();
+		// XXX enable the speaker - implementation to go
 		phone->Dial(da->dest);
 		// XXX push data to model
 		/*
@@ -354,40 +359,151 @@ State * TeleKarma::SendTone(Action * a, State * s)
 	return result;
 }
 
-// XXX implementation to go
+// Enter normal hold mode
 State * TeleKarma::Hold(Action * a, State * s)
 {
-
+	if (s->id != STATE_CONNECTED) return s;
+	State * result = s;
+	if (phone == NULL) {
+		result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Telephony service failed"));
+		result = SetState(new State(STATE_UNINITIALIZED, result->turn+1));
+	} else {
+		result = SetState(new State(STATE_HOLD, result->turn+1));
+		// XXX disable the speaker - implementation to go
+		// disable the microphone
+		phone->TurnOffMicrophone();
+		// play notification of recording IF not already recording
+		if (!phone->IsRecording()) {
+			PString assuranceName = "assurance.wav";
+			phone->PlayWAV(assuranceName, 0, 0);
+			result = SetState(new State(result->id, result->turn, STATUS_NOTIFY_RECORD));
+			// XXX leftover hack from original project...
+			PThread::Sleep(4500);
+			phone->StopWAV();
+			PTime now;
+			PString recFName("recordings/rec");
+			recFName += now.AsString("_yyyy.MM.dd_hh.mm.ss");
+			recFName += ".wav";
+			phone->StartRecording(recFName);
+		}
+		result = SetState(new State(result->id, result->turn, STATUS_RECORDING));
+		phone->PlayWAV(HOLD_WAV, IVR_REPEATS, PAUSE_TIME);
+	}
+	return result;
 }
 
-// XXX implementation to go
+// Enter autohold mode
 State * TeleKarma::AutoHold(Action * a, State * s)
 {
-
+	State * result = s;
+	if (s->id == STATE_CONNECTED) {
+		if (phone == NULL) {
+			result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Telephony service failed"));
+			result = SetState(new State(STATE_UNINITIALIZED, result->turn+1));
+		} else {
+			result = SetState(new State(STATE_AUTOHOLD, result->turn+1));
+			// clear the touch tone queue
+			phone->ClearTones();
+			// disable the microphone
+			phone->TurnOffMicrophone();
+			// play notification of recording IF not already recording
+			if (!phone->IsRecording()) {
+				PString assuranceName = "assurance.wav";
+				phone->PlayWAV(assuranceName, 0, 0);
+				result = SetState(new State(result->id, result->turn, STATUS_NOTIFY_RECORD));
+				// XXX leftover hack from original project...
+				PThread::Sleep(4500);
+				phone->StopWAV();
+				PTime now;
+				PString recFName("recordings/rec");
+				recFName += now.AsString("_yyyy.MM.dd_hh.mm.ss");
+				recFName += ".wav";
+				phone->StartRecording(recFName);
+			}
+			result = SetState(new State(result->id, result->turn, STATUS_RECORDING));
+			phone->PlayWAV(AUTO_HOLD_WAV, IVR_REPEATS, PAUSE_TIME);
+		}
+	} else if (s->id == STATE_MUTEAUTOHOLD) {
+		result = SetState(new State(STATE_AUTOHOLD, result->turn+1));
+		// XXX enable the speaker - implementation to go
+	}
+	return result;
 }
 
 // XXX implementation to go
 State * TeleKarma::MuteAutoHold(Action * a, State * s)
 {
-
+	State * result = s;
+	if (s->id == STATE_CONNECTED) {
+		if (phone == NULL) {
+			result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Telephony service failed"));
+			result = SetState(new State(STATE_UNINITIALIZED, result->turn+1));
+		} else {
+			result = SetState(new State(STATE_MUTEAUTOHOLD, result->turn+1));
+			// clear the touch tone queue
+			phone->ClearTones();
+			// XXX disable the speaker - implementation to go
+			// disable the microphone
+			phone->TurnOffMicrophone();
+			// play notification of recording IF not already recording
+			if (!phone->IsRecording()) {
+				PString assuranceName = "assurance.wav";
+				phone->PlayWAV(assuranceName, 0, 0);
+				result = SetState(new State(STATE_MUTEAUTOHOLD, result->turn, STATUS_NOTIFY_RECORD));
+				// XXX leftover hack from original project...
+				PThread::Sleep(4500);
+				phone->StopWAV();
+				PTime now;
+				PString recFName("recordings/rec");
+				recFName += now.AsString("_yyyy.MM.dd_hh.mm.ss");
+				recFName += ".wav";
+				phone->StartRecording(recFName);
+			}
+			result = SetState(new State(STATE_MUTEAUTOHOLD, result->turn, STATUS_RECORDING));
+			phone->PlayWAV(AUTO_HOLD_WAV, IVR_REPEATS, PAUSE_TIME);
+		}
+	} else if (s->id == STATE_AUTOHOLD) {
+		result = SetState(new State(STATE_MUTEAUTOHOLD, result->turn+1));
+		// XXX disable the speaker - implementation to go
+	}
+	return result;
 }
 
-// XXX implementation to go
+// Retrieve a call from hold, autohold or muteautohold
 State * TeleKarma::Retrieve(Action * a, State * s)
 {
-
+	if (!IsHoldingState(s)) return s;
+	State * result = s;
+	if (phone == NULL) {
+		result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Telephony service failed"));
+		result = SetState(new State(STATE_UNINITIALIZED, result->turn+1));
+	} else {
+		result = SetState(new State(result->id, result->turn, STATUS_RETRIEVE));
+		phone->StopWAV();
+		if (phone->IsRecording()) phone->StopRecording();
+		phone->TurnOnMicrophone();
+		// XXX enable the speaker - implementation to go
+		result = SetState(new State(STATE_CONNECTED, result->turn+1));
+	}
+	return result;
 }
 
 // Disconnect the current call. Asynchronous.
 State * TeleKarma::Disconnect(Action * a, State * s)
 {
-	if (IsConnectedState(s)) return s;
-	State * result = SetState(new State(STATE_DISCONNECTING, result->turn+1));
+	if (!IsConnectedState(s)) return s;
+	State * result = SetState(new State(STATE_DISCONNECTING, s->turn+1));
 	if (phone == NULL) {
 		result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Telephony service failed"));
 		result = SetState(new State(STATE_UNINITIALIZED, result->turn+1));
 	} else {
 		phone->Disconnect();
+		if (IsHoldingState(s)) {
+			phone->StopWAV();
+			if (phone->IsRecording()) phone->StopRecording();
+			phone->TurnOnMicrophone();
+			// XXX enable the speaker - implementation to go
+		}
 	}
 	return result;
 }
@@ -423,102 +539,35 @@ bool TeleKarma::IsConnectedState(State * s)
 	}
 }
 
+// Determine whether the call can be retrieved
+bool TeleKarma::IsHoldingState(State * s)
+{
+	if (s == NULL) return false;
+	switch (s->id) {
+		case STATE_AUTOHOLD:
+		case STATE_MUTEAUTOHOLD:
+		case STATE_HOLD:
+			return true;
+		case STATE_UNINITIALIZED:
+		case STATE_INITIALIZING:
+		case STATE_INITIALIZED:
+		case STATE_REGISTERING:
+		case STATE_REGISTERED:
+		case STATE_DISCONNECTING:
+		case STATE_DISCONNECTED:
+		case STATE_TERMINATING:
+		case STATE_TERMINATED:
+		case STATE_DIALING:
+		case STATE_CONNECTED:
+		default:
+			return false;
+	}
+}
+
 // Unconditionally signal program termination
 State * TeleKarma::Quit(Action * a, State * s)
 {
 	return SetState(new State(STATE_TERMINATING, s->turn+1));
 }
-
-/*
-
-// Play a WAV file over phone connection.
-void TeleKarma::PlayWAV(const PString & filename, int repeat, int delay)
-{
-	if (phone != NULL) {
-		phone->PlayWAV(filename, repeat, delay);
-	}
-}
-
-void TeleKarma::StopWAV()
-{
-	if (phone != NULL) {
-		phone->StopWAV();
-	}
-}
-
-void TeleKarma::StartIVR(const PString &fname)
-{
-	if (phone != NULL) {
-		PString assuranceName = "assurance.wav";
-		PlayWAV(assuranceName, 0,0);
-		cout << "Please wait while a mandatory prompt is played..." << flush;
-		PThread::Sleep(4500);
-		StopWAV();
-		cout << "finished.\n" << flush;
-		StartRecording();
-		phone->PlayWAV(fname, IVR_REPEATS, PAUSE_TIME);
-		phone->TurnOffMicrophone();
-	}
-}
-
-void TeleKarma::StopIVR()
-{
-	if (phone != NULL) {
-		phone->StopWAV();
-		phone->TurnOnMicrophone();
-	}
-}
-
-//Only used for debugging.  Potentially for later features also.
-void TeleKarma::ToggleRecording()
-{
-	if (!phone->IsRecording()) {
-		StartRecording();
-	} else {
-		phone->StopRecording();
-	}
-}
-
-void TeleKarma::StartRecording() {
-	PTime now;
-	PString recFName("recordings/rec");
-	recFName += now.AsString("_yyyy.MM.dd_hh.mm.ss");
-	recFName += ".wav";
-	phone->StartRecording(recFName);
-}
-
-bool TeleKarma::IsPlayingWAV(bool onLine, bool onSpeakers)
-{
-	if (onLine && onSpeakers) {
-		return false;	// TO GO, since we currently don't play WAVs over speaker
-	} else if (onLine) {
-		return (phone != NULL && phone->IsPlayingWav());
-	} else if (onSpeakers) {
-		return false;	// TO GO, since we currently don't play WAVs over speaker
-	} else {
-		return false;
-	}
-}
-
-void TeleKarma::SetMicVolume(unsigned int volume)
-{
-	// not functioning per Opal spec
-	if (phone != NULL) return phone->SetMicVolume(volume);
-#ifdef WIN32
-	if (volume > 0) {
-		//UnMuteMic();
-	} else {
-		//MuteMic();
-	}
-
-#endif
-}
-
-void TeleKarma::SetSpeakerVolume(unsigned int volume)
-{
-	// not functioning per Opal spec
-	if (phone != NULL) return phone->SetSpeakerVolume(volume);
-}
-*/
 
 // End of File ///////////////////////////////////////////////////////////////
