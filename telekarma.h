@@ -2,7 +2,7 @@
  *
  * telekarma.h
  *
- * The TeleKarma main application thread.
+ * TeleKarma's Controller.
  *
  */
 
@@ -10,16 +10,11 @@
 #define _TELEKARMA_H_
 
 #include <ptlib.h>
-#include <ptlib/pprocess.h>
 #include "controller.h"
-#include "model.h"
-#include "telephony.h"
-#include "state.h"
 
-class DialAction;
-class EventQueue;
-class RegisterAction;
-class View;
+class Model;
+class TelephonyIfc;
+class Action;
 
 /**
  * Defines the minimum amount of time, in milliseconds, for the
@@ -80,7 +75,12 @@ class View;
  */
 #define HOLD_WAV        "pleasehold.wav"
 
+/**
+ * Defines the minimum timeout duration in milliseconds for registration.
+ */
+#define REGISTRATION_TIMEOUT (60*1000)
 
+// XXX need to update the documentation...
 /**
  * <p>
  * The TeleKarma class provides the "main" function for the
@@ -101,20 +101,15 @@ class View;
  */
 class TeleKarma : public Controller {
 
-	// PTLib macro for setting up methods required by the PProcess class.
-	//PCLASSINFO(TeleKarma, PProcess);
-
 	public:
 
 		/**
 		 * Constructor. Initializes fields.
+		 * @param model
 		 */
 		TeleKarma(Model * model);
 
-		/**
-		 * Destructor. Heap memory cleanup and delay of {@link EXIT_DELAY}
-		 * milliseconds before returning.
-		 */
+		/** Destructor. Heap memory cleanup. */
 		virtual ~TeleKarma();
 
 		/**
@@ -133,192 +128,39 @@ class TeleKarma : public Controller {
 		void Main();
 		
 	private:
-		/**
-		 * Called by state handler to transition to a new state. Calls
-		 * the current state handler's {@link StateHandler#Exit()} method,
-		 * then replaces the current state handler with an instance of
-		 * the new state handler and calls that object's
-		 * {@link StateHandler#Enter()} method.
-		 * @param stateId one of the state identifiers from state.h.
-		 */
-		void EnterState(int stateId); //change private XXX HACK
 
-		/**
-		 * Instantiates the {@link TelephonyIfc}. Expected to be called
-		 * from a state handler object. Must be called prior to
-		 * calling {@link #Register(const PString &, const PString &, const Pstring &)}.
-		 * This is a blocking method.
-		 * @param stun STUN server address (may be set to empty)
-		 * @param user required username
-		 */
-		void Initialize(const PString & stun, const PString & user);
+		//
+		// fields
+		//
 
-		/**
-		 * Returns a description of the STUN server type.
-		 * Not meaningful until {@link #Initialize(const PString &, const PString &)}
-		 * has been called.
-		 * @return a description of the STUN server type.
-		 */
-		PString GetSTUNType();
-
-		/**
-		 * Registers the user with an SIP registrar. This method is
-		 * non-blocking. Registration process continues in another
-		 * thread. Caller must use {@link #IsRegistered()} to verify
-		 * success. Registration can take time.
-		 * @param registrar an SIP registrar
-		 * @param user user name registered with the registrar
-		 * @param password user's password
-		 */
-		void Register(RegisterAction * params);
-
-		/**
-		 * Dials an SIP phone number. This method is non-blocking. Initiation
-		 * of the call takes place in a separate thread. The caller is responsible
-		 * for determing call state using {@link #IsDialing()} and {@link #IsConnected()}.
-		 * @param destination an SIP-formatted address, including sip: prefix
-		 */
-		void Dial(DialAction * params);
-
-		/**
-		 * Disconnects a phone call. This method is non-blocking. Disconnection
-		 * is carried out in a separate thread. The caller is responsible
-		 * for determing call state using {@link #IsConnected()}.
-		 */
-		void Disconnect();
-
-		/**
-		 * Returns true if the user is registered with an SIP service. This
-		 * method reflects actual registration state.
-		 * @return true if the user is registered with their SIP registrar,
-		 *         false otherwise.
-		 */
-		bool IsRegistered();
-
-		/**
-		 * Returns true if a call is in the process of being dialed. This
-		 * method will return false once {@link #IsConnected()} begins
-		 * returning true.
-		 * @return true if a call is in the process of being dialed.
-		 */
-		bool IsDialing();
-
-		/**
-		 * Returns true if a call is connected.
-		 * @return true if a call is connected, false if not connected
-		 *         or dialing.
-		 */
-		bool IsConnected();
-
-		/**
-		 * Returns a user-friendly description of the reason why the
-		 * most recent call in the current session was disconnected.
-		 * @return a description of the reason for the most recent
-		 *         call disconnection.
-		 */
-		PString DisconnectReason(); //change later
-
-		/**
-		 * Indicates whether a WAV is or has been played since
-		 * the current call began.
-		 * @param onLine true by default; false not supported.
-		 * @param onSpeakers ignored.
-		 * @return true if the current call has had a WAV played on it.
-		 */
-		bool IsPlayingWAV(bool onLine = true, bool onSpeakers = false);
-
-		/**
-		 * Plays a WAV file over the current call.
-		 * @param src path (relative to telekarma.exe folder) and filename
-		 *            of wav to play.
-		 * @param repeat number of times to play the WAV. Defaults to zero.
-		 * @param delay how long (in milliseconds) to wait between repeats.
-		 *            defaults to zero.
-		 */
-		void PlayWAV(const PString & src, int repeat = 0, int delay = 0); //ptlib delay doesn't work
-
-		/**
-		 * Inoperative. Reserved for future development.
-		 */
-		void SetMicVolume(unsigned int volume);
-
-		/**
-		 * Inoperative. Reserved for future development.
-		 */
-		void SetSpeakerVolume(unsigned int volume);
-
-		/**
-		 * Called upon entry of standard hold and detect human hold modes.
-		 * Disables the microphone, plays a notice of recording, begins
-		 * recording, and calls {@link #PlayWav(const PString &, int, int)}.
-		 * @param fname path (relative to telekarma.exe folder) and filename
-		 *              of wav to play.
-		 */
-		void StartIVR(const PString &fname);
-
-		/**
-		 * Called upon termination of standard hold and detect human hold modes.
-		 * Enables the microphone and calls {@link #StopWav()}.
-		 */
-		void StopIVR();
-
-		/**
-		 * Invokes {@link TelephonyIfc#StopWav()}.
-		 */
-		void StopWAV();
-
-		/**
-		 * Inverts the recording state. If recording, recording is stopped. If
-		 * no recording, recording is initiated. Provided for debugging purposes
-		 * only.
-		 */
-		void ToggleRecording();
-
-		/**
-		 * Begins recording of the call. Recordings are generated in WAV format
-		 * and dumped in a timestamped file in the recordings subdirectory of
-		 * the folder that holds the telekarma executable.
-		 */
-		void StartRecording();
-
-		/**
-		 * Indicates whether the touch tone associated with the given character
-		 * has been received since the last time the touch tone queue was cleared,
-		 * and optionally clears the touch tone queue.
-		 * @param key the label of the key associated with a touch tone
-		 * @param clear true (default) to clear the touch tone queue.
-		 */
-		bool ToneReceived(char key, bool clear = true);
-
-		/**
-		 * Clears the contents of the touch tone queue. Prevents historical touch
-		 * tones from corrupting current input detection.
-		 */
-		void ClearTones();
-
-		/**
-		 * Sends the DTMF tone associated with the given key to the remote party.
-		 * @param key the label of the key associated with a touch tone
-		 */
-		void SendTone(char key);
-
-		void ProcessNextEvent();
-		
-
-	private:
-		int countdown;
+		int countdown;							// timeout support
 		TelephonyIfc * phone;					// telephony services
+		
+		//
 		// disabled assignment operator & copy constructor
+		//
+
 		TeleKarma & operator=(const TeleKarma & rhs);
 		TeleKarma(const TeleKarma & rhs);
 
-		State * DoAction(Action * a, State * s);
-		/**
-		* Comparing controller's state to Telephony's state and returning what the current state should be.
-		* @param s The current state.
-		* @return The new state (same as current state if no change).
-		*/
+		//
+		// helper methods
+		//
+
+		State * SetState(State * s);
 		State * UpdateState(State * s);
+		State * DoAction(Action * a, State * s);
+		State * Initialize(Action * a, State * s);
+		State * Register(Action * a, State * s);
+		State * Dial(Action * a, State * s);
+		State * Hold(Action * a, State * s);			// XXX not implemented yet
+		State * AutoHold(Action * a, State * s);		// XXX not implemented yet
+		State * MuteAutoHold(Action * a, State * s);	// XXX not implemented yet
+		State * Retrieve(Action * a, State * s);		// XXX not implemented yet
+		State * SendTone(Action * a, State * s);
+		State * Disconnect(Action * a, State * s);
+		State * Quit(Action * a, State * s);
+		bool    IsConnectedState(State * s);
 
 };
 
