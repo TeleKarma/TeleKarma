@@ -1,17 +1,12 @@
 #include "cliview.h"
 
-#ifdef WIN32
-#include <conio.h>			// for MS-specific _kbhit() and _getch()
-#endif
-#include <assert.h>
-
 #include "action.h"
 #include "clicontext.h"
 #include "conf.h"
+#include "controller.h"
 #include "eventqueue.h"
 #include "model.h"
 #include "state.h"
-#include "controller.h"
 #include "telekarma.h"
 
 CLIView::InputHandler::InputHandler(CLIView & cli, PString defaultValue) :
