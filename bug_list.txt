@@ -2,4 +2,4 @@
 
 2. Recording stops when we don't want it to (old bug)
 
-3.
+3. Extra .wav file that isn't being used?
