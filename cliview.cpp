@@ -16,7 +16,7 @@ CLIView::InputHandler::InputHandler(CLIView & cli, PString defaultValue) :
 
 void CLIView::InputHandler::WaitForInput()
 {
-	cli.SetPrompt("Telekarma>");
+	cli.SetPrompt("Input your command here (press ? for help)>");
 	cli.SetInputHandler(NULL);
 }
 
