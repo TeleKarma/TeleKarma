@@ -103,7 +103,6 @@ State * TeleKarma::UpdateState(State * s)
 			}
 			break;
 		case STATE_DIALING:
-			cerr << "TeleKarma::UpdateState::STATE_DIALING" << endl << flush;
 			if (!phone) {
 				result = SetState(new State(STATE_ERROR, result->turn+1, STATUS_UNSPECIFIED, "Telephony service failed"));
 				result = SetState(new State(STATE_UNINITIALIZED, result->turn+1));
@@ -327,7 +326,6 @@ State * TeleKarma::Register(Action * a, State * s)
 // Dial the indicated SIP address. Format sip addr as sip:user@domain. Asynchronous.
 State * TeleKarma::Dial(Action * a, State * s)
 {
-	cerr << "TeleKarma::Dial" << endl << flush;
 	if (s->id != STATE_REGISTERED) return s;
 	State * result = SetState(new State(STATE_DIALING, s->turn+1));
 	DialAction * da = dynamic_cast<DialAction *>(a);
@@ -347,7 +345,6 @@ State * TeleKarma::Dial(Action * a, State * s)
 		*/
 	}
 	return result;
-	cerr << "TeleKarma::Dial - EXIT" << endl << flush;
 }
 
 // Play a DTMF tone over phone connection.

@@ -9,8 +9,4 @@ RegisterAction::RegisterAction(const PString & registrar, const PString & user, 
 	registrar(registrar),
 	user(user),
 	password(password)
-{
-	cerr << "RegisterAction::registrar: " << registrar << endl << flush;
-	cerr << "RegisterAction::user: " << user << endl << flush;
-	cerr << "RegisterAction::password: " << password << endl << flush;
-}
+{ }
