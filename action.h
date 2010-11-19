@@ -35,22 +35,17 @@ class InitializeAction : public Action
 			stunServer(stunServer)
 			{ }
 
-		const PString & stunServer;
+		const PString stunServer;
 };
 
 class RegisterAction : public Action
 {
 	public:
-		RegisterAction(const PString & registrar, const PString & user, const PString & password, int turn) :
-			Action(ACTION_REGISTER, turn),
-			registrar(registrar),
-			user(user),
-			password(password)
-			{ }
+		RegisterAction(const PString & registrar, const PString & user, const PString & password, int turn);
 
-		const PString & registrar;
-		const PString & user;
-		const PString & password;
+		const PString registrar;
+		const PString user;
+		const PString password;
 };
 
 class DialAction : public Action
@@ -61,7 +56,7 @@ class DialAction : public Action
 			dest(dest)
 			{ }
 
-		const PString & dest;
+		const PString dest;
 };
 
 class HoldAction : public Action

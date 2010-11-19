@@ -35,6 +35,6 @@ State::State(StateID id, int turn, StatusID status, const PString & msg) :
 
 State * State::Clone() const
 {
-	State * obj = new State(id, turn);
+	State * obj = new State(id, turn, status, message);
 	return obj;
 }

@@ -46,6 +46,7 @@ void TeleKarma::Main() {
 	while (currentState && currentState->id != STATE_TERMINATING) {
 		currentState = UpdateState(currentState);
 		currentState = DoAction(model->DequeueAction(), currentState);
+		currentState = model->GetState();	// Mike's attempt to patch a bug reported by Tom
 		PThread::Sleep(SLEEP_DURATION);
 	}
 	// handle extreme case
@@ -82,7 +83,7 @@ State * TeleKarma::UpdateState(State * s)
 			if (phone && phone->IsRegistered()) {
 				result = SetState(new State(STATE_REGISTERED, result->turn+1));
 			} else {
-				if (countdown == 0) {
+				if (countdown <= 0) {
 					// timeout
 					result = SetState(new State(result->id, result->turn, STATUS_FAILED));
 					result = SetState(new State(STATE_INITIALIZED, result->turn+1));
@@ -102,6 +103,7 @@ State * TeleKarma::UpdateState(State * s)
 			}
 			break;
 		case STATE_DIALING:
+			cerr << "TeleKarma::UpdateState::STATE_DIALING" << endl << flush;
 			if (!phone) {
 				result = SetState(new State(STATE_ERROR, result->turn+1, STATUS_UNSPECIFIED, "Telephony service failed"));
 				result = SetState(new State(STATE_UNINITIALIZED, result->turn+1));
@@ -115,7 +117,7 @@ State * TeleKarma::UpdateState(State * s)
 				// concurrency kludge - note expectation in TelephonyIfc:
 				// IsConnected true before IsDialing false
 				if (!phone->IsConnected()) {
-					result = SetState(new State(STATE_DIALING, result->turn, STATUS_FAILED, "Call failed"));
+					result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Call failed"));
 					result = SetState(new State(STATE_REGISTERED, result->turn+1));
 				}
 			}
@@ -206,35 +208,39 @@ State * TeleKarma::DoAction(Action * a, State * s)
 	if (a->turn == s->turn) {
 		switch (a->id) {
 			case ACTION_INITIALIZE:
-				s = Initialize(a, s);
+				result = Initialize(a, s);
 				break;
 			case ACTION_REGISTER:
-				s = Register(a, s);
+				result = Register(a, s);
 				break;
 			case ACTION_DIAL:
-				s = Dial(a, s);
+				result = Dial(a, s);
 				break;
 			case ACTION_HOLD:
-				s = Hold(a, s);
+				result = Hold(a, s);
 				break;
 			case ACTION_AUTOHOLD:
-				s = AutoHold(a, s);			// XXX Not implemented yet
+				result = AutoHold(a, s);			// XXX Not implemented yet
 				break;
 			case ACTION_MUTE:
-				s = MuteAutoHold(a, s);		// XXX Not implemented yet
+				result = MuteAutoHold(a, s);		// XXX Not implemented yet
 				break;
 			case ACTION_RETRIEVE:
-				s = Retrieve(a, s);			// XXX Not implemented yet
+				result = Retrieve(a, s);			// XXX Not implemented yet
 				break;
 			case ACTION_DISCONNECT:
-				s = Disconnect(a, s);
+				result = Disconnect(a, s);
 				break;
 			case ACTION_QUIT:
-				s = Quit(a, s);
+				result = Quit(a, s);
 				break;
 			default:
 				// simply ignore unknown actions
 				break;
+		}
+	} else {
+		if (s != NULL) {
+			result = SetState(new State(s->id, s->turn, STATUS_TURN_MISMATCH));
 		}
 	}
 	delete a;
@@ -321,6 +327,7 @@ State * TeleKarma::Register(Action * a, State * s)
 // Dial the indicated SIP address. Format sip addr as sip:user@domain. Asynchronous.
 State * TeleKarma::Dial(Action * a, State * s)
 {
+	cerr << "TeleKarma::Dial" << endl << flush;
 	if (s->id != STATE_REGISTERED) return s;
 	State * result = SetState(new State(STATE_DIALING, s->turn+1));
 	DialAction * da = dynamic_cast<DialAction *>(a);
@@ -340,6 +347,7 @@ State * TeleKarma::Dial(Action * a, State * s)
 		*/
 	}
 	return result;
+	cerr << "TeleKarma::Dial - EXIT" << endl << flush;
 }
 
 // Play a DTMF tone over phone connection.
