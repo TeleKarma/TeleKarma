@@ -39,8 +39,15 @@ void CLIView::STUNInputHandler::WaitForInput()
 void CLIView::STUNInputHandler::ReceiveInput(PString input)
 {
 	InputHandler::ReceiveInput(input);
+	cli.PrintMessage("\nInitializing telephony system (this may take a moment)...");
 	cli.Initialize(inputValue);
-	cli.SetInputHandler(cli.registrarInputHandler);
+	if (cli.WaitForState(STATE_INITIALIZED, 15000)) {
+		cli.PrintMessage("done.\n\n");
+		cli.SetInputHandler(cli.registrarInputHandler);
+	} else {
+		cli.PrintMessage("failed.\n\n");
+		cli.SetInputHandler(cli.stunInputHandler);
+	}
 }
 
 CLIView::RegistrarInputHandler::RegistrarInputHandler(CLIView & cli, PString defaultValue) :
@@ -86,10 +93,19 @@ void CLIView::PasswordInputHandler::WaitForInput()
 void CLIView::PasswordInputHandler::ReceiveInput(PString input)
 {
 	InputHandler::ReceiveInput(input);
+	cli.PrintMessage("\nRegistering with " +
+			 cli.registrarInputHandler->inputValue +
+			 " as " + cli.userInputHandler->inputValue + "...");
 	cli.Register(cli.registrarInputHandler->inputValue,
 		     cli.userInputHandler->inputValue,
 		     this->inputValue);
-	cli.SetInputHandler(cli.defaultInputHandler);
+	if (cli.WaitForState(STATE_REGISTERED, 15000)) {
+		cli.PrintMessage("done.\n\n");
+		cli.SetInputHandler(cli.defaultInputHandler);
+	} else {
+		cli.PrintMessage("failed\n\n");
+		cli.SetInputHandler(cli.registrarInputHandler);
+	}
 }
 
 
@@ -105,7 +121,13 @@ void CLIView::DestInputHandler::WaitForInput()
 void CLIView::DestInputHandler::ReceiveInput(PString input)
 {
 	InputHandler::ReceiveInput(input);
+	cli.PrintMessage("\nDialing " + inputValue + " ...");
 	cli.Dial(inputValue);
+	if (cli.WaitForState(STATE_CONNECTED, 15000)) {
+		cli.PrintMessage("done.\n\n");
+	} else {
+		cli.PrintMessage("failed.\n\n");
+	}
 	cli.SetInputHandler(cli.defaultInputHandler);
 }
 
@@ -114,7 +136,8 @@ CLIView::CLIView() :
 	destInputHandler(NULL),
 	defaultInputHandler(NULL),
 	currentInputHandler(NULL),
-	turn(0)
+	state(NULL),
+	stateMutex(1,1)
 	{ }
 
 void CLIView::Main() {
@@ -147,20 +170,9 @@ void CLIView::Main() {
 	while(true) {
 		State * state = model->DequeueState();
 		if(state) {
-			switch(state->id) {
-			case STATE_REGISTERED:
-				PrintMessage("Registered");
-				break;
-			case STATE_INITIALIZED:
-				PrintMessage("Initialized");
-				break;
-			case STATE_CONNECTED:
-				PrintMessage("Connected");
-			}
-			/* XXX We probably need a mutex here: */
-			turn = state->turn;
+			SetState(state);
 		}
-		PThread::Sleep(500);
+		PThread::Sleep(100);
 	}
 }
 
@@ -187,46 +199,104 @@ void CLIView::SetInputHandler(InputHandler * handler)
 
 void CLIView::PrintMessage(PString message)
 {
-	cout << endl << "*** " << message << "***\n";
-	cout << "A notification has interrupted your typing please continue where you left off.\n>" << flush;
+	cout << message << flush;
+}
+
+bool CLIView::WaitForState(enum StateID stateToWaitFor, int timeout)
+{
+	bool ret = false;
+	int timeWaited = 0;
+	int sleepTime = 100;
+	do {
+		State * currentState = GetStateWithLock();
+		if (currentState->status == STATUS_FAILED) {
+			ret = false;
+			goto cleanup;
+		}
+		if (currentState->id == stateToWaitFor) {
+			ret = true;
+			goto cleanup;
+		}
+		ReleaseStateLock();
+		PThread::Sleep(sleepTime);
+	} while(timeWaited < timeout);
+	goto exit;
+cleanup:
+	ReleaseStateLock();
+exit:
+	return ret;
+}
+
+void CLIView::SetState(State * newState)
+{
+	stateMutex.Wait();
+	if (state) {
+		delete state;
+	}
+	state = newState;
+	stateMutex.Signal();
+}
+
+State * CLIView::GetStateWithLock()
+{
+	stateMutex.Wait();
+	return state;
+}
+
+void CLIView::ReleaseStateLock()
+{
+	stateMutex.Signal();
+}
+
+int CLIView::GetTurn()
+{
+	int currentTurn;
+	stateMutex.Wait();
+	if (state) {
+		currentTurn = state->turn;
+	} else {
+		currentTurn = 0;
+	}
+	stateMutex.Signal();
+	return currentTurn;
 }
 
 void CLIView::Initialize(PString & stunServer)
 {
-	DoAction(new InitializeAction(stunServer, turn));
+	DoAction(new InitializeAction(stunServer, GetTurn()));
 }
 
 void CLIView::Register(const PString & registrar, const PString & user, const PString & password) {
-	DoAction(new RegisterAction(registrar, user, password, turn));
+	DoAction(new RegisterAction(registrar, user, password, GetTurn()));
 }
 
 void CLIView::Dial(PString & dest) {
-	DoAction(new DialAction(dest, turn));
+	DoAction(new DialAction(dest, GetTurn()));
 }
 
-void CLIView::Dial(PCLI::Arguments & args, INT) 
+void CLIView::Dial(PCLI::Arguments & args, INT)
 {
 	SetInputHandler(destInputHandler);
 }
 
 void CLIView::Hold(PCLI::Arguments & args, INT) {
-	DoAction(new HoldAction(turn));
+	DoAction(new HoldAction(GetTurn()));
 }
 
 void CLIView::AutoHold(PCLI::Arguments & args, INT) {
-	DoAction(new AutoHoldAction(turn));
+	DoAction(new AutoHoldAction(GetTurn()));
 }
 
 void CLIView::Retrieve(PCLI::Arguments & args, INT) {
-	DoAction(new RetrieveAction(turn));
+	DoAction(new RetrieveAction(GetTurn()));
 }
 
 void CLIView::Disconnect(PCLI::Arguments & args, INT) {
-	DoAction(new DisconnectAction(turn));
+	DoAction(new DisconnectAction(GetTurn()));
 }
 
 void CLIView::Quit(PCLI::Arguments & args, INT) {
-	DoAction(new QuitAction(turn));
+	DoAction(new QuitAction(GetTurn()));
 }
 
 PCLI::Context * CLIView::CreateContext()

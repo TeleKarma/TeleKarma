@@ -4,11 +4,13 @@
 
 #include <ptclib/cli.h>
 
+#include "state.h"
 #include "view.h"
 
 class CLIView;
 
 class CLIContext;
+class PSemaphore;
 class TeleKarma;
 
 class CLIView : public PCLIStandard,  public View {
@@ -73,9 +75,16 @@ class CLIView : public PCLIStandard,  public View {
 		void PrintMessage(PString message);
 		void SetInputHandler(InputHandler * handler);
 		void OnReceivedLine(Arguments & line);
+		bool WaitForState(enum StateID stateToWaitFor, int timeout);
 		void Initialize(PString & stunServer);
 		void Register(const PString & registrar, const PString & user, const PString & password);
 		void Dial(PString & dest);
+
+		void SetState(State * newState);
+		State * GetStateWithLock();
+		void ReleaseStateLock();
+
+		int GetTurn();
 
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Dial);
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Hold);
@@ -92,7 +101,9 @@ class CLIView : public PCLIStandard,  public View {
 		DestInputHandler * destInputHandler;
 		InputHandler * currentInputHandler;
 
-		int turn;
+		State * state;
+		PSemaphore stateMutex;
+
 	friend class InputHandler;
 	friend class STUNInputHandler;
 	friend class RegistrarInputHandler;
