@@ -149,13 +149,13 @@ void CLIView::Main() {
 		if(state) {
 			switch(state->id) {
 			case STATE_REGISTERED:
-				cout << "Registered\n";
+				PrintMessage("Registered");
 				break;
 			case STATE_INITIALIZED:
-				cout << "Initialized\n";
+				PrintMessage("Initialized");
 				break;
 			case STATE_CONNECTED:
-				cout << "Connected\n";
+				PrintMessage("Connected");
 			}
 			/* XXX We probably need a mutex here: */
 			turn = state->turn;
@@ -183,6 +183,12 @@ void CLIView::SetInputHandler(InputHandler * handler)
 	if (currentInputHandler) {
 		handler->WaitForInput();
 	}
+}
+
+void CLIView::PrintMessage(PString message)
+{
+	cout << endl << "*** " << message << "***\n";
+	cout << "A notification has interrupted your typing please continue where you left off.\n>" << flush;
 }
 
 void CLIView::Initialize(PString & stunServer)

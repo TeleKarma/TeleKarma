@@ -7,6 +7,8 @@
 #include "view.h"
 
 class CLIView;
+
+class CLIContext;
 class TeleKarma;
 
 class CLIView : public PCLIStandard,  public View {
@@ -68,6 +70,7 @@ class CLIView : public PCLIStandard,  public View {
 		PCLI::Context * CreateContext();
 
 	private:
+		void PrintMessage(PString message);
 		void SetInputHandler(InputHandler * handler);
 		void OnReceivedLine(Arguments & line);
 		void Initialize(PString & stunServer);
