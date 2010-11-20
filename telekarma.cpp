@@ -204,7 +204,7 @@ State * TeleKarma::DoAction(Action * a, State * s)
 {
 	if (a == NULL) return s;
 	State * result = s;
-	if (a->turn == s->turn) {
+	if (a->id == ACTION_QUIT || a->turn == s->turn) {
 		switch (a->id) {
 			case ACTION_INITIALIZE:
 				result = Initialize(a, s);
@@ -219,13 +219,13 @@ State * TeleKarma::DoAction(Action * a, State * s)
 				result = Hold(a, s);
 				break;
 			case ACTION_AUTOHOLD:
-				result = AutoHold(a, s);			// XXX Not implemented yet
+				result = AutoHold(a, s);
 				break;
 			case ACTION_MUTE:
-				result = MuteAutoHold(a, s);		// XXX Not implemented yet
+				result = MuteAutoHold(a, s);
 				break;
 			case ACTION_RETRIEVE:
-				result = Retrieve(a, s);			// XXX Not implemented yet
+				result = Retrieve(a, s);
 				break;
 			case ACTION_DISCONNECT:
 				result = Disconnect(a, s);
@@ -435,7 +435,6 @@ State * TeleKarma::AutoHold(Action * a, State * s)
 	return result;
 }
 
-// XXX implementation to go
 State * TeleKarma::MuteAutoHold(Action * a, State * s)
 {
 	State * result = s;
