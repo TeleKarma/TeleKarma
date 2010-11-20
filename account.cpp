@@ -234,4 +234,5 @@ bool AccountList::Save() const
 bool AccountList::SaveTo(const PString & filename) const
 {
 	// XXX implementation to-go
+	return false;
 }
