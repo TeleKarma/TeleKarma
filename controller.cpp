@@ -9,10 +9,12 @@
  
  
  //Only constructor for the Controller class?
- Controller::Controller(Model * model) : PThread(65536), model(model) {
+ Controller::Controller(Model * model) : PThread(65536, false), model(model)
+ {
 	 
  }
  
- Controller::~Controller() { 
+ Controller::~Controller()
+ { 
 	//Don't do anything in here
  }
