@@ -6,6 +6,7 @@
 #include "controller.h"
 #include "eventqueue.h"
 #include "model.h"
+#include "sms.h"
 #include "state.h"
 #include "telekarma.h"
 
@@ -131,6 +132,42 @@ void CLIView::DestInputHandler::ReceiveInput(PString input)
 	cli.SetInputHandler(cli.defaultInputHandler);
 }
 
+CLIView::SMSDestInputHandler::SMSDestInputHandler(CLIView & cli, PString defaultValue) :
+	InputHandler(cli, defaultValue)
+	{ }
+
+void CLIView::SMSDestInputHandler::WaitForInput()
+{
+	cli.SetPrompt("Enter phone number for SMS message: ");
+}
+
+void CLIView::SMSDestInputHandler::ReceiveInput(PString input)
+{
+	InputHandler::ReceiveInput(input);
+	cli.SetInputHandler(cli.smsMessageInputHandler);
+}
+
+CLIView::SMSMessageInputHandler::SMSMessageInputHandler(CLIView & cli, PString defaultValue) :
+	InputHandler(cli, defaultValue)
+	{ }
+
+void CLIView::SMSMessageInputHandler::WaitForInput()
+{
+	cli.SetPrompt("Enter your SMS message: ");
+}
+
+void CLIView::SMSMessageInputHandler::ReceiveInput(PString input)
+{
+	InputHandler::ReceiveInput(input);
+	cli.PrintMessage("\nSending SMS...");
+	if (cli.SendSMS(cli.smsDestInputHandler->inputValue, inputValue)) {
+		cli.PrintMessage("Done.\n\n");
+	} else {
+		cli.PrintMessage("Failed\n\n");
+	}
+	cli.SetInputHandler(cli.defaultInputHandler);
+}
+
 CLIView::CLIView() :
 	View(),
 	destInputHandler(NULL),
@@ -153,6 +190,8 @@ void CLIView::Main() {
 	userInputHandler = new UserInputHandler(*this, ACCOUNT);
 	passwordInputHandler = new PasswordInputHandler(*this);
 	destInputHandler = new DestInputHandler(*this, DEST);
+	smsDestInputHandler = new SMSDestInputHandler(*this);
+	smsMessageInputHandler = new SMSMessageInputHandler(*this);
 
 	SetCommand("c", PCREATE_NOTIFIER(Dial), "Place a call");
 	SetCommand("q", PCREATE_NOTIFIER(Quit), "Quit");
@@ -162,6 +201,7 @@ void CLIView::Main() {
 	SetCommand("h", PCREATE_NOTIFIER(Hold), "Hold call");
 	SetCommand("w", PCREATE_NOTIFIER(AutoHold), "Hold until human detected");
 	SetCommand("d", PCREATE_NOTIFIER(Disconnect), "Disconnect");
+	SetCommand("s", PCREATE_NOTIFIER(SendSMS), "Send SMS");
 
 	SetInputHandler(stunInputHandler);
 
@@ -297,6 +337,16 @@ void CLIView::Disconnect(PCLI::Arguments & args, INT) {
 
 void CLIView::Quit(PCLI::Arguments & args, INT) {
 	DoAction(new QuitAction(GetTurn()));
+}
+
+bool CLIView::SendSMS(PString dest, PString message) {
+	SMS * sms = new SMS(dest, message);
+	sms->Send();
+	delete sms;
+}
+
+void CLIView::SendSMS(PCLI::Arguments & args, INT) {
+	SetInputHandler(smsDestInputHandler);
 }
 
 PCLI::Context * CLIView::CreateContext()

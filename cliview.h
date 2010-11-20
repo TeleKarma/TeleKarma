@@ -63,6 +63,20 @@ class CLIView : public PCLIStandard,  public View {
 			void WaitForInput();
 	};
 
+	class SMSDestInputHandler : public InputHandler {
+		public:
+			SMSDestInputHandler(CLIView & cli, PString defaultValue = PString::Empty());
+			void ReceiveInput(PString input);
+			void WaitForInput();
+	};
+
+	class SMSMessageInputHandler : public InputHandler {
+		public:
+			SMSMessageInputHandler(CLIView & cli, PString defaultValue = PString::Empty());
+			void ReceiveInput(PString input);
+			void WaitForInput();
+	};
+
 	public:
 		CLIView(); 
 		~CLIView() { }
@@ -79,6 +93,7 @@ class CLIView : public PCLIStandard,  public View {
 		void Initialize(PString & stunServer);
 		void Register(const PString & registrar, const PString & user, const PString & password);
 		void Dial(PString & dest);
+		bool SendSMS(PString dest, PString message);
 
 		void SetState(State * newState);
 		State * GetStateWithLock();
@@ -92,6 +107,7 @@ class CLIView : public PCLIStandard,  public View {
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Retrieve);
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Disconnect);
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Quit);
+		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, SendSMS);
 
 		InputHandler * defaultInputHandler;
 		STUNInputHandler * stunInputHandler;
@@ -99,6 +115,8 @@ class CLIView : public PCLIStandard,  public View {
 		UserInputHandler * userInputHandler;
 		PasswordInputHandler * passwordInputHandler;
 		DestInputHandler * destInputHandler;
+		SMSDestInputHandler * smsDestInputHandler;
+		SMSMessageInputHandler * smsMessageInputHandler;
 		InputHandler * currentInputHandler;
 
 		State * state;
@@ -110,6 +128,8 @@ class CLIView : public PCLIStandard,  public View {
 	friend class UserInputHandler;
 	friend class PasswordInputHandler;
 	friend class DestInputHandler;
+	friend class SMSDestInputHandler;
+	friend class SMSMessageInputHandler;
 };
 
 #endif //_CLIVIEW_H_
