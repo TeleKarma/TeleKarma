@@ -110,6 +110,9 @@ PBoolean TelephonyIfc::IsRegistered()
 
 
 PBoolean TelephonyIfc::Unregister() {
+	// bug fix for segfault on deconstruction 
+	// without initialization
+	if (sipEP == NULL) return PTrue;
 	if (sipEP->IsRegistered(aor)) {
 		Disconnect();
 		sipEP->Unregister(aor);

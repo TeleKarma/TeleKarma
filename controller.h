@@ -14,12 +14,11 @@ class Model;
 
 class Controller : public PThread
 {
-	PCLASSINFO(Controller, PThread); //maybe subclasses need this
+	PCLASSINFO(Controller, PThread);
 	public:
 	
 		Controller(Model * model);
-		virtual ~Controller();
-		virtual void Main()=0;
+		virtual void Main() = 0;
 	
 	private:
 	

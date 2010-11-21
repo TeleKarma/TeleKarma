@@ -109,9 +109,6 @@ class TeleKarma : public Controller {
 		 */
 		TeleKarma(Model * model);
 
-		/** Destructor. Heap memory cleanup. */
-		virtual ~TeleKarma();
-
 		/**
 		 * <p>
 		 * Main program logic. Verifies existance of required subfolders,

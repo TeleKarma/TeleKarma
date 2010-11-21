@@ -33,12 +33,6 @@ TeleKarma::TeleKarma(Model * model) :
 	model->SetState(new State(STATE_UNINITIALIZED, 0));
 }
 
-// Destructor - heap memory management.
-TeleKarma::~TeleKarma()
-{
-	delete phone;
-}
-
 // Main program
 void TeleKarma::Main() {
 	// enter main control loop
@@ -57,6 +51,10 @@ void TeleKarma::Main() {
 
 	// TO GO: cleanup??
 	// may want to delete phone explicitely here, before destructor...
+
+	// PThread does NOT have a virtual destructor - only gaurantee of normal
+	// cleanup is to cleanup on the way out of MAIN
+	delete phone;
 
 	// final step
 	SetState(new State(STATE_TERMINATED, -3));
