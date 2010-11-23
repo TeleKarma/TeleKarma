@@ -11,21 +11,58 @@ Task List by Priority:
 
 1. Architecture - Model->State->Controller->View(s)
 	Controller: State read-write. Compare Action <-> State turn. Illegal op discard.
+	
+	=> Done
 
 2. Dev UI
+	
+	=> Done
 
 3. Bug fixes!
 
+	=> Outstanding ( Monday )
+
 3. What does "Connected", "Registered", ... mean?
+
+	=> ??
 
 4. Console UI
 
+	=> Outstanding (Wednesday)
+
 5. GUI
+
+	=> Outstanding (Monday - by tonight - push branch)
 
 6. SMS
 
+	=> Outstanding (Monday)
+
 6. Config (parser)
+
+	=> Outstanding (Monday)
 
 6. Cross Platform Functionality (keep back-test)
 
+	=> Outstanding (Monday)
+
 7. Build File-Structure into Git and push up (Release folder with .txt that we submitted last time etc).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
