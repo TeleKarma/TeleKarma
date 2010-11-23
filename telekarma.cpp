@@ -49,10 +49,7 @@ void TeleKarma::Main() {
 		SetState(new State(STATE_TERMINATING, -2));
 	}
 
-	// TO GO: cleanup??
-	// may want to delete phone explicitely here, before destructor...
-
-	// PThread does NOT have a virtual destructor - only gaurantee of normal
+	// PThread does NOT have a virtual destructor - only guarantee of normal
 	// cleanup is to cleanup on the way out of MAIN
 	delete phone;
 
@@ -166,6 +163,7 @@ State * TeleKarma::UpdateState(State * s)
 				result = SetState(new State(result->id, result->turn, STATUS_AUTO_RETRIEVE, "Human detected"));
 				phone->StopWAV();
 				if (phone->IsRecording()) phone->StopRecording();
+				result = SetState(new State(result->id, result->turn, STATUS_DONE_RECORDING));
 				phone->TurnOnMicrophone();
 				// XXX enable the speaker - implementation to go
 				result = SetState(new State(STATE_CONNECTED, result->turn+1));
@@ -483,6 +481,7 @@ State * TeleKarma::Retrieve(Action * a, State * s)
 		result = SetState(new State(result->id, result->turn, STATUS_RETRIEVE));
 		phone->StopWAV();
 		if (phone->IsRecording()) phone->StopRecording();
+		result = SetState(new State(result->id, result->turn, STATUS_DONE_RECORDING));
 		phone->TurnOnMicrophone();
 		// XXX enable the speaker - implementation to go
 		result = SetState(new State(STATE_CONNECTED, result->turn+1));
