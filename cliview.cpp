@@ -4,7 +4,6 @@
 #include "clicontext.h"
 #include "conf.h"
 #include "controller.h"
-#include "eventqueue.h"
 #include "model.h"
 #include "sms.h"
 #include "state.h"
