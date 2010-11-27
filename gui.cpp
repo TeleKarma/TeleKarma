@@ -6,17 +6,10 @@
 #include "state.h"
 #include "action.h"
 #include "model.h"
-<<<<<<< HEAD
 #include "view.h"
 #include "telekarma.h"
 #include <opal/mediafmt.h>  // required for wxstring.h
 #include <ptlib/wxstring.h>
-=======
-#include "telekarma.h"
-#include <opal/mediafmt.h>  // required for wxstring.h
-#include <ptlib/wxstring.h>
-#include "wxevt.h"
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 #include "gui.h"
 
 //#ifdef WIN32
@@ -31,31 +24,6 @@ typedef  stringstream tstringstream;
 
 //////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
-=======
-/*
-wxStateChangeEvent::wxStateChangeEvent( wxObject * origin, const StateID & stateId, int turn, const StatusID & statusId, const wxString & message )
-	: wxNotifyEvent(wxEVT_STATE_CHANGE), stateId(stateId), statusId(statusId), turn(turn), msg(message)
-{
-	SetEventObject(origin);
-}
-
-StateID wxStateChangeEvent::GetStateID() { return stateId; }
-
-StatusID wxStateChangeEvent::GetStatusID() { return statusId; }
-
-int wxStateChangeEvent::GetTurn() { return turn; }
-
-const wxString & wxStateChangeEvent::GetMessage() { return msg; }
-
-wxEvent * wxStateChangeEvent::Clone()
-{
-	wxEvent * clone = new wxStateChangeEvent( GetEventObject(), stateId, turn, statusId, msg );
-	return clone;
-}
-*/
-
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 wxStateChangeEvent::wxStateChangeEvent( wxObject * origin )
 	: wxNotifyEvent(wxEVT_STATE_CHANGE)
 {
@@ -80,36 +48,12 @@ TeleKarmaNG::~TeleKarmaNG()
 	model->EnqueueAction(a);
 	// wait (blocking) for controller to stop
 	controller->WaitForTermination(PTimeInterval(8000));
-<<<<<<< HEAD
-=======
-	// wait (blocking) for monitor to stop
-	monitor->WaitForTermination(PTimeInterval(8000));
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 	// Theory says these should be deleted, but in practice,
 	// doing so produces segfaults - probably related to
 	// assert fail (long-lived child processes)
 	//delete controller;
-<<<<<<< HEAD
 	//delete model;
 	delete mutex;
-=======
-	//delete monitor;
-	//delete model;
-	delete smutex;
-	delete tmutex;
-	// delete any states still queued (should be none...)
-	for (int i = 0; i < sqsize; ++i) {
-		delete squeue[i];
-		squeue[i] = NULL;
-	}
-	delete [] squeue;
-	squeue = NULL;
-}
-
-void TeleKarmaNG::Main()
-{
-	// a dummy method for the benefit of PProcess
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 }
 
 bool TeleKarmaNG::OnInit()
@@ -117,81 +61,35 @@ bool TeleKarmaNG::OnInit()
 	// initialize pointers
 	model = NULL;
 	controller = NULL;
-<<<<<<< HEAD
 	win = NULL;
 	mutex = NULL;
 
 	// create mutux
 	mutex = new PSemaphore(1,1);
-=======
-	monitor = NULL;
-	win = NULL;
-	smutex = NULL;
-	tmutex = NULL;
-	squeue = NULL;
-
-	// create mutux
-	tmutex = new PSemaphore(1,1);
-	smutex = new PSemaphore(1,1);
-
-	// set up state queue
-	sqsize = QUEUE_SIZE;			// from model.h
-	sqhead = 0;
-	sqtail = 0;
-	squeue = new State *[sqsize];
-	for (int i = 0; i < sqsize; ++i) {
-		squeue[i] = NULL;
-	}
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 
 	// construct model
 	model = new Model();
 
-<<<<<<< HEAD
 	// register event listener with model
 	model->SetListener(this);
 
 	// launch GUI
     win = new MainFrame( this, _("TeleKarma NG"), wxDefaultPosition, wxSize(450,340) );
-=======
-	// launch GUI
-    win = new MainFrame( this, model, _("TeleKarma NG"), wxDefaultPosition, wxSize(450,340) );
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 
 	// launch controller thread
 	controller = new TeleKarma(model);
 
-<<<<<<< HEAD
-=======
-	// launch monitor thread
-	monitor = new StateMonitor(this, model);
-
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 	// display the window
 	win->Show(true);
     SetTopWindow(win);
 
-<<<<<<< HEAD
 	// Start controller thread
 	controller->Resume();
-=======
-	// Start service threads
-	controller->Resume();
-	monitor->Resume();
-
-	// remnants from testing/debugging of failure to pass state data with event...
-	//wxStateChangeEvent evt(win);
-	//win->AddPendingEvent(evt);
-	//win->Trace(StateHelper::ToTrace(evt.GetStateID(), evt.GetStatusID(), evt.GetMessage()));
-	//wxStateChangeEvent * evt2 = dynamic_cast<wxStateChangeEvent *>(evt.Clone());
-	//win->Trace(StateHelper::ToTrace(evt2->GetStateID(), evt2->GetStatusID(), evt2->GetMessage()));
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 
 	// signal successful setup
     return true;
 }
 
-<<<<<<< HEAD
 void TeleKarmaNG::OnStateChange()
 {
 	mutex->Wait();
@@ -207,76 +105,14 @@ void TeleKarmaNG::OnWindowDone()
 	mutex->Wait();
 	win = NULL;
 	mutex->Signal();
-=======
-void TeleKarmaNG::OnStateChange(State * s)
-{
-	tmutex->Wait();
-	if (win != NULL && s != NULL) {
-		smutex->Wait();
-		// enqueue
-		if (sqhead == sqtail) {
-			if (squeue[sqhead] == NULL) {
-				// the queue is empty
-				squeue[sqtail] = s;
-				sqtail = (sqtail + 1) % sqsize;
-			}
-		} else {
-			// the queue is neither empty nor full
-			squeue[sqtail] = s;
-			sqtail = (sqtail + 1) % sqsize;
-		}
-		smutex->Signal();
-		//win->Trace(_("New state\n"));
-		wxStateChangeEvent evt( win );
-		win->AddPendingEvent(evt);
-		//win->Trace(_("***\n"));
-		//win->Trace(StateHelper::ToTrace(s->id, s->status, _("CANNOT SET")));
-		//win->Trace(_("***\n"));
-	}
-	tmutex->Signal();
-	// delete s;
-}
-
-// Remove a state from the queue
-State * TeleKarmaNG::DequeueState()
-{
-	// set up result
-	State * result = NULL;
-	// enter mutex
-	smutex->Wait();
-	// dequeue
-	if (squeue[sqhead] != NULL) {
-		result = squeue[sqhead];
-		squeue[sqhead] = NULL;
-		sqhead = (sqhead + 1) % sqsize;
-	}
-	// exit mutex
-	smutex->Signal();
-	return result;
-}
-
-
-void TeleKarmaNG::OnWindowDone()
-{
-	tmutex->Wait();
-	win = NULL;
-	tmutex->Signal();
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 }
 
 
 //////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 MainFrame::MainFrame(TeleKarmaNG * parent, const wxString & title, const wxPoint & pos, const wxSize & size)
 	: wxFrame( NULL, -1, title, pos, size ),
 	  parent(parent),
-=======
-MainFrame::MainFrame(TeleKarmaNG * parent, Model * model, const wxString & title, const wxPoint & pos, const wxSize & size)
-	: wxFrame( NULL, -1, title, pos, size ),
-	  parent(parent),
-	  model(model),
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 	  menuFile(NULL),
 	  menuEdit(NULL),
 	  menuCall(NULL),
@@ -301,11 +137,7 @@ MainFrame::MainFrame(TeleKarmaNG * parent, Model * model, const wxString & title
 	// define the edit menu...
 	menuEdit = new wxMenu;
     menuEdit->Append( evAccounts, _("&Accounts...") );
-<<<<<<< HEAD
     //menuEdit->Append( evContacts, _("&Contacts...") );
-=======
-    menuEdit->Append( evContacts, _("&Contacts...") );
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 
 	// define the call menu...
 	menuCall = new wxMenu;
@@ -336,11 +168,7 @@ MainFrame::MainFrame(TeleKarmaNG * parent, Model * model, const wxString & title
 	// store menu item id's
 	fileExit = menuBar->FindMenuItem(_("File"), _("Exit"));
 	editAccounts = menuBar->FindMenuItem(_("Edit"), _("Accounts..."));
-<<<<<<< HEAD
 	//editContacts = menuBar->FindMenuItem(_("Edit"), _("Contacts..."));
-=======
-	editContacts = menuBar->FindMenuItem(_("Edit"), _("Contacts..."));
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 	callDial = menuBar->FindMenuItem(_("Call"), _("Dial"));
 	callHold = menuBar->FindMenuItem(_("Call"), _("Hold"));
 	callAutoHold = menuBar->FindMenuItem(_("Call"), _("AutoHold"));
@@ -355,15 +183,9 @@ MainFrame::MainFrame(TeleKarmaNG * parent, Model * model, const wxString & title
 	wxBoxSizer * hbox = new wxBoxSizer(wxHORIZONTAL);
 
 	// Create status & dial panel
-<<<<<<< HEAD
 	//btnContacts = new wxButton(panel, NULL, wxT("Contacts..."));
 	//btnContacts->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnQuit));
 	//btnContacts->SetFocus();
-=======
-	btnContacts = new wxButton(panel, NULL, wxT("Contacts..."));
-	//btnContacts->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnQuit));
-	btnContacts->SetFocus();
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 
 	// Address
 	tcDest = new wxTextCtrl(panel, wxID_ANY, _("sip:"), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER | wxSUNKEN_BORDER);
@@ -373,29 +195,19 @@ MainFrame::MainFrame(TeleKarmaNG * parent, Model * model, const wxString & title
 	// Dial button
 	btnDial = new wxButton(panel, NULL, wxT("&Dial"));
 	btnDial->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnDial));
-<<<<<<< HEAD
 	btnDial->SetFocus();
-=======
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 
 	// Trace window
 	// wxTE_RICH: on Windows, enables >64kb of data
 	tcTrace = new wxTextCtrl(panel, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_DONTWRAP | wxSUNKEN_BORDER | wxTE_RICH | wxTE_READONLY);
 	tcTrace->SetForegroundColour(wxColour(53,255,53)); // green
 	tcTrace->SetBackgroundColour(wxColour(0,0,0)); // black
-<<<<<<< HEAD
 	// following didn't work (changed color too)
-=======
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 	//wxFont font(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 	//tcTrace->SetFont(font);
 
 	// add the dial bar
-<<<<<<< HEAD
 	//hbox->Add(btnContacts, 0, wxALIGN_LEFT | wxALL, 5);
-=======
-	hbox->Add(btnContacts, 0, wxALIGN_LEFT | wxALL, 5);
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 	hbox->Add(tcDest, 1, wxALIGN_LEFT | wxTOP | wxBOTTOM | wxEXPAND, 5);
 	hbox->Add(btnDial, 0, wxALIGN_RIGHT | wxALL, 5);
 	vbox->Add(hbox, 0, wxALIGN_TOP | wxEXPAND, 0);
@@ -445,11 +257,7 @@ void MainFrame::OnStateChange(wxStateChangeEvent & evt)
 				// XXX temporary
 				Trace(_("State Uninitialized\n"));
 				a = new InitializeAction("stun.ekiga.net", s->turn);
-<<<<<<< HEAD
 				parent->DoAction(a);
-=======
-				model->EnqueueAction(a);
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 				a = NULL;
 				break;
 			case STATE_INITIALIZING:
@@ -457,13 +265,8 @@ void MainFrame::OnStateChange(wxStateChangeEvent & evt)
 				break;
 			case STATE_INITIALIZED:
 				// XXX temporary
-<<<<<<< HEAD
 				a = new RegisterAction("ekiga.net", "**username**", "**password**", s->turn);
 				parent->DoAction(a);
-=======
-				a = new RegisterAction("ekiga.net", "mvolk@ekiga.net", "rockin4test", s->turn);
-				model->EnqueueAction(a);
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 				a = NULL;
 				//{
 				//	RegisterDialog * r = new RegisterDialog(this, model, s->turn);
@@ -471,19 +274,12 @@ void MainFrame::OnStateChange(wxStateChangeEvent & evt)
 				//}
 				break;
 			case STATE_REGISTERING:
-<<<<<<< HEAD
 
 				break;
 			case STATE_REGISTERED:
 				//a = new DialAction("sip:500@ekiga.net", turn);
 				//parent->DoAction(a);
 				//a = NULL;
-=======
-				
-				break;
-			case STATE_REGISTERED:
-
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 				break;
 			case STATE_DISCONNECTING:
 				
@@ -521,11 +317,7 @@ void MainFrame::OnAdjustControls(const StateID state)
 {
 	menuBar->Enable(fileExit, true);
 	menuBar->Enable(editAccounts, false);
-<<<<<<< HEAD
 	//menuBar->Enable(editContacts, false);
-=======
-	menuBar->Enable(editContacts, false);
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 	menuBar->Enable(callDial, StateHelper::CanDial(state));
 	menuBar->Enable(callHold, StateHelper::CanHold(state));
 	menuBar->Enable(callAutoHold, StateHelper::CanHold(state));
@@ -535,7 +327,6 @@ void MainFrame::OnAdjustControls(const StateID state)
 	menuBar->Enable(helpAbout, true);
 	if (StateHelper::CanDial(state)) {
 		btnDial->Enable(true);
-<<<<<<< HEAD
 		//Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnHangUp));
 		//Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnDial));
 		btnDial->SetLabel(_("&Dial"));
@@ -543,29 +334,15 @@ void MainFrame::OnAdjustControls(const StateID state)
 		btnDial->Enable(true);
 		//Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnDial));
 		//Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnHangUp));
-=======
-		Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnHangUp));
-		Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnDial));
-		btnDial->SetLabel(_("&Dial"));
-	} else if (StateHelper::CanHangUp(state)) {
-		btnDial->Enable(true);
-		Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnDial));
-		Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnHangUp));
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 		btnDial->SetLabel(_("&Hang Up"));
 	} else {
 		btnDial->Enable(false);
 	}
-<<<<<<< HEAD
 	//btnContacts->Enable(false);
-=======
-	btnContacts->Enable(false);
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 }
 
 void MainFrame::OnDial(wxCommandEvent & event)
 {
-<<<<<<< HEAD
 	Trace(_("Entering OnDial..."));
 	Action * a = new DialAction("sip:500@ekiga.net", turn);
 //	if (a == NULL) {
@@ -578,40 +355,24 @@ void MainFrame::OnDial(wxCommandEvent & event)
 //		Trace(desc.str().c_str());
 //	}
 	parent->DoAction(a);
-=======
-	Action * a = new DialAction("sip:500@ekiga.net", turn);
-	model->EnqueueAction(a);
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 }
 
 void MainFrame::OnHangUp(wxCommandEvent & event)
 {
 	Action * a = new DisconnectAction(turn);
-<<<<<<< HEAD
 	parent->DoAction(a);
-=======
-	model->EnqueueAction(a);
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 }
 
 void MainFrame::OnHold(wxCommandEvent & event)
 {
 	Action * a = new HoldAction(turn);
-<<<<<<< HEAD
 	parent->DoAction(a);
-=======
-	model->EnqueueAction(a);
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 }
 
 void MainFrame::OnAutoHold(wxCommandEvent & event)
 {
 	Action * a = new AutoHoldAction(turn);
-<<<<<<< HEAD
 	parent->DoAction(a);
-=======
-	model->EnqueueAction(a);
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 }
 
 void MainFrame::OnMuteAutoHold(wxCommandEvent & event)
@@ -623,35 +384,21 @@ void MainFrame::OnMuteAutoHold(wxCommandEvent & event)
 void MainFrame::OnRetrieve(wxCommandEvent & event)
 {
 	Action * a = new RetrieveAction(turn);
-<<<<<<< HEAD
 	parent->DoAction(a);
-=======
-	model->EnqueueAction(a);
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 }
 
 void MainFrame::OnQuit(wxCommandEvent & WXUNUSED(event))
 {
 	Action * a = new QuitAction(turn);
-<<<<<<< HEAD
 	parent->DoAction(a);
 	parent->OnWindowDone();
 	Destroy();
-=======
-	model->EnqueueAction(a);
-	parent->OnWindowDone();
-	Close(true);
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 }
 
 void MainFrame::OnClose(wxCloseEvent & event)
 {
 	Action * a = new QuitAction(turn);
-<<<<<<< HEAD
 	parent->DoAction(a);
-=======
-	model->EnqueueAction(a);
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 	parent->OnWindowDone();
 	Destroy();
 }
@@ -1023,10 +770,7 @@ bool StateHelper::IsRegistered(const StateID & state)
 
 //////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 /*
-=======
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 StateMonitor::StateMonitor(TeleKarmaNG * parent, Model * model)
 	: PThread(65536, NoAutoDeleteThread), model(model), parent(parent)
 { }
@@ -1046,7 +790,4 @@ void StateMonitor::Main()
 		}
 	}
 }
-<<<<<<< HEAD
 */
-=======
->>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
