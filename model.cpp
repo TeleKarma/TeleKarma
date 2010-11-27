@@ -181,5 +181,11 @@ bool Model::SetState(State * newState)
 	}
 	delete oldState;
 	sMutex.Signal();
+	listener->OnStateChange();
 	return result;
+}
+
+void Model::SetListener(ModelListener * l)
+{
+	listener = l;
 }

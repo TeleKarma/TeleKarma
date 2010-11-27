@@ -159,7 +159,6 @@ class TeleKarma : public Controller {
 		State * Quit(Action * a, State * s);
 		bool    IsConnectedState(State * s);
 		bool    IsHoldingState(State * s);
-		void StartRecording(State * currentState);
 
 };
 

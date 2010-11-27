@@ -30,6 +30,7 @@ enum StatusID
 	STATUS_AUTO_RETRIEVE,		// human detected, automatically exiting autohold
 	STATUS_NOTIFY_RECORD,
 	STATUS_RECORDING,
+	STATUS_DONE_RECORDING,
 	STATUS_TURN_MISMATCH,
 	STATUS_RETRIEVE				// user-initiated exit from hold/autohold/muteautohold
 };

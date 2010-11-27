@@ -14,6 +14,23 @@
 class Action;
 class State;
 
+
+/**
+ * <p>
+ * Interface for a class that can register itself with the Model for
+ * notification upon state changes.
+ * </p>
+ */
+class ModelListener
+{
+	public:
+		/**
+		 * Abstract method gets called when 
+		 * {@link Model::SetState(State *)} is called.
+		 */
+		virtual void OnStateChange() = 0;
+};
+
 /**
  * <p>
  * The TeleKarma NG Model superclass.
@@ -256,16 +273,27 @@ class Model
 		 */
 		virtual bool SetState(State * newState);
 
+		/**
+		 * <p>
+		 * Sets the sole listener class. The OnStateChange() method
+		 * of this class will be called each time the state is 
+		 * updated using SetState(State *).
+		 * </p>
+		 * @param l a listener class.
+		 */
+		virtual void SetListener(ModelListener * l);
+
 	private:
-		Action ** aqueue;	// array implementation of action queue
-		int aqhead, aqtail;	// pointers into the array of actions
-		int aqsize;			// size of the array implementing the aqueue
-		State ** squeue;	// array implementation of state queue
-		int sqhead, sqtail;	// pointers into the array of states
-		int sqsize;			// size of the array implementing the squeue
-		State * state;		// current state
-		PSemaphore aMutex;	// mutex for action queue
-		PSemaphore sMutex;	// mutex for state & state queue
+		Action ** aqueue;			// array implementation of action queue
+		int aqhead, aqtail;			// pointers into the array of actions
+		int aqsize;					// size of the array implementing the aqueue
+		State ** squeue;			// array implementation of state queue
+		int sqhead, sqtail;			// pointers into the array of states
+		int sqsize;					// size of the array implementing the squeue
+		State * state;				// current state
+		PSemaphore aMutex;			// mutex for action queue
+		PSemaphore sMutex;			// mutex for state & state queue
+		ModelListener * listener;	// listener function
 
 		/**
 		 * Explicitly disabled copy constructor.
