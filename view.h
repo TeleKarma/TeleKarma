@@ -40,8 +40,6 @@ class View : public PProcess, public ModelListener {
 		 */
 		virtual void OnStateChange() { }
 
-	protected:
-
 		/**
 		 * Returns the current State of the Model.
 		 * @return the current State of the Model.
@@ -64,6 +62,8 @@ class View : public PProcess, public ModelListener {
 		 * @param action an action for the controller to take.
 		 */
 		virtual void DoAction(Action * action);
+
+	protected:
 
 		/**
 		 * The model used by the view. Subclasses are responsible
