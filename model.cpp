@@ -22,7 +22,8 @@ Model::Model() :
 	sqsize(QUEUE_SIZE),
 	state(NULL),
 	aMutex(1,1),
-	sMutex(1,1)
+	sMutex(1,1),
+	listener(NULL)
 {
 	// Action queue allocation & initialization
 	aqueue = new Action *[aqsize];
@@ -181,7 +182,9 @@ bool Model::SetState(State * newState)
 	}
 	delete oldState;
 	sMutex.Signal();
-	listener->OnStateChange();
+	if (listener != NULL) {
+		listener->OnStateChange();
+	}
 	return result;
 }
 
