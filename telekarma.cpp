@@ -336,9 +336,7 @@ State * TeleKarma::Dial(Action * a, State * s)
 		// XXX enable the speaker - implementation to go
 		phone->Dial(da->dest);
 		// XXX push data to model
-		/*
-		model->SetDestination(da->dest);
-		*/
+		//model->SetDestination(da->dest);
 	}
 	return result;
 }
