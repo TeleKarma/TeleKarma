@@ -194,7 +194,7 @@ MainFrame::MainFrame(TeleKarmaNG * parent, const wxString & title, const wxPoint
 
 	// Dial button
 	btnDial = new wxButton(panel, NULL, wxT("&Dial"));
-	btnDial->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnDial));
+	Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnDial));
 	btnDial->SetFocus();
 
 	// Trace window
