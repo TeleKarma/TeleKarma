@@ -8,6 +8,11 @@
 #ifndef _GUI_H_
 #define _GUI_H_
 
+<<<<<<< HEAD
+=======
+#include "wxevt.h"
+
+>>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 #define PRODUCT_NAME "TeleKarma NG"
 #define VERSION "0.1.002"
 #define COPYRIGHT_HOLDER "Thomas Stellard, Michael Volk, Nikhil Tripathi and Peter Batzel"
@@ -21,16 +26,41 @@ class MainFrame;
 class PSemaphore;
 enum  StateID;
 class RegisterDialog;
+<<<<<<< HEAD
 class View;
 class ModelListener;
+=======
+
+>>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 
 //////////////////////////////////////////////////////////////////////////////
 
 class wxStateChangeEvent : public wxNotifyEvent
 {
 public:
+<<<<<<< HEAD
     wxStateChangeEvent( wxObject * origin );
     virtual wxEvent * Clone();
+=======
+	// Note that original concept - passing new state as part of the event - failed for reasons as yet unknown
+    //wxStateChangeEvent( wxObject * origin, const StateID & stateId, int turn, const StatusID & statusId, const wxString & message );
+    wxStateChangeEvent( wxObject * origin );
+
+    // accessors
+	//StateID GetStateID();
+	//StatusID GetStatusID();
+	//int GetTurn();
+	//const wxString & GetMessage();
+
+    // required for sending with wxPostEvent(), wxAddPendingEvent()
+    virtual wxEvent * Clone();
+
+private:
+    //StateID stateId;
+	//StatusID statusId;
+	//int turn;
+	//wxString msg;
+>>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 };
 
 DECLARE_EVENT_TYPE( wxEVT_STATE_CHANGE, -1 )
@@ -49,13 +79,18 @@ DEFINE_EVENT_TYPE( wxEVT_STATE_CHANGE )
 /**
  * The main process.
  */
+<<<<<<< HEAD
 class TeleKarmaNG: public wxApp, public View
+=======
+class TeleKarmaNG: public wxApp, public PProcess
+>>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 {
 	PCLASSINFO(TeleKarmaNG, PProcess);
 	public:
 		/** Destructor waits for child threads. */
 		~TeleKarmaNG();
 		/** A dummy method for the benefit of PProcess. */
+<<<<<<< HEAD
 		void Main() { }
 		/** Fulfills wxApp requirement. */
 		bool OnInit();
@@ -72,6 +107,35 @@ class TeleKarmaNG: public wxApp, public View
 
 //////////////////////////////////////////////////////////////////////////////
 
+=======
+		void Main();
+		/** Fulfills wxApp requirement. */
+		bool OnInit();
+		/** Interface for StateMonitor */
+		void OnStateChange(State * s);
+		/** Interface for MainFrame */
+		void OnWindowDone();
+		/** Exit handler. */
+		void Quit();
+		/** For use by main window in dequeuing states */
+		virtual State * DequeueState();
+	private:
+		Model * model;				// ptr to the model
+		Controller * controller;	// ptr to the controller
+		StateMonitor * monitor;		// ptr to state monitoring thread
+		MainFrame * win;			// ptr to main window
+		PSemaphore * tmutex;		// mutex protecting termination order
+		State ** squeue;			// array implementation of state queue
+		int sqhead, sqtail;			// pointers into the array of states
+		int sqsize;					// size of the array implementing the sQ
+		PSemaphore * smutex;		// mutex for state queue
+};
+
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+>>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 /**
  * The main window.
  */
@@ -79,7 +143,11 @@ class MainFrame: public wxFrame
 {
 	public:
 		/** Constructs the main window. */
+<<<<<<< HEAD
 		MainFrame(TeleKarmaNG * parent, const wxString & title, const wxPoint & pos, const wxSize & size);
+=======
+		MainFrame(TeleKarmaNG * parent, Model * model, const wxString & title, const wxPoint & pos, const wxSize & size);
+>>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 		/** Handles evExit (file->exit). */
 		void OnQuit(wxCommandEvent& event);
 		/** Handles system-prompted close events */
@@ -104,10 +172,18 @@ class MainFrame: public wxFrame
 		void OnAdjustControls(const StateID state);
 		/** Add a trace message to the console */
 		void Trace(const wxString & msg);
+<<<<<<< HEAD
+=======
+
+>>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 		// macro binds event handlers
 		DECLARE_EVENT_TABLE()
 	private:
 		TeleKarmaNG * parent;
+<<<<<<< HEAD
+=======
+		Model * model;
+>>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 		wxMenu * menuFile;
 		wxMenu * menuEdit;
 		wxMenu * menuCall;
@@ -133,8 +209,15 @@ class MainFrame: public wxFrame
 		StateID state;
 };
 
+<<<<<<< HEAD
 //////////////////////////////////////////////////////////////////////////////
 
+=======
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+>>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 /**
  * The registration window.
  */
@@ -159,9 +242,17 @@ class RegisterDialog : public wxDialog
 		int turn;
 };
 
+<<<<<<< HEAD
 //////////////////////////////////////////////////////////////////////////////
 
 // Events the GUI can generate
+=======
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+// Defines events that GUI can generate
+>>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 enum
 {
 	// Edit menu
@@ -191,6 +282,10 @@ END_EVENT_TABLE()
 
 //////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 class StateHelper
 {
 	public:
@@ -204,6 +299,30 @@ class StateHelper
 		static bool IsRegistered(const StateID & state);
 };
 
+<<<<<<< HEAD
 //////////////////////////////////////////////////////////////////////////////
 
+=======
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+/**
+ * State Monitor Thread. Monitors model state and drives
+ * events into the GUI when state changes.
+ */
+class StateMonitor : public PThread
+{
+	PCLASSINFO(StateMonitor, PThread);
+	public:
+		StateMonitor(TeleKarmaNG * parent, Model * model);
+		void Main();
+	private:
+		Model * model;
+		TeleKarmaNG * parent;
+};
+
+
+
+>>>>>>> bb8fbf66b06fd6c81c152271f16402663b1ee410
 #endif // _GUI_H_
