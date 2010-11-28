@@ -27,7 +27,7 @@ Model::Model() :
 	listener(NULL),
 	stunServer("Unspecified"),
 	stunType("Unknown"),
-	server("Unspecified"),
+	registrar("Unspecified"),
 	user("Unspecified"),
 	destination("None")
 {
@@ -59,7 +59,7 @@ Model::Model(int queueSize) :
 	iMutex(1,1),
 	stunServer("Unspecified"),
 	stunType("Unknown"),
-	server("Unspecified"),
+	registrar("Unspecified"),
 	user("Unspecified"),
 	destination("None")
 {
@@ -235,17 +235,17 @@ PString Model::GetStunType()
 	return res;
 }
 
-void Model::SetServer(const PString & val)
+void Model::SetRegistrar(const PString & val)
 {
 	iMutex.Wait();
-	server = val;
+	registrar = val;
 	iMutex.Signal();
 }
 
-PString Model::GetServer()
+PString Model::GetRegistrar()
 {
 	iMutex.Wait();
-	PString res(server);
+	PString res(registrar);
 	iMutex.Signal();
 	return res;
 }

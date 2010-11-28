@@ -318,7 +318,7 @@ class Model
 		 * Copies the provided value.
 		 * @param val SIP server address or hostname.
 		 */
-		virtual void SetServer(const PString & val);
+		virtual void SetRegistrar(const PString & val);
 
 		/**
 		 * Returns the stun server type description.
@@ -326,7 +326,7 @@ class Model
 		 * the caller. Caller is responsible for deleting
 		 * the copy produced.
 		 */
-		virtual PString GetServer();
+		virtual PString GetRegistrar();
 
 		/**
 		 * Sets the user name.
@@ -372,7 +372,7 @@ class Model
 		ModelListener * listener;	// listener function
 		PString stunServer;			// stun server address or hostname
 		PString stunType;			// stun type
-		PString server;				// SIP server
+		PString registrar;			// SIP registrar
 		PString user;				// username
 		PString destination;		// active destination
 
