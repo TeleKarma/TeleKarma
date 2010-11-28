@@ -346,12 +346,14 @@ class Model
 		/**
 		 * Sets the call destination.
 		 * Copies the provided value.
+		 * No expectation of update upon disconnection, but
+		 * set upon each dialing.
 		 * @param val call destination.
 		 */
 		virtual void SetDestination(const PString & val);
 
 		/**
-		 * Returns the call destination.
+		 * Returns the most recent call destination.
 		 * Makes a unique copy for the exclusive use of
 		 * the caller. Caller is responsible for deleting
 		 * the copy produced.
