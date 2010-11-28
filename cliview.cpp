@@ -342,6 +342,7 @@ bool CLIView::SendSMS(PString dest, PString message) {
 	SMS * sms = new SMS(dest, message);
 	sms->Send();
 	delete sms;
+	return false;	// added by MV - return value req'd by compiler
 }
 
 void CLIView::SendSMS(PCLI::Arguments & args, INT) {
