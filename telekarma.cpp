@@ -247,48 +247,49 @@ State * TeleKarma::Initialize(Action * a, State * s)
 {
 	if (s->id != STATE_UNINITIALIZED) return s;
 	bool flag = false;
-	State * result = SetState(new State(STATE_INITIALIZING, s->turn+1));
-	// verify existence and type of 'logs' folder
-	const char * strPath1 = "logs";
-	struct stat status;
-	stat(strPath1, &status);
-	if ((ACCESS(strPath1, 0) == -1) || !(status.st_mode & S_IFDIR)){
-		result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Please create a \"logs\" folder in your TeleKarma program folder."));
-		flag = true;
-	}
-	// verify existence and type of 'recordings' folder
-	const char * strPath2 = "recordings";
-	stat(strPath2, &status);
-	if ((ACCESS(strPath2, 0) == -1) || !(status.st_mode & S_IFDIR)){
-		result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Please create a \"recordings\" folder in your TeleKarma program folder."));
-		flag = true;
-	}
-	if (flag) {
+	InitializeAction * ia = dynamic_cast<InitializeAction *>(a);
+	State * result = NULL;
+	if (ia == NULL) {
+		result = SetState(new State(STATE_INITIALIZING, s->turn+1));
+		result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Programming error: action cast failed"));
 		result = SetState(new State(STATE_UNINITIALIZED, result->turn+1));
 	} else {
-		// create log file
-		PTime now;
-		PString logFName("logs/log");
-		logFName += now.AsString("_yyyy.MM.dd_hh.mm.ss");
-		logFName += ".txt";
-		PTrace::Initialise(5, logFName);
-		// initialize telephony (blocking call)
-		InitializeAction * ia = dynamic_cast<InitializeAction *>(a);
-		if (ia != NULL) {
+		// set stun server **before** entering INITIALIZING state
+		model->SetStunServer(ia->stunServer);
+		result = SetState(new State(STATE_INITIALIZING, s->turn+1));
+		// verify existence and type of 'logs' folder
+		const char * strPath1 = "logs";
+		struct stat status;
+		stat(strPath1, &status);
+		if ((ACCESS(strPath1, 0) == -1) || !(status.st_mode & S_IFDIR)){
+			result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Please create a \"logs\" folder in your TeleKarma program folder."));
+			flag = true;
+		}
+		// verify existence and type of 'recordings' folder
+		const char * strPath2 = "recordings";
+		stat(strPath2, &status);
+		if ((ACCESS(strPath2, 0) == -1) || !(status.st_mode & S_IFDIR)){
+			result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Please create a \"recordings\" folder in your TeleKarma program folder."));
+			flag = true;
+		}
+		if (flag) {
+			result = SetState(new State(STATE_UNINITIALIZED, result->turn+1));
+		} else {
+			// create log file
+			PTime now;
+			PString logFName("logs/log");
+			logFName += now.AsString("_yyyy.MM.dd_hh.mm.ss");
+			logFName += ".txt";
+			PTrace::Initialise(5, logFName);
+			// initialize telephony (blocking call)
 			phone->Initialise(ia->stunServer);
-			// XXX push stun server type to model
-			/*
 			PSTUNClient * stunClient = phone->GetSTUNClient();
 			if (stunClient != NULL) {
-				model->SetStunServerType(stunClient->GetNatTypeName());
+				model->SetStunType(stunClient->GetNatTypeName());
 			} else {
-				model->SetStunServerType("none");
+				model->SetStunType("none");
 			}
-			*/
 			result = SetState(new State(STATE_INITIALIZED, result->turn+1));
-		} else {
-			result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Programming error: action cast failed"));
-			result = SetState(new State(STATE_UNINITIALIZED, result->turn+1));
 		}
 	}
 	return result;
@@ -298,23 +299,23 @@ State * TeleKarma::Initialize(Action * a, State * s)
 State * TeleKarma::Register(Action * a, State * s)
 {
 	if (s->id != STATE_INITIALIZED) return s;
-	State * result = SetState(new State(STATE_REGISTERING, s->turn+1));
+	State * result = NULL;
 	RegisterAction * ra = dynamic_cast<RegisterAction *>(a);
 	if (ra == NULL) {
+		result = SetState(new State(STATE_REGISTERING, s->turn+1));
 		result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Programming error: action cast failed"));
 		result = SetState(new State(STATE_INITIALIZED, result->turn+1));
 	} else if (phone == NULL) {
+		result = SetState(new State(STATE_REGISTERING, s->turn+1));
 		result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Telephony service failed"));
 		result = SetState(new State(STATE_UNINITIALIZED, result->turn+1));
 	} else {
+		// set model data before changing state to REGISTERING
+		model->SetRegistrar(ra->registrar);
+		model->SetUserName(ra->user);
+		result = SetState(new State(STATE_REGISTERING, s->turn+1));
 		countdown = (REGISTRATION_TIMEOUT)/(SLEEP_DURATION);
 		phone->Register(ra->registrar, ra->user, ra->password);
-		// XXX push data to model
-		/*
-		model->SetRegistrar(ra->registrar);
-		model->SetUser(ra->user);
-		model->SetPassword(ra->password);
-		*/
 	}
 	return result;
 }
@@ -323,20 +324,23 @@ State * TeleKarma::Register(Action * a, State * s)
 State * TeleKarma::Dial(Action * a, State * s)
 {
 	if (s->id != STATE_REGISTERED) return s;
-	State * result = SetState(new State(STATE_DIALING, s->turn+1));
+	State * result = NULL;
 	DialAction * da = dynamic_cast<DialAction *>(a);
 	if (da == NULL) {
+		result = SetState(new State(STATE_DIALING, s->turn+1));
 		result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Programming error: action cast failed"));
 		result = SetState(new State(STATE_REGISTERED, result->turn+1));
 	} else if (phone == NULL) {
+		result = SetState(new State(STATE_DIALING, s->turn+1));
 		result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Telephony service failed"));
 		result = SetState(new State(STATE_UNINITIALIZED, result->turn+1));
 	} else {
+		// set model data before changing state to DIALING
+		model->SetDestination(da->dest);
+		result = SetState(new State(STATE_DIALING, s->turn+1));
 		phone->TurnOnMicrophone();
 		// XXX enable the speaker - implementation to go
 		phone->Dial(da->dest);
-		// XXX push data to model
-		//model->SetDestination(da->dest);
 	}
 	return result;
 }
