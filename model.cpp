@@ -23,7 +23,13 @@ Model::Model() :
 	state(NULL),
 	aMutex(1,1),
 	sMutex(1,1),
-	listener(NULL)
+	iMutex(1,1),
+	listener(NULL),
+	stunServer("Unspecified"),
+	stunType("Unknown"),
+	server("Unspecified"),
+	user("Unspecified"),
+	destination("None")
 {
 	// Action queue allocation & initialization
 	aqueue = new Action *[aqsize];
@@ -49,7 +55,13 @@ Model::Model(int queueSize) :
 	sqsize(queueSize),
 	state(NULL),
 	aMutex(1,1),
-	sMutex(1,1)
+	sMutex(1,1),
+	iMutex(1,1),
+	stunServer("Unspecified"),
+	stunType("Unknown"),
+	server("Unspecified"),
+	user("Unspecified"),
+	destination("None")
 {
 	// Action queue allocation & initialization
 	aqueue = new Action *[aqsize];
@@ -191,4 +203,79 @@ bool Model::SetState(State * newState)
 void Model::SetListener(ModelListener * l)
 {
 	listener = l;
+}
+
+void Model::SetStunServer(const PString & val)
+{
+	iMutex.Wait();
+	stunServer = val;
+	iMutex.Signal();
+}
+
+PString Model::GetStunServer()
+{
+	iMutex.Wait();
+	PString res(stunServer);
+	iMutex.Signal();
+	return res;
+}
+
+void Model::SetStunType(const PString & val)
+{
+	iMutex.Wait();
+	stunType = val;
+	iMutex.Signal();
+}
+
+PString Model::GetStunType()
+{
+	iMutex.Wait();
+	PString res(stunType);
+	iMutex.Signal();
+	return res;
+}
+
+void Model::SetServer(const PString & val)
+{
+	iMutex.Wait();
+	server = val;
+	iMutex.Signal();
+}
+
+PString Model::GetServer()
+{
+	iMutex.Wait();
+	PString res(server);
+	iMutex.Signal();
+	return res;
+}
+
+void Model::SetUserName(const PString & val)
+{
+	iMutex.Wait();
+	user = val;
+	iMutex.Signal();
+}
+
+PString Model::GetUserName()
+{
+	iMutex.Wait();
+	PString res(user);
+	iMutex.Signal();
+	return res;
+}
+
+void Model::SetDestination(const PString & val)
+{
+	iMutex.Wait();
+	destination = val;
+	iMutex.Signal();
+}
+
+PString Model::GetDestination()
+{
+	iMutex.Wait();
+	PString res(destination);
+	iMutex.Signal();
+	return res;
 }

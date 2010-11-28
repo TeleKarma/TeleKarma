@@ -283,6 +283,81 @@ class Model
 		 */
 		virtual void SetListener(ModelListener * l);
 
+		/**
+		 * Sets the stun server address or hostname.
+		 * Copies the provided value.
+		 * @param val stun server address or hostname.
+		 */
+		virtual void SetStunServer(const PString & val);
+
+		/**
+		 * Returns the stun server address or hostname.
+		 * Makes a unique copy for the exclusive use of
+		 * the caller. Caller is responsible for deleting
+		 * the copy produced.
+		 */
+		virtual PString GetStunServer();
+
+		/**
+		 * Sets the stun server type description.
+		 * Copies the provided value.
+		 * @param val stun server type description.
+		 */
+		virtual void SetStunType(const PString & val);
+
+		/**
+		 * Returns the stun server type description.
+		 * Makes a unique copy for the exclusive use of
+		 * the caller. Caller is responsible for deleting
+		 * the copy produced.
+		 */
+		virtual PString GetStunType();
+
+		/**
+		 * Sets the SIP server address or hostname.
+		 * Copies the provided value.
+		 * @param val SIP server address or hostname.
+		 */
+		virtual void SetServer(const PString & val);
+
+		/**
+		 * Returns the stun server type description.
+		 * Makes a unique copy for the exclusive use of
+		 * the caller. Caller is responsible for deleting
+		 * the copy produced.
+		 */
+		virtual PString GetServer();
+
+		/**
+		 * Sets the user name.
+		 * Copies the provided value.
+		 * @param val user name.
+		 */
+		virtual void SetUserName(const PString & val);
+
+		/**
+		 * Returns the user name.
+		 * Makes a unique copy for the exclusive use of
+		 * the caller. Caller is responsible for deleting
+		 * the copy produced.
+		 */
+		virtual PString GetUserName();
+
+		/**
+		 * Sets the call destination.
+		 * Copies the provided value.
+		 * @param val call destination.
+		 */
+		virtual void SetDestination(const PString & val);
+
+		/**
+		 * Returns the call destination.
+		 * Makes a unique copy for the exclusive use of
+		 * the caller. Caller is responsible for deleting
+		 * the copy produced.
+		 */
+		virtual PString GetDestination();
+
 	private:
 		Action ** aqueue;			// array implementation of action queue
 		int aqhead, aqtail;			// pointers into the array of actions
@@ -293,7 +368,13 @@ class Model
 		State * state;				// current state
 		PSemaphore aMutex;			// mutex for action queue
 		PSemaphore sMutex;			// mutex for state & state queue
+		PSemaphore iMutex;			// mutex for misc info setter/getter methods
 		ModelListener * listener;	// listener function
+		PString stunServer;			// stun server address or hostname
+		PString stunType;			// stun type
+		PString server;				// SIP server
+		PString user;				// username
+		PString destination;		// active destination
 
 		/**
 		 * Explicitly disabled copy constructor.
