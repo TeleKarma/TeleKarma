@@ -19,7 +19,10 @@ void CLIContext::OnCompletedLine()
 
 bool CLIContext::ProcessInput(int ch)
 {
-	if ((ch == '\n' || ch == '\r') && m_commandLine.IsEmpty()) {
+	if (ch == '\r') {
+		return true;
+	}
+	if (ch == '\n' && m_commandLine.IsEmpty()) {
 		OnCompletedLine();
 		return WritePrompt();
 	}
