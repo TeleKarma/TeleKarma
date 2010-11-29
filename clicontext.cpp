@@ -28,3 +28,8 @@ bool CLIContext::ProcessInput(int ch)
 	}
 	return Context::ProcessInput(ch);
 }
+
+bool CLIContext::SetLocalEcho(bool localEcho)
+{
+	return readChannel->SetLocalEcho(localEcho);
+}

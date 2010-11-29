@@ -14,6 +14,7 @@ class CLIContext : public PCLI::Context
 	public:
 		void OnCompletedLine();
 		bool ProcessInput(int ch);
+		bool SetLocalEcho(bool localEcho);
 };
 
 #endif // _CLICONTEXT_H_

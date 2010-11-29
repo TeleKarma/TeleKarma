@@ -121,6 +121,7 @@ class CLIView : public PCLIStandard,  public View {
 
 		State * state;
 		PSemaphore stateMutex;
+		CLIContext * currentContext;
 
 	friend class InputHandler;
 	friend class STUNInputHandler;

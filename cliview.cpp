@@ -87,6 +87,7 @@ CLIView::PasswordInputHandler::PasswordInputHandler(CLIView & cli, PString defau
 
 void CLIView::PasswordInputHandler::WaitForInput()
 {
+	cli.currentContext->SetLocalEcho(false);
 	cli.SetPrompt("Please enter your SIP password: ");
 }
 
@@ -99,6 +100,7 @@ void CLIView::PasswordInputHandler::ReceiveInput(PString input)
 	cli.Register(cli.registrarInputHandler->inputValue,
 		     cli.userInputHandler->inputValue,
 		     this->inputValue);
+	cli.currentContext->SetLocalEcho(true);
 	if (cli.WaitForState(STATE_REGISTERED, 15000)) {
 		cli.PrintMessage("done.\n\n");
 		cli.SetInputHandler(cli.defaultInputHandler);
@@ -351,5 +353,6 @@ void CLIView::SendSMS(PCLI::Arguments & args, INT) {
 
 PCLI::Context * CLIView::CreateContext()
 {
-	return new CLIContext(*this);
+	currentContext = new CLIContext(*this);
+	return currentContext;
 }
