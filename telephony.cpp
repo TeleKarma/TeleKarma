@@ -122,23 +122,15 @@ PBoolean TelephonyIfc::Unregister() {
 }
 
 void TelephonyIfc::StartRecording(const PString & fname) {
-	if (recordToken.IsEmpty()) {
-		PString VXML = "ivr:<vxml><form>"
-		"<record name=\"msg\" dtmfterm=\"false\" dest=\"" +
-					PURL(PFilePath(fname)).AsString() + "\"/>"
-		"</form></vxml>";
-
-		SetUpCall("mcu:*;Listen-Only=1", VXML, recordToken);
-	}
+	OpalManager::StartRecording(callToken, PFilePath(fname));
 }
 
 void TelephonyIfc::StopRecording() {
-	ClearCall(recordToken);
-	recordToken.MakeEmpty();
+	OpalManager::StopRecording(callToken);
 }
 
 PBoolean TelephonyIfc::IsRecording() {
-	return IsCallEstablished(recordToken);
+	return OpalManager::IsRecording(callToken);
 }
 
 void TelephonyIfc::SendTone(const char tone) {
