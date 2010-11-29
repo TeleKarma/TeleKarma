@@ -329,8 +329,20 @@ PBoolean TelephonyIfc::PlayWAV(const PString & path, int repeat, int delay)
 		cout << "Only one wav file can be played at a time.\n";
 		return PFalse;
 	}
+	if (repeat == 0) {
+		return PlayWAVOnce(path);
+	}
 	PStringStream ivrString;
 	ivrString << "ivr:repeat=" << repeat << ";delay=" << delay << ";" << PURL(PFilePath(path));
+	SetUpCall("mcu:*", ivrString, wavToken);
+	return PTrue;
+}
+
+PBoolean TelephonyIfc::PlayWAVOnce(const PString &path)
+{
+	PString ivrString = "ivr:<vxml><form>"
+		"<audio src=\"" + PURL(PFilePath(path)).AsString() + "\"/>"
+		"</form></vxml>";
 	SetUpCall("mcu:*", ivrString, wavToken);
 	return PTrue;
 }

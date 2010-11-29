@@ -179,6 +179,12 @@ class TelephonyIfc : public OpalManager {
 		 * repeated playings of the file
 		 */
 		PBoolean PlayWAV(const PString & path, int repeat=0, int delay=0);
+		
+		/**
+		 * IsPlayingWAV() will work correctly if the WAV is played with
+		 * this function.
+		 */
+		PBoolean PlayWAVOnce(const PString &path);
 
 		/**
 		 * Stop the WAV file that is currently playing

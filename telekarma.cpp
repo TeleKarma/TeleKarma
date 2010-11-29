@@ -377,7 +377,7 @@ State * TeleKarma::Hold(Action * a, State * s)
 		phone->TurnOffMicrophone();
 		// play notification of recording IF not already recording
 		if (!phone->IsRecording()) {
-			StartRecording(result);
+			result = StartRecording(result);
 		}
 		result = SetState(new State(result->id, result->turn, STATUS_RECORDING));
 		phone->PlayWAV(HOLD_WAV, IVR_REPEATS, PAUSE_TIME);
@@ -401,7 +401,7 @@ State * TeleKarma::AutoHold(Action * a, State * s)
 			phone->TurnOffMicrophone();
 			// play notification of recording IF not already recording
 			if (!phone->IsRecording()) {
-				StartRecording(result);
+				result = StartRecording(result);
 			}
 			result = SetState(new State(result->id, result->turn, STATUS_RECORDING));
 			phone->PlayWAV(AUTO_HOLD_WAV, IVR_REPEATS, PAUSE_TIME);
@@ -429,7 +429,7 @@ State * TeleKarma::MuteAutoHold(Action * a, State * s)
 			phone->TurnOffMicrophone();
 			// play notification of recording IF not already recording
 			if (!phone->IsRecording()) {
-				StartRecording(result);
+				result = StartRecording(result);
 			}
 			result = SetState(new State(STATE_MUTEAUTOHOLD, result->turn, STATUS_RECORDING));
 			phone->PlayWAV(AUTO_HOLD_WAV, IVR_REPEATS, PAUSE_TIME);
@@ -537,12 +537,13 @@ bool TeleKarma::IsHoldingState(State * s)
 	}
 }
 
-void TeleKarma::StartRecording(State * currentState)
+State * TeleKarma::StartRecording(State * currentState)
 {
+	State * result = NULL;	
 	PString assuranceName = "assurance.wav";
 	phone->PlayWAV(assuranceName, 0, 0);
 	/* XXX Do we care about what the return value. */
-	SetState(new State(currentState->id,
+	result = SetState(new State(currentState->id,
 		currentState->turn, STATUS_NOTIFY_RECORD));
 	while(phone->IsPlayingWav());
 	PTime now;
@@ -550,6 +551,7 @@ void TeleKarma::StartRecording(State * currentState)
 	recFName += now.AsString("_yyyy.MM.dd_hh.mm.ss");
 	recFName += ".wav";
 	phone->StartRecording(recFName);
+	return result;
 }
 
 
