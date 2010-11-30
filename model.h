@@ -8,12 +8,14 @@
 #ifndef _MODEL_H_
 #define _MODEL_H_
 
+
 /** The default capacity of the action and error message queues. */
 #define QUEUE_SIZE 50
 
 class Action;
 class State;
-
+class AccountList;
+class PString;
 
 /**
  * <p>
@@ -359,6 +361,20 @@ class Model
 		 * the copy produced.
 		 */
 		virtual PString GetDestination();
+
+		/**
+		 * Returns a pointer to an AccountList object attached
+		 * to the given file. Note that no concurrency support
+		 * is provided - this method assumes one caller and one
+		 * call. Caller is responsible for deleting the returned
+		 * object.
+		 * @param fname path to and name of file containing accounts.
+		 * @return an AccountList with at least one Account. If the
+		 *         file does not exist or cannot be opened, the
+		 *         AccountList will contain a single Account where
+		 *         all values are the empty string.
+		 */
+		virtual AccountList * GetAccountList(const PString & fname);
 
 	private:
 		Action ** aqueue;			// array implementation of action queue

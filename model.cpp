@@ -9,6 +9,7 @@
 #include "model.h"
 #include "state.h"
 #include "action.h"
+#include "account.h"
 
 // Default constructor
 Model::Model() :
@@ -278,4 +279,9 @@ PString Model::GetDestination()
 	PString res(destination);
 	iMutex.Signal();
 	return res;
+}
+
+AccountList * Model::GetAccountList(const PString & fname)
+{
+	return new AccountList(fname);
 }
