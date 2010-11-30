@@ -200,7 +200,7 @@ State * TeleKarma::DoAction(Action * a, State * s)
 {
 	if (a == NULL) return s;
 	State * result = s;
-	// first process "global" (turn-independent) actions
+	// process "global" (turn-independent) actions independant of turn #
 	switch (a->id) {
 		case ACTION_QUIT:
 			result = Quit(a, s);
@@ -209,49 +209,44 @@ State * TeleKarma::DoAction(Action * a, State * s)
 			result = PlaySound(a, s);
 			break;
 		default:
+			// process turn-independent actions if applicable
+			if (a->turn == s->turn) {
+				switch (a->id) {
+					case ACTION_INITIALIZE:
+						result = Initialize(a, s);
+						break;
+					case ACTION_REGISTER:
+						result = Register(a, s);
+						break;
+					case ACTION_DIAL:
+						result = Dial(a, s);
+						break;
+					case ACTION_HOLD:
+						result = Hold(a, s);
+						break;
+					case ACTION_AUTOHOLD:
+						result = AutoHold(a, s);
+						break;
+					case ACTION_MUTE:
+						result = MuteAutoHold(a, s);
+						break;
+					case ACTION_RETRIEVE:
+						result = Retrieve(a, s);
+						break;
+					case ACTION_DISCONNECT:
+						result = Disconnect(a, s);
+						break;
+					default:
+						// simply ignore unknown actions
+						// (and global actions)
+						break;
+				}
+			} else {
+				if (s != NULL) {
+					result = SetState(new State(s->id, s->turn, STATUS_TURN_MISMATCH));
+				}
+			}
 			break;
-	}
-	// now process turn-independent actions
-	if (a->id == ACTION_QUIT || a->turn == s->turn) {
-		switch (a->id) {
-			case ACTION_INITIALIZE:
-				result = Initialize(a, s);
-				break;
-			case ACTION_REGISTER:
-				result = Register(a, s);
-				break;
-			case ACTION_DIAL:
-				result = Dial(a, s);
-				break;
-			case ACTION_HOLD:
-				result = Hold(a, s);
-				break;
-			case ACTION_AUTOHOLD:
-				result = AutoHold(a, s);
-				break;
-			case ACTION_MUTE:
-				result = MuteAutoHold(a, s);
-				break;
-			case ACTION_RETRIEVE:
-				result = Retrieve(a, s);
-				break;
-			case ACTION_DISCONNECT:
-				result = Disconnect(a, s);
-				break;
-			case ACTION_QUIT:
-				// turn independent
-				break;
-			case ACTION_PLAY_SOUND:
-				// turn independent
-				break;
-			default:
-				// simply ignore unknown actions
-				break;
-		}
-	} else {
-		if (s != NULL) {
-			result = SetState(new State(s->id, s->turn, STATUS_TURN_MISMATCH));
-		}
 	}
 	delete a;
 	return result;
