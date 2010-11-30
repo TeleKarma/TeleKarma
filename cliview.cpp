@@ -1,5 +1,7 @@
 #include "cliview.h"
 
+#include <ptlib/sound.h>
+
 #include "action.h"
 #include "clicontext.h"
 #include "conf.h"
@@ -212,6 +214,9 @@ void CLIView::Main() {
 		State * state = model->DequeueState();
 		if(state) {
 			SetState(state);
+		if (state->status == STATUS_AUTO_RETRIEVE || state->status == STATUS_RETRIEVE) {
+			PlaySound(HUMAN_DETECTED_WAV);
+		}
 		}
 		PThread::Sleep(100);
 	}
@@ -313,6 +318,11 @@ void CLIView::Register(const PString & registrar, const PString & user, const PS
 
 void CLIView::Dial(PString & dest) {
 	DoAction(new DialAction(dest, GetTurn()));
+}
+
+void CLIView::PlaySound(const PString & fileName)
+{
+	DoAction(new PlaySoundAction(fileName, GetTurn()));
 }
 
 void CLIView::Dial(PCLI::Arguments & args, INT)

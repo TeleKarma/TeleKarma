@@ -170,6 +170,7 @@ class TelephonyIfc : public OpalManager {
 		 */
 		void ClearTones();
 
+		PBoolean PlayWAVSpeaker(const PString & path);
 		/**
 		 * Transmit a WAV file to the remote party.
 		 * @note You can only play one WAV file at a time.
@@ -178,14 +179,7 @@ class TelephonyIfc : public OpalManager {
 		 * @param delay The time in milliseconds to wait between
 		 * repeated playings of the file
 		 */
-		PBoolean PlayWAV(const PString & path, int repeat=0, int delay=0);
-		
-		/**
-		 * IsPlayingWAV() will work correctly if the WAV is played with
-		 * this function.
-		 */
-		PBoolean PlayWAVOnce(const PString &path);
-
+		PBoolean PlayWAVCall(const PString & path, int repeat = 0, int delay = 0);
 		/**
 		 * Stop the WAV file that is currently playing
 		 */
@@ -232,6 +226,7 @@ class TelephonyIfc : public OpalManager {
 		/** Call token for the connection from telekarma to the
 		 * recording device */
 		PString recordToken;
+		PString speakerToken;
 		PString aor;
 		/** PTrue if telekarma is dialing a remote party otherwise
 		 * PFalse*/
@@ -250,6 +245,11 @@ class TelephonyIfc : public OpalManager {
 
 		void OnAudioFileSent();
 
+		/**
+		 * IsPlayingWAV() will work correctly if the WAV is played with
+		 * this function.
+		 */
+		PString CreatePlayOnceIVR(const PString & path);
 };
 
 

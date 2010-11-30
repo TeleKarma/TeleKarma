@@ -93,6 +93,7 @@ class CLIView : public PCLIStandard,  public View {
 		void Initialize(PString & stunServer);
 		void Register(const PString & registrar, const PString & user, const PString & password);
 		void Dial(PString & dest);
+		void PlaySound(const PString & fileName);
 		bool SendSMS(PString dest, PString message);
 
 		void SetState(State * newState);
