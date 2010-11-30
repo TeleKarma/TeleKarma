@@ -6,20 +6,25 @@
  */
 
 #include <ptlib.h>
+#include <ptlib\textfile.h>
+#include <ptlib\filepath.h>
+#include <ptlib\channel.h>
 #include "account.h"
-
+//#include <stdio.h>
+//#include <iostream>
+//using namespace std;
 /**
  * Construct an Account with a default STUN server.
  */
-Account::Account(const PString & registrar, const PString & user)
-	: registrar(registrar), user(user), stun(DEFAULT_STUN_SERVER), index(-1)
+Account::Account(const PString & name, const PString & registrar, const PString & user)
+	: name(name), registrar(registrar), user(user), stun(DEFAULT_STUN_SERVER), index(-1)
 { }
 
 /**
  * Construct an Account with user-specified STUN server.
  */
-Account::Account(const PString & registrar, const PString & user, const PString & stun)
-	: registrar(registrar), user(user), stun(stun), index(-1)
+Account::Account(const PString & name, const PString & registrar, const PString & user, const PString & stun)
+	: name(name), registrar(registrar), user(user), stun(stun), index(-1)
 { }
 
 /**
@@ -52,6 +57,14 @@ const PString & Account::GetUser() const
 }
 
 /**
+ * Returns the account name.
+ */
+const PString &Account::GetName() const
+{
+	return name;
+}
+
+/**
  * Sets the STUN server.
  */
 void Account::SetStunServer(const PString & value)
@@ -73,6 +86,14 @@ void Account::SetRegistrar(const PString & value)
 void Account::SetUser(const PString & value)
 {
 	user = value;
+}
+
+/**
+ * Sets the account name.
+ */
+void Account::setName(const PString & value)
+{
+	name = value;
 }
 
 /**
@@ -100,8 +121,66 @@ int Account::GetIndex() const
 AccountList::AccountList(const PString & filename)
 	: fname(filename), list(NULL), size(0)
 {
-	// XXX load from file
-	// set index in each account
+	int totalaccounts = 0;
+	int accountnum = 0;
+	PString name, registrar, username = "";
+	PString stun = DEFAULT_STUN_SERVER;
+	PString line = "";
+	file = new PTextFile(filename, PFile::ReadOnly);
+
+	if(file->IsOpen()) {
+		while(file->ReadLine(line)){ //count # of accounts in file
+			if(line[0] == '>') {
+				totalaccounts++;
+			}
+		}
+		if(totalaccounts == 0) {
+			totalaccounts = 1;
+		}
+
+		list = new Account *[totalaccounts]; //allocate for num of account		
+		file->SetPosition(0);
+		while(file->ReadLine(line)){
+			if(line[0] == '>') { //found an account
+				line.Delete(0,1);
+				if(name != "") {
+					list[accountnum++] = new Account(name, registrar, username, stun);
+					list[accountnum-1]->SetIndex(accountnum-1);
+					stun = DEFAULT_STUN_SERVER;
+				}
+				name = line;
+			}
+			else { //not an account line
+				//split on ':'
+				PStringArray values = line.Tokenise(":");
+				if(values[0] == "stun") {
+					stun = values[1];
+				}
+				else if(values[0] == "registrar") { 
+					registrar = values[1];
+				}
+				else if(values[0] == "username") {
+					username = values[1];
+				}				
+			}
+		}
+		list[accountnum] = new Account(name, registrar, username, stun);
+		list[accountnum]->SetIndex(accountnum);
+	}
+	else { //if the file wasn't found or couldn't be opened
+		//printf("file couldn't open");
+		name = ""; //these may be redundant
+		stun = DEFAULT_STUN_SERVER;
+		registrar = "";
+		username = "";
+		totalaccounts = 1;
+
+		list = new Account *[totalaccounts]; //allocate for num of account
+		list[0] = new Account(name, registrar, username, stun);
+		list[0]->SetIndex(0);
+	}
+	size = totalaccounts;
+	file ->Close();
 }
 
 /**
@@ -172,21 +251,33 @@ void AccountList::AddAccount(Account * account)
  */
 void AccountList::RemoveAccount(const Account * account)
 {
+	if (account == NULL) return;
 	int idx = account->GetIndex();
+// begin debug
+//	for (int i = 0; i < size; ++i) {
+//		cout << "'" << list[i]->GetStunServer() << "' " << list[i]->GetIndex() << endl << flush;
+//	}
+	if (size == 0) return;
 	if (idx < 0 || idx >= size) return;
 	Account ** n = new Account*[size-1];
 	for (int i = 0; i < size; ++i) {
 		if (i < idx) {
 			n[i] = list[i];
 		} else if (i > idx) {
-			n[i] = list[i+1];
-			n[i]->SetIndex(i);
+			n[i-1] = list[i];
+			if (n[i] != NULL) {
+				n[i]->SetIndex(i);
+			}
 		}
 	}
 	--size;
 	delete account;
 	delete[] list;
 	list = n;
+	// begin debug
+//	for (int i = 0; i < size; ++i) {
+//		cout << "'" << list[i]->GetStunServer() << "' " << list[i]->GetIndex() << endl << flush;
+//	}
 }
 
 /**
@@ -221,6 +312,7 @@ int AccountList::GetCount() const
  */
 bool AccountList::Save() const
 {
+	//printf("in save\n");
 	return SaveTo(fname);
 }
 
@@ -233,6 +325,20 @@ bool AccountList::Save() const
  */
 bool AccountList::SaveTo(const PString & filename) const
 {
-	// XXX implementation to-go
+	//printf("in SaveTo()\n");
+	file->Open(filename, PFile::WriteOnly);
+	if(file->IsOpen()) { //if the file already exists
+		//printf("File opened %i", size);
+		for(int i=0;i<size;i++) {
+			//printf("Writing first line...");
+			file->WriteLine(">"+list[i]->GetName());
+			//printf("Writing second line...");
+			file->WriteLine("stun:"+list[i]->GetStunServer());
+			file->WriteLine("registrar:"+list[i]->GetRegistrar());
+			file->WriteLine("username:"+list[i]->GetUser());
+			//printf("Finished writing all \n");
+		}
+	}
+
 	return false;
 }

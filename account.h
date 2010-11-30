@@ -23,12 +23,12 @@ class Account
 		/**
 		 * Construct an Account with a default STUN server.
 		 */
-		Account(const PString & registrar, const PString & user);
+		Account(const PString & name, const PString & registrar, const PString & user);
 
 		/**
 		 * Construct an Account with user-specified STUN server.
 		 */
-		Account(const PString & registrar, const PString & user, const PString & stun);
+		Account(const PString & name, const PString & registrar, const PString & user, const PString & stun);
 
 		/**
 		 * Destructor. Does nothing.
@@ -51,6 +51,11 @@ class Account
 		const PString & GetUser() const;
 
 		/**
+		 * Returns the account name.
+		 */
+		const PString & GetName() const;
+
+		/**
 		 * Sets the STUN server.
 		 */
 		void SetStunServer(const PString & value);
@@ -65,8 +70,14 @@ class Account
 		 */
 		void SetUser(const PString & value);
 
+		/**
+		 * Sets the account name.
+		 */
+		void setName(const PString & value);
+
 	private:
 
+		PString name;
 		PString registrar;
 		PString user;
 		PString stun;
@@ -175,6 +186,7 @@ class AccountList
 		bool SaveTo(const PString & filename) const;
 
 	private:
+		PTextFile * file;
 		PString fname;
 		Account ** list;
 		int size;
