@@ -218,6 +218,8 @@ void CLIView::Main() {
 	smsMessageInputHandler = new SMSMessageInputHandler(*this);
 
 	SetInputHandler(stunInputHandler);
+	SetExitCommand(PString::Empty());
+
 	Start();
 
 	while(true) {
@@ -232,9 +234,16 @@ void CLIView::Main() {
 			if (statusID == STATUS_UNSPECIFIED) {
 				UpdateHelp(stateID);
 			}
+			if (stateID == STATE_TERMINATING) {
+				PrintMessage("\nCleaning up... (this may take a few moments)\n");
+			}
+			if (stateID == STATE_TERMINATED) {
+				break;
+			}
 		}
 		PThread::Sleep(100);
 	}
+	currentContext->Stop();
 }
 
 void CLIView::AddCommand(Command command)
@@ -427,6 +436,7 @@ void CLIView::Disconnect(PCLI::Arguments & args, INT) {
 
 void CLIView::Quit(PCLI::Arguments & args, INT) {
 	DoAction(new QuitAction(GetTurn()));
+	while(true);
 }
 
 bool CLIView::SendSMS(PString dest, PString message) {
