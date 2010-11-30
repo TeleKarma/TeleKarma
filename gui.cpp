@@ -130,7 +130,6 @@ MainFrame::MainFrame(TeleKarmaNG * parent, Model * model, const wxString & title
 	  menuFile(NULL),
 	  menuEdit(NULL),
 	  menuCall(NULL),
-	  menuSMS(NULL),
 	  menuHelp(NULL),
 	  menuBar(NULL),
 	  btnContacts(NULL),
@@ -167,10 +166,6 @@ MainFrame::MainFrame(TeleKarmaNG * parent, Model * model, const wxString & title
     menuCall->AppendSeparator();
     menuCall->Append( evHangUp, _("&Hang Up") );
 
-	// define the sms menu...
-	menuSMS = new wxMenu;
-    menuSMS->Append( evSendSMS, _("&Send Text...") );
-
 	// define the help menu...
 	menuHelp = new wxMenu;
     menuHelp->Append( wxID_ABOUT, _("&About...") );
@@ -179,7 +174,6 @@ MainFrame::MainFrame(TeleKarmaNG * parent, Model * model, const wxString & title
     menuBar->Append( menuFile, _("&File") );
     menuBar->Append( menuEdit, _("&Edit") );
     menuBar->Append( menuCall, _("&Call") );
-    menuBar->Append( menuSMS,  _("&SMS" ) );
     menuBar->Append( menuHelp, _("&Help") );
 
     SetMenuBar( menuBar );
@@ -194,7 +188,6 @@ MainFrame::MainFrame(TeleKarmaNG * parent, Model * model, const wxString & title
 	callAutoHold = menuBar->FindMenuItem(_("Call"), _("AutoHold"));
 	callRetrieve = menuBar->FindMenuItem(_("Call"), _("Retrieve"));
 	callHangUp = menuBar->FindMenuItem(_("Call"), _("Hang Up"));
-	smsSendText = menuBar->FindMenuItem(_("SMS"), _("Send Text..."));
 	helpAbout = menuBar->FindMenuItem(_("Help"), _("About"));
 
 	wxPanel * panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
@@ -265,8 +258,6 @@ void MainFrame::OnAdjustControls(const StateID state)
 	menuBar->Enable(callAutoHold, StateHelper::CanHold(state));
 	menuBar->Enable(callRetrieve, StateHelper::CanRetrieve(state));
 	menuBar->Enable(callHangUp, StateHelper::CanHangUp(state));
-	menuBar->Enable(smsSendText, false);
-	//menuBar->Enable(smsSendText, StateHelper::IsRegistered(state));
 	menuBar->Enable(helpAbout, true);
 	if (StateHelper::CanDial(state)) {
 		btnDial->Enable(true);

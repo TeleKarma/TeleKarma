@@ -131,7 +131,6 @@ class MainFrame: public wxFrame
 		wxMenu * menuFile;
 		wxMenu * menuEdit;
 		wxMenu * menuCall;
-		wxMenu * menuSMS;
 		wxMenu * menuHelp;
 		wxMenuBar * menuBar;
 		wxButton * btnContacts;
@@ -148,7 +147,6 @@ class MainFrame: public wxFrame
 		int callAutoHold;
 		int callRetrieve;
 		int callHangUp;
-		int smsSendText;
 		int helpAbout;
 		int turn;
 		StateID state;
@@ -200,8 +198,6 @@ enum
 	evHold = 4,
 	evAutoHold = 5,
 	evRetrieve = 6,
-	// SMS menu
-	evSendSMS = 7
 };
 
 /** Unique Widget IDs */
