@@ -9,6 +9,7 @@
  */
 
 #include <ptlib.h>
+#include <ptlib/sound.h>
 #include <sys/types.h>  		// for struct stat
 #include <sys/stat.h>   		// for struct stat
 #include "action.h"
@@ -395,7 +396,7 @@ State * TeleKarma::Hold(Action * a, State * s)
 			result = StartRecording(result);
 		}
 		result = SetState(new State(result->id, result->turn, STATUS_RECORDING));
-		phone->PlayWAV(HOLD_WAV, IVR_REPEATS, PAUSE_TIME);
+		phone->PlayWAVCall(HOLD_WAV, IVR_REPEATS, PAUSE_TIME);
 	}
 	return result;
 }
@@ -419,7 +420,7 @@ State * TeleKarma::AutoHold(Action * a, State * s)
 				result = StartRecording(result);
 			}
 			result = SetState(new State(result->id, result->turn, STATUS_RECORDING));
-			phone->PlayWAV(AUTO_HOLD_WAV, IVR_REPEATS, PAUSE_TIME);
+			phone->PlayWAVCall(AUTO_HOLD_WAV, IVR_REPEATS, PAUSE_TIME);
 		}
 	} else if (s->id == STATE_MUTEAUTOHOLD) {
 		result = SetState(new State(STATE_AUTOHOLD, result->turn+1));
@@ -447,7 +448,7 @@ State * TeleKarma::MuteAutoHold(Action * a, State * s)
 				result = StartRecording(result);
 			}
 			result = SetState(new State(STATE_MUTEAUTOHOLD, result->turn, STATUS_RECORDING));
-			phone->PlayWAV(AUTO_HOLD_WAV, IVR_REPEATS, PAUSE_TIME);
+			phone->PlayWAVCall(AUTO_HOLD_WAV, IVR_REPEATS, PAUSE_TIME);
 		}
 	} else if (s->id == STATE_AUTOHOLD) {
 		result = SetState(new State(STATE_MUTEAUTOHOLD, result->turn+1));
@@ -504,8 +505,18 @@ State * TeleKarma::PlaySound(Action * a, State * s)
 	if (psa == NULL) {
 		result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Unable to play WAV file"));
 	} else {
-		// XXX implementation to go
-		//result = SetState(new State(result->id, result->turn, STATUS_UNSPECIFIED, "Playing WAV file"));
+		PStringArray devices = PSoundChannel::GetDeviceNames(PSoundChannel::Player);
+		PSoundChannel * chan;
+		for (int i = 0; i < devices.GetSize(); i++) {
+			chan = PSoundChannel::CreateChannelByName(devices[i], PSoundChannel::Player);
+			cout << "for dev " << devices[i] << "\n";
+			if (chan) {
+				cout << "Playing file\n";
+				chan->PlayFile(psa->fname, false);
+				break;
+			}
+		}
+		result = SetState(new State(result->id, result->turn, STATUS_UNSPECIFIED, "Playing WAV file"));
 	}
 	return result;
 }
@@ -571,7 +582,7 @@ State * TeleKarma::StartRecording(State * currentState)
 {
 	State * result = NULL;	
 	PString assuranceName = "assurance.wav";
-	phone->PlayWAV(assuranceName, 0, 0);
+	phone->PlayWAVCall(assuranceName, 0, 0);
 	/* XXX Do we care about what the return value. */
 	result = SetState(new State(currentState->id,
 		currentState->turn, STATUS_NOTIFY_RECORD));
