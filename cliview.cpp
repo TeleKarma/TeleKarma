@@ -103,6 +103,7 @@ void CLIView::PasswordInputHandler::ReceiveInput(PString input)
 		     cli.userInputHandler->inputValue,
 		     this->inputValue);
 	cli.currentContext->SetLocalEcho(true);
+	cli.commandMutex.Wait();
 	if (cli.WaitForState(STATE_REGISTERED, 15000)) {
 		cli.PrintMessage("done.\n\n");
 		cli.SetInputHandler(cli.defaultInputHandler);
@@ -110,6 +111,7 @@ void CLIView::PasswordInputHandler::ReceiveInput(PString input)
 		cli.PrintMessage("failed\n\n");
 		cli.SetInputHandler(cli.registrarInputHandler);
 	}
+	cli.commandMutex.Signal();
 }
 
 
@@ -127,11 +129,13 @@ void CLIView::DestInputHandler::ReceiveInput(PString input)
 	InputHandler::ReceiveInput(input);
 	cli.PrintMessage("\nDialing " + inputValue + " ...");
 	cli.Dial(inputValue);
+	cli.commandMutex.Wait();
 	if (cli.WaitForState(STATE_CONNECTED, 15000)) {
 		cli.PrintMessage("done.\n\n");
 	} else {
 		cli.PrintMessage("failed.\n\n");
 	}
+	cli.commandMutex.Signal();
 	cli.SetInputHandler(cli.defaultInputHandler);
 }
 
@@ -171,13 +175,30 @@ void CLIView::SMSMessageInputHandler::ReceiveInput(PString input)
 	cli.SetInputHandler(cli.defaultInputHandler);
 }
 
+CLIView::Command::Command(const char * command, const PNotifier notifier, const char * help, const char * usage) :
+	notifier(notifier),
+	help(help),
+	usage(usage),
+	command(command),
+	enabled(true)
+	{ }
+
 CLIView::CLIView() :
 	View(),
+	PCLIStandard(),
 	destInputHandler(NULL),
 	defaultInputHandler(NULL),
 	currentInputHandler(NULL),
 	state(NULL),
-	stateMutex(1,1)
+	dialCommand("c", PCREATE_NOTIFIER(Dial), "Place a call"),
+	holdCommand("h", PCREATE_NOTIFIER(Hold), "Hold call"),
+	autoHoldCommand("w", PCREATE_NOTIFIER(AutoHold), "Hold until human detected"),
+	retrieveCommand("r", PCREATE_NOTIFIER(Retrieve), "Retrieve call"),
+	disconnectCommand("d", PCREATE_NOTIFIER(Disconnect), "Disconnect"),
+	quitCommand("q", PCREATE_NOTIFIER(Quit), "Quit"),
+	stateMutex(1,1),
+	commandMutex(1,1)
+
 	{ }
 
 void CLIView::Main() {
@@ -196,30 +217,86 @@ void CLIView::Main() {
 	smsDestInputHandler = new SMSDestInputHandler(*this);
 	smsMessageInputHandler = new SMSMessageInputHandler(*this);
 
-	SetCommand("c", PCREATE_NOTIFIER(Dial), "Place a call");
-	SetCommand("q", PCREATE_NOTIFIER(Quit), "Quit");
-	SetCommand("r", PCREATE_NOTIFIER(Retrieve), "Retrieve call");
-//	menu << "  0-9 : touch tones" << endl;
-//	menu << "  *,# : touch tones" << endl;
-	SetCommand("h", PCREATE_NOTIFIER(Hold), "Hold call");
-	SetCommand("w", PCREATE_NOTIFIER(AutoHold), "Hold until human detected");
-	SetCommand("d", PCREATE_NOTIFIER(Disconnect), "Disconnect");
-	SetCommand("s", PCREATE_NOTIFIER(SendSMS), "Send SMS");
-
 	SetInputHandler(stunInputHandler);
-
 	Start();
 
 	while(true) {
 		State * state = model->DequeueState();
 		if(state) {
+			enum StateID stateID = state->id;
+			enum StatusID statusID = state->status;
 			SetState(state);
-		if (state->status == STATUS_AUTO_RETRIEVE || state->status == STATUS_RETRIEVE) {
-			PlaySound(HUMAN_DETECTED_WAV);
-		}
+			if (statusID == STATUS_AUTO_RETRIEVE || statusID == STATUS_RETRIEVE) {
+				PlaySound(HUMAN_DETECTED_WAV);
+			}
+			if (statusID == STATUS_UNSPECIFIED) {
+				UpdateHelp(stateID);
+			}
 		}
 		PThread::Sleep(100);
 	}
+}
+
+void CLIView::AddCommand(Command command)
+{
+	if (command.enabled) {
+		SetCommand(command.command, command.notifier, command.help, command.usage);
+	}
+}
+
+void CLIView::UpdateHelp(enum StateID stateID)
+{
+	bool displayHelp = false;
+	dialCommand.enabled = false;
+	holdCommand.enabled = false;
+	autoHoldCommand.enabled = false;
+	retrieveCommand.enabled = false;
+	disconnectCommand.enabled = false;
+
+	quitCommand.enabled = true;
+
+	switch(stateID) {
+		case STATE_REGISTERED:
+			displayHelp = true;
+			dialCommand.enabled = true;
+			break;
+		case STATE_HOLD:
+		case STATE_AUTOHOLD:
+		case STATE_MUTEAUTOHOLD:
+			displayHelp = true;
+			retrieveCommand.enabled = true;
+			disconnectCommand.enabled = true;
+			break;
+		case STATE_CONNECTED:
+			displayHelp = true;
+			holdCommand.enabled = true;
+			autoHoldCommand.enabled = true;
+			disconnectCommand.enabled = true;
+			break;
+		default:
+			return;
+	}
+	commandMutex.Wait();
+	m_commands.clear();
+	AddCommand(dialCommand);
+	AddCommand(holdCommand);
+	AddCommand(autoHoldCommand);
+	AddCommand(retrieveCommand);
+	AddCommand(disconnectCommand);
+	AddCommand(quitCommand);
+	commandMutex.Signal();
+	if (displayHelp) {
+		ShowHelp(*currentContext);
+	}
+}
+
+void CLIView::ShowHelp(Context & context)
+{
+	commandMutex.Wait();
+	PrintMessage("\n\n");
+	PCLIStandard::ShowHelp(context);
+	PrintMessage(GetPrompt());
+	commandMutex.Signal();
 }
 
 void CLIView::OnReceivedLine(Arguments & line)
@@ -231,7 +308,9 @@ void CLIView::OnReceivedLine(Arguments & line)
 			currentInputHandler->ReceiveInput(line[0]);
 		}
 	} else {
+		commandMutex.Wait();
 		PCLIStandard::OnReceivedLine(line);
+		commandMutex.Signal();
 	}
 }
 

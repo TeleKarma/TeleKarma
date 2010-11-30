@@ -77,6 +77,21 @@ class CLIView : public PCLIStandard,  public View {
 			void WaitForInput();
 	};
 
+	class Command
+	{
+		public:
+			Command(const char * command, const PNotifier notifier, const char * help, const char * usage = NULL);
+			Command() { }
+		private:
+			const char * command;
+			const PNotifier notifier;
+			const char * help;
+			const char * usage;
+			bool enabled;
+
+		friend class CLIView;
+	};
+
 	public:
 		CLIView(); 
 		~CLIView() { }
@@ -88,6 +103,9 @@ class CLIView : public PCLIStandard,  public View {
 	private:
 		void PrintMessage(PString message);
 		void SetInputHandler(InputHandler * handler);
+		void AddCommand(Command command);
+		void UpdateHelp(enum StateID stateID);
+		void ShowHelp(Context & context);
 		void OnReceivedLine(Arguments & line);
 		bool WaitForState(enum StateID stateToWaitFor, int timeout);
 		void Initialize(PString & stunServer);
@@ -120,8 +138,16 @@ class CLIView : public PCLIStandard,  public View {
 		SMSMessageInputHandler * smsMessageInputHandler;
 		InputHandler * currentInputHandler;
 
+		Command dialCommand;
+		Command holdCommand;
+		Command autoHoldCommand;
+		Command retrieveCommand;
+		Command disconnectCommand;
+		Command quitCommand;
+
 		State * state;
 		PSemaphore stateMutex;
+		PSemaphore commandMutex;
 		CLIContext * currentContext;
 
 	friend class InputHandler;
