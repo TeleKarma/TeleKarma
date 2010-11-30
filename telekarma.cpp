@@ -200,6 +200,18 @@ State * TeleKarma::DoAction(Action * a, State * s)
 {
 	if (a == NULL) return s;
 	State * result = s;
+	// first process "global" (turn-independent) actions
+	switch (a->id) {
+		case ACTION_QUIT:
+			result = Quit(a, s);
+			break;
+		case ACTION_PLAY_SOUND:
+			result = PlaySound(a, s);
+			break;
+		default:
+			break;
+	}
+	// now process turn-independent actions
 	if (a->id == ACTION_QUIT || a->turn == s->turn) {
 		switch (a->id) {
 			case ACTION_INITIALIZE:
@@ -227,7 +239,10 @@ State * TeleKarma::DoAction(Action * a, State * s)
 				result = Disconnect(a, s);
 				break;
 			case ACTION_QUIT:
-				result = Quit(a, s);
+				// turn independent
+				break;
+			case ACTION_PLAY_SOUND:
+				// turn independent
 				break;
 			default:
 				// simply ignore unknown actions
@@ -480,6 +495,21 @@ State * TeleKarma::Disconnect(Action * a, State * s)
 	}
 	return result;
 }
+
+// Play a WAV file over PC sound system
+State * TeleKarma::PlaySound(Action * a, State * s)
+{
+	State * result = s;
+	PlaySoundAction * psa = dynamic_cast<PlaySoundAction *>(a);
+	if (psa == NULL) {
+		result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Unable to play WAV file"));
+	} else {
+		// XXX implementation to go
+		//result = SetState(new State(result->id, result->turn, STATUS_UNSPECIFIED, "Playing WAV file"));
+	}
+	return result;
+}
+
 
 // Determine whether we can hang up in the given state
 bool TeleKarma::IsConnectedState(State * s)

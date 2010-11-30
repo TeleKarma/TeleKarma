@@ -157,6 +157,7 @@ class TeleKarma : public Controller {
 		State * SendTone(Action * a, State * s);
 		State * Disconnect(Action * a, State * s);
 		State * Quit(Action * a, State * s);
+		State * PlaySound(Action * a, State * s);
 		bool    IsConnectedState(State * s);
 		bool    IsHoldingState(State * s);
 		State * StartRecording(State * currentState);
