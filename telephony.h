@@ -179,7 +179,7 @@ class TelephonyIfc : public OpalManager {
 		 * @param delay The time in milliseconds to wait between
 		 * repeated playings of the file
 		 */
-		PBoolean PlayWAVCall(const PString & path, int repeat=0, int delay=0);
+		PBoolean PlayWAVCall(const PString & path, int repeat = 0, int delay = 0);
 		/**
 		 * Stop the WAV file that is currently playing
 		 */
@@ -249,7 +249,7 @@ class TelephonyIfc : public OpalManager {
 		 * IsPlayingWAV() will work correctly if the WAV is played with
 		 * this function.
 		 */
-		PBoolean PlayWAV(const PString & path, const PString & dest, PString & token, int repeat = 0, int delay = 0);
+		PString CreatePlayOnceIVR(const PString & path);
 };
 
 

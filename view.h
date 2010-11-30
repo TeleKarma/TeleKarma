@@ -8,7 +8,7 @@ class Action;
 class Controller;
 class State;
 
-#define HUMAN_DETECTED_WAV "alert2-opal.wav"
+#define HUMAN_DETECTED_WAV "alert2.wav"
 #define ACCOUNTS_FILE	   "accounts.txt"
 
 /**

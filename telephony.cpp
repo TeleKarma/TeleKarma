@@ -315,17 +315,23 @@ bool TelephonyIfc::ToneReceived(char key, bool clear)
 	return r;
 }
 
+PString TelephonyIfc::CreatePlayOnceIVR(const PString & path)
+{
+	PString ivrString = "ivr:<vxml><form>"
+	"<audio src=\"" + PURL(PFilePath(path)).AsString() + "\"/>"
+	"</form></vxml>";
+
+	return ivrString;
+}
+
 PBoolean TelephonyIfc::PlayWAVSpeaker(const PString & path)
 {
-	return PlayWAV(path, "pc:*", speakerToken);
+	PString ivr = CreatePlayOnceIVR(path);	
+	SetUpCall(ivr, "pc:*", speakerToken);
+	return PTrue;
 }
 
 PBoolean TelephonyIfc::PlayWAVCall(const PString & path, int repeat, int delay)
-{
-	return PlayWAV(path, "mcu:*", wavToken, repeat, delay);
-}
-
-PBoolean TelephonyIfc::PlayWAV(const PString & path, const PString & dest, PString & token, int repeat, int delay)
 {
 	PString ivrString;
 	if (!wavToken.IsEmpty()) {
@@ -333,13 +339,11 @@ PBoolean TelephonyIfc::PlayWAV(const PString & path, const PString & dest, PStri
 		return PFalse;
 	}
 	if (repeat == 0) {
-		ivrString = "ivr:<vxml><form>"
-		"<audio src=\"" + PURL(PFilePath(path)).AsString() + "\"/>"
-		"</form></vxml>";
+		ivrString = CreatePlayOnceIVR(path);
 	} else {
 		ivrString = "ivr:repeat=" + PString(repeat) + ";delay=" + PString(delay) + ";" + PURL(PFilePath(path)).AsString();
 	}
-	SetUpCall(dest, ivrString, token);
+	SetUpCall("mcu:*", ivrString, wavToken);
 	return PTrue;
 }
 
