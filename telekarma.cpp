@@ -505,17 +505,7 @@ State * TeleKarma::PlaySound(Action * a, State * s)
 	if (psa == NULL) {
 		result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Unable to play WAV file"));
 	} else {
-		PStringArray devices = PSoundChannel::GetDeviceNames(PSoundChannel::Player);
-		PSoundChannel * chan;
-		for (int i = 0; i < devices.GetSize(); i++) {
-			chan = PSoundChannel::CreateChannelByName(devices[i], PSoundChannel::Player);
-			cout << "for dev " << devices[i] << "\n";
-			if (chan) {
-				cout << "Playing file\n";
-				chan->PlayFile(psa->fname, false);
-				break;
-			}
-		}
+		phone->PlayWAVSpeaker(psa->fname);
 		result = SetState(new State(result->id, result->turn, STATUS_UNSPECIFIED, "Playing WAV file"));
 	}
 	return result;
