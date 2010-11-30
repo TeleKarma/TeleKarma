@@ -8,6 +8,9 @@ class Action;
 class Controller;
 class State;
 
+#define HUMAN_DETECTED_WAV "alert2.wav"
+#define ACCOUNTS_FILE	   "accounts.txt"
+
 /**
  * Abstract superclass for all TeleKarma views. Subclass
  * this class to create a new view.
