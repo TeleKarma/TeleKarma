@@ -1,4 +1,3 @@
-
 #ifndef _ACTION_H_
 #define _ACTION_H_
 
@@ -15,7 +14,8 @@ enum ActionID
 	ACTION_RETRIEVE,
 	ACTION_SEND_TONE,
 	ACTION_DISCONNECT,
-	ACTION_QUIT
+	ACTION_QUIT,
+	ACTION_PLAY_SOUND
 };
 
 class Action
@@ -94,6 +94,17 @@ class QuitAction : public Action
 {
 	public:
 		QuitAction(int turn) : Action(ACTION_QUIT, turn) { }
+};
+
+class PlaySoundAction : public Action
+{
+	public:
+		PlaySoundAction(const PString & fname, int turn) :
+			Action(ACTION_PLAY_SOUND, turn),
+			fname(fname)
+			{ }
+
+		const PString fname;
 };
 
 #endif // _ACTION_H_
