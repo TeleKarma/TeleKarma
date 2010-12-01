@@ -437,7 +437,7 @@ class StateHelper
 		 * @param initialized true if {@link State#STATE_INITIALIZED} has
 		 *                    already been seen at least once.
 		 */
-		static wxString ToTrace(const StateID & state, const StatusID & status, const wxString & message, Model * model, bool initialized);
+		static wxString ToTrace(const StateID & state, const StatusID & status, const PString & message, Model * model, bool initialized);
 		/**
 		 * Determine whether the registration is allowed.
 		 * @param state from {@link State#id}.

@@ -13,6 +13,10 @@
 #include <ptlib/wxstring.h>
 #include "gui.h"
 
+// for debugging only
+#include <iostream>
+using namespace std;
+
 //	::PlaySound(TEXT("alert.wav"), NULL, SND_FILENAME);
 //	::PlaySound(TEXT("alert.wav"), NULL, SND_FILENAME);
 
@@ -329,7 +333,7 @@ void MainFrame::OnStateChange(wxStateChangeEvent & event)
 	previousStateID = currentStateID;
 	currentStateID = s->id;
 	if (!(initialized && currentStateID == STATE_INITIALIZED)) {
-		Trace(StateHelper::ToTrace(currentStateID, s->status, _Pstr2wxStr(s->message), model, initialized));
+		Trace(StateHelper::ToTrace(currentStateID, s->status, s->message, model, initialized));
 	}
 	if (s->status == STATUS_FAILED) {
 		if (currentStateID == STATE_INITIALIZING) {
@@ -839,7 +843,7 @@ wxString StateHelper::ToStatus(const StateID & state)
 	return str;
 }
 
-wxString StateHelper::ToTrace(const StateID & state, const StatusID & status, const wxString & message, Model * model, bool initialized)
+wxString StateHelper::ToTrace(const StateID & state, const StatusID & status, const PString & message, Model * model, bool initialized)
 {
 	wxString str;
 	tstringstream text;
