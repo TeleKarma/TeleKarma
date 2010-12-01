@@ -3,8 +3,8 @@
 #include <ptlib/sound.h>
 
 #include "action.h"
+#include "account.h"
 #include "clicontext.h"
-#include "conf.h"
 #include "controller.h"
 #include "model.h"
 #include "sms.h"
@@ -29,13 +29,22 @@ void CLIView::InputHandler::ReceiveInput(PString input)
 	}
 }
 
+PString CLIView::InputHandler::GetDefaultForPrompt()
+{
+	if (inputValue.IsEmpty()) {
+		return inputValue;
+	} else {
+		return " [" + inputValue + "]";
+	}
+}
+
 CLIView::STUNInputHandler::STUNInputHandler(CLIView & cli, PString defaultValue) :
 	InputHandler(cli, defaultValue)
 	{ }
 
 void CLIView::STUNInputHandler::WaitForInput()
 {
-	cli.SetPrompt("Please enter your SIP Registrar's STUN address [" + inputValue + "]: ");
+	cli.SetPrompt("Please enter your SIP Registrar's STUN address"+ GetDefaultForPrompt() + ": ");
 }
 
 void CLIView::STUNInputHandler::ReceiveInput(PString input)
@@ -58,7 +67,7 @@ CLIView::RegistrarInputHandler::RegistrarInputHandler(CLIView & cli, PString def
 
 void CLIView::RegistrarInputHandler::WaitForInput()
 {
-	cli.SetPrompt("Please enter your SIP Registrar's address [" + inputValue + "]: ");
+	cli.SetPrompt("Please enter your SIP Registrar's address" + GetDefaultForPrompt() + ": ");
 
 }
 
@@ -74,7 +83,7 @@ CLIView::UserInputHandler::UserInputHandler(CLIView & cli, PString defaultValue)
 
 void CLIView::UserInputHandler::WaitForInput()
 {
-	cli.SetPrompt("Please enter your SIP user name: ");
+	cli.SetPrompt("Please enter your SIP user name" + GetDefaultForPrompt() + ": ");
 }
 
 void CLIView::UserInputHandler::ReceiveInput(PString input)
@@ -121,7 +130,7 @@ CLIView::DestInputHandler::DestInputHandler(CLIView & cli, PString defaultValue)
 
 void CLIView::DestInputHandler::WaitForInput()
 {
-	cli.SetPrompt("Enter SIP address [" + inputValue + "]: ");
+	cli.SetPrompt("Enter SIP address" + GetDefaultForPrompt() + ": ");
 }
 
 void CLIView::DestInputHandler::ReceiveInput(PString input)
@@ -208,13 +217,27 @@ void CLIView::Main() {
 	controller = new TeleKarma(model);
 	controller->Resume();
 
+	PString STUN = PString::Empty();
+	PString REGISTRAR = PString::Empty();
+	PString USER = PString::Empty();
+
 	/* Setup input handlers. */
+	AccountList accounts = AccountList(ACCOUNTS_FILE);
+	Account * account;
+	account = accounts.GetAccount();
+
+	if (account) {
+		STUN = account->GetStunServer();
+		REGISTRAR = account->GetRegistrar();
+		USER = account->GetUser();
+	}
+
 	defaultInputHandler = new InputHandler(*this);
 	stunInputHandler = new STUNInputHandler(*this, STUN);
 	registrarInputHandler = new RegistrarInputHandler(*this, REGISTRAR);
-	userInputHandler = new UserInputHandler(*this, ACCOUNT);
+	userInputHandler = new UserInputHandler(*this, USER);
 	passwordInputHandler = new PasswordInputHandler(*this);
-	destInputHandler = new DestInputHandler(*this, DEST);
+	destInputHandler = new DestInputHandler(*this);
 	smsDestInputHandler = new SMSDestInputHandler(*this);
 	smsMessageInputHandler = new SMSMessageInputHandler(*this);
 

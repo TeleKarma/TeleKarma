@@ -25,6 +25,7 @@ class CLIView : public PCLIStandard,  public View {
 			PString inputValue;
 
 		protected:
+			PString GetDefaultForPrompt();
 			CLIView & cli;
 	};
 
