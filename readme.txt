@@ -13,6 +13,7 @@ Core Functionality Bugs & Status:
 
 4) PCSS audio quality is marginal to poor, depending on platform
 
+5) Our file structure may contain unnecessary audio files
 
 
 wxWidgets GUI-specific Bugs & Status:
