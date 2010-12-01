@@ -196,6 +196,7 @@ CLIView::CLIView() :
 	retrieveCommand("r", PCREATE_NOTIFIER(Retrieve), "Retrieve call"),
 	disconnectCommand("d", PCREATE_NOTIFIER(Disconnect), "Disconnect"),
 	quitCommand("q", PCREATE_NOTIFIER(Quit), "Quit"),
+	toneCommand("0-9, #, *", PCREATE_NOTIFIER(NoAction), "Send a touch tone"),
 	stateMutex(1,1),
 	commandMutex(1,1)
 
@@ -261,6 +262,7 @@ void CLIView::UpdateHelp(enum StateID stateID)
 	autoHoldCommand.enabled = false;
 	retrieveCommand.enabled = false;
 	disconnectCommand.enabled = false;
+	toneCommand.enabled = false;
 
 	quitCommand.enabled = true;
 
@@ -275,12 +277,14 @@ void CLIView::UpdateHelp(enum StateID stateID)
 			displayHelp = true;
 			retrieveCommand.enabled = true;
 			disconnectCommand.enabled = true;
+			toneCommand.enabled = true;
 			break;
 		case STATE_CONNECTED:
 			displayHelp = true;
 			holdCommand.enabled = true;
 			autoHoldCommand.enabled = true;
 			disconnectCommand.enabled = true;
+			toneCommand.enabled = true;
 			break;
 		default:
 			return;
@@ -292,6 +296,7 @@ void CLIView::UpdateHelp(enum StateID stateID)
 	AddCommand(autoHoldCommand);
 	AddCommand(retrieveCommand);
 	AddCommand(disconnectCommand);
+	AddCommand(toneCommand);
 	AddCommand(quitCommand);
 	commandMutex.Signal();
 	if (displayHelp) {
@@ -317,6 +322,11 @@ void CLIView::OnReceivedLine(Arguments & line)
 			currentInputHandler->ReceiveInput(line[0]);
 		}
 	} else {
+		/* Handle touch tones */
+		if (line.GetCount() > 0 && currentContext->IsTouchTone(line[0])) {
+			SendTone(line[0][0]);
+			return;
+		}
 		commandMutex.Wait();
 		PCLIStandard::OnReceivedLine(line);
 		commandMutex.Signal();
@@ -413,6 +423,11 @@ void CLIView::PlaySound(const PString & fileName)
 	DoAction(new PlaySoundAction(fileName, GetTurn()));
 }
 
+void CLIView::SendTone(char tone)
+{
+	DoAction(new SendToneAction(tone, GetTurn()));
+}
+
 void CLIView::Dial(PCLI::Arguments & args, INT)
 {
 	SetInputHandler(destInputHandler);
@@ -448,6 +463,10 @@ bool CLIView::SendSMS(PString dest, PString message) {
 
 void CLIView::SendSMS(PCLI::Arguments & args, INT) {
 	SetInputHandler(smsDestInputHandler);
+}
+
+void CLIView::NoAction(PCLI::Arguments & args, INT) {
+
 }
 
 PCLI::Context * CLIView::CreateContext()

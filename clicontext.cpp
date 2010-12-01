@@ -9,7 +9,7 @@
 void CLIContext::OnCompletedLine()
 {
 	PCaselessString line = m_commandLine.Trim();
-	if (line.IsEmpty()) {
+	if (line.IsEmpty() || IsTouchTone(line)) {
 		PCLI::Arguments args = PCLI::Arguments(*this, line);
 		m_cli.OnReceivedLine(args);
 	} else {
@@ -32,4 +32,28 @@ bool CLIContext::ProcessInput(int ch)
 bool CLIContext::SetLocalEcho(bool localEcho)
 {
 	return readChannel->SetLocalEcho(localEcho);
+}
+
+bool CLIContext::IsTouchTone(PString line)
+{
+	if (line.GetLength() != 1) {
+		return false;
+	}
+	switch(line[0]) {
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '#':
+	case '*':
+		return true;
+	default:
+		return false;
+	}
 }

@@ -15,6 +15,7 @@ class CLIContext : public PCLI::Context
 		void OnCompletedLine();
 		bool ProcessInput(int ch);
 		bool SetLocalEcho(bool localEcho);
+		bool IsTouchTone(PString line);
 };
 
 #endif // _CLICONTEXT_H_

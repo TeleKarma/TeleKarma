@@ -112,6 +112,7 @@ class CLIView : public PCLIStandard,  public View {
 		void Register(const PString & registrar, const PString & user, const PString & password);
 		void Dial(PString & dest);
 		void PlaySound(const PString & fileName);
+		void SendTone(char tone);
 		bool SendSMS(PString dest, PString message);
 
 		void SetState(State * newState);
@@ -127,6 +128,7 @@ class CLIView : public PCLIStandard,  public View {
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Disconnect);
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Quit);
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, SendSMS);
+		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, NoAction);
 
 		InputHandler * defaultInputHandler;
 		STUNInputHandler * stunInputHandler;
@@ -144,6 +146,7 @@ class CLIView : public PCLIStandard,  public View {
 		Command retrieveCommand;
 		Command disconnectCommand;
 		Command quitCommand;
+		Command toneCommand;
 
 		State * state;
 		PSemaphore stateMutex;
