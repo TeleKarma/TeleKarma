@@ -310,7 +310,6 @@ void CLIView::UpdateHelp(enum StateID stateID)
 			displayHelp = true;
 			retrieveCommand.enabled = true;
 			disconnectCommand.enabled = true;
-			toneCommand.enabled = true;
 			break;
 		case STATE_CONNECTED:
 			displayHelp = true;
@@ -458,7 +457,7 @@ void CLIView::PlaySound(const PString & fileName)
 
 void CLIView::SendTone(char tone)
 {
-	DoAction(new SendToneAction(tone, GetTurn()));
+	DoAction(new SendToneAction(GetTurn(), tone));
 }
 
 void CLIView::Dial(PCLI::Arguments & args, INT)
