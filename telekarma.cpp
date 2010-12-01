@@ -209,6 +209,9 @@ State * TeleKarma::DoAction(Action * a, State * s)
 		case ACTION_PLAY_SOUND:
 			result = PlaySound(a, s);
 			break;
+		case ACTION_SEND_TONE:
+			result = SendTone(a, s);
+			break;
 		default:
 			// process turn-independent actions if applicable
 			if (a->turn == s->turn) {
