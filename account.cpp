@@ -6,9 +6,9 @@
  */
 
 #include <ptlib.h>
-#include <ptlib\textfile.h>
-#include <ptlib\filepath.h>
-#include <ptlib\channel.h>
+#include <ptlib/textfile.h>
+#include <ptlib/filepath.h>
+#include <ptlib/channel.h>
 #include "account.h"
 //#include <stdio.h>
 //#include <iostream>
