@@ -356,7 +356,6 @@ State * TeleKarma::Dial(Action * a, State * s)
 		// set model data before changing state to DIALING
 		model->SetDestination(da->dest);
 		result = SetState(new State(STATE_DIALING, s->turn+1));
-		phone->TurnOnMicrophone();
 		// XXX enable the speaker - implementation to go
 		phone->Dial(da->dest);
 	}
@@ -489,12 +488,6 @@ State * TeleKarma::Disconnect(Action * a, State * s)
 		result = SetState(new State(STATE_UNINITIALIZED, result->turn+1));
 	} else {
 		phone->Disconnect();
-		if (IsHoldingState(s)) {
-			phone->StopWAV();
-			if (phone->IsRecording()) phone->StopRecording();
-			phone->TurnOnMicrophone();
-			// XXX enable the speaker - implementation to go
-		}
 	}
 	return result;
 }
