@@ -315,26 +315,34 @@ bool TelephonyIfc::ToneReceived(char key, bool clear)
 	return r;
 }
 
-PBoolean TelephonyIfc::PlayWAV(const PString & path, int repeat, int delay)
+PString TelephonyIfc::CreatePlayOnceIVR(const PString & path)
 {
+	PString ivrString = "ivr:<vxml><form>"
+	"<audio src=\"" + PURL(PFilePath(path)).AsString() + "\"/>"
+	"</form></vxml>";
+
+	return ivrString;
+}
+
+PBoolean TelephonyIfc::PlayWAVSpeaker(const PString & path)
+{
+	PString ivr = CreatePlayOnceIVR(path);	
+	SetUpCall(ivr, "pc:*", speakerToken);
+	return PTrue;
+}
+
+PBoolean TelephonyIfc::PlayWAVCall(const PString & path, int repeat, int delay)
+{
+	PString ivrString;
 	if (!wavToken.IsEmpty()) {
 		cout << "Only one wav file can be played at a time.\n";
 		return PFalse;
 	}
 	if (repeat == 0) {
-		return PlayWAVOnce(path);
+		ivrString = CreatePlayOnceIVR(path);
+	} else {
+		ivrString = "ivr:repeat=" + PString(repeat) + ";delay=" + PString(delay) + ";" + PURL(PFilePath(path)).AsString();
 	}
-	PStringStream ivrString;
-	ivrString << "ivr:repeat=" << repeat << ";delay=" << delay << ";" << PURL(PFilePath(path));
-	SetUpCall("mcu:*", ivrString, wavToken);
-	return PTrue;
-}
-
-PBoolean TelephonyIfc::PlayWAVOnce(const PString &path)
-{
-	PString ivrString = "ivr:<vxml><form>"
-		"<audio src=\"" + PURL(PFilePath(path)).AsString() + "\"/>"
-		"</form></vxml>";
 	SetUpCall("mcu:*", ivrString, wavToken);
 	return PTrue;
 }
