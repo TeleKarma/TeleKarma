@@ -78,7 +78,7 @@ class Action;
 /**
  * Defines the minimum timeout duration in milliseconds for registration.
  */
-#define REGISTRATION_TIMEOUT (60*1000)
+#define REGISTRATION_TIMEOUT (10*1000)
 
 // XXX need to update the documentation...
 /**
