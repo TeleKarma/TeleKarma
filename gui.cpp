@@ -13,6 +13,9 @@
 #include <ptlib/wxstring.h>
 #include "gui.h"
 
+//	::PlaySound(TEXT("alert.wav"), NULL, SND_FILENAME);
+//	::PlaySound(TEXT("alert.wav"), NULL, SND_FILENAME);
+
 #if wxUSE_UNICODE
 typedef wstringstream tstringstream;
 #else
@@ -46,6 +49,32 @@ wxStateChangeEvent::wxStateChangeEvent( wxObject * origin )
 wxEvent * wxStateChangeEvent::Clone()
 {
 	return ( new wxStateChangeEvent( GetEventObject() ) );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+wxRegisterDialogClosedEvent::wxRegisterDialogClosedEvent( wxObject * origin )
+	: wxNotifyEvent(wxEVT_REGISTER_DIALOG_CLOSED)
+{
+	SetEventObject(origin);
+}
+
+wxEvent * wxRegisterDialogClosedEvent::Clone()
+{
+	return ( new wxRegisterDialogClosedEvent( GetEventObject() ) );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+wxDialPadClosedEvent::wxDialPadClosedEvent( wxObject * origin )
+	: wxNotifyEvent(wxEVT_DIAL_PAD_CLOSED)
+{
+	SetEventObject(origin);
+}
+
+wxEvent * wxDialPadClosedEvent::Clone()
+{
+	return ( new wxDialPadClosedEvent( GetEventObject() ) );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -113,7 +142,7 @@ void TeleKarmaNG::OnStateChange()
 	mutex->Signal();
 }
 
-void TeleKarmaNG::OnWindowDone()
+void TeleKarmaNG::OnCloseApplication()
 {
 	mutex->Wait();
 	win = NULL;
@@ -123,9 +152,9 @@ void TeleKarmaNG::OnWindowDone()
 
 //////////////////////////////////////////////////////////////////////////////
 
-MainFrame::MainFrame(TeleKarmaNG * parent, Model * model, const wxString & title, const wxPoint & pos, const wxSize & size)
+MainFrame::MainFrame(TeleKarmaNG * view, Model * model, const wxString & title, const wxPoint & pos, const wxSize & size)
 	: wxFrame( NULL, -1, title, pos, size ),
-	  parent(parent),
+	  view(view),
 	  model(model),
 	  menuFile(NULL),
 	  menuEdit(NULL),
@@ -136,11 +165,14 @@ MainFrame::MainFrame(TeleKarmaNG * parent, Model * model, const wxString & title
 	  btnDial(NULL),
 	  tcDest(NULL),
 	  tcTrace(NULL),
-	  turn(-65536),
-	  state(STATE_ERROR),
-	  reg(NULL),
+	  currentTurn(-65536),
+	  previousStateID(STATE_ERROR),
+	  currentStateID(STATE_ERROR),
+	  regAction(NULL),
 	  accounts(NULL),
-	  initialized(false)
+	  initialized(false),
+	  registerDialogIsOpen(false),
+	  dialPadIsOpen(false)
 {
 
 	// set minimum size
@@ -159,7 +191,10 @@ MainFrame::MainFrame(TeleKarmaNG * parent, Model * model, const wxString & title
 
 	// define the call menu...
 	menuCall = new wxMenu;
-    menuCall->Append( evDial, _("&Dial...") );
+    menuCall->Append( evDial, _("&Dial") );
+    menuCall->AppendSeparator();
+    menuCall->Append( evDialPad, _("&Touch Tones...") );
+    menuCall->AppendSeparator();
     menuCall->Append( evHold, _("H&old") );
     menuCall->Append( evAutoHold, _("&AutoHold") );
     menuCall->Append( evRetrieve, _("&Retrieve") );
@@ -183,7 +218,8 @@ MainFrame::MainFrame(TeleKarmaNG * parent, Model * model, const wxString & title
 	fileRegister = menuBar->FindMenuItem(_("File"), _("Register..."));
 	editAccounts = menuBar->FindMenuItem(_("Edit"), _("Accounts..."));
 	//editContacts = menuBar->FindMenuItem(_("Edit"), _("Contacts..."));
-	callDial = menuBar->FindMenuItem(_("Call"), _("Dial..."));
+	callDial = menuBar->FindMenuItem(_("Call"), _("Dial"));
+	callDialPad = menuBar->FindMenuItem(_("Call"), _("Touch Tones..."));
 	callHold = menuBar->FindMenuItem(_("Call"), _("Hold"));
 	callAutoHold = menuBar->FindMenuItem(_("Call"), _("AutoHold"));
 	callRetrieve = menuBar->FindMenuItem(_("Call"), _("Retrieve"));
@@ -206,8 +242,8 @@ MainFrame::MainFrame(TeleKarmaNG * parent, Model * model, const wxString & title
 	tcDest->SetBackgroundColour(wxColour(255,255,255));	// white
 
 	// Dial button
-	btnDial = new wxButton(panel, wxID_ANY, wxT("&Dial"));
-	Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnDial));
+	btnDial = new wxButton(panel, tkID_DIAL_BTN, wxT("&Dial"));
+	Connect(tkID_DIAL_BTN, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnDial));
 	btnDial->SetFocus();
 
 	// Trace window
@@ -237,10 +273,16 @@ MainFrame::MainFrame(TeleKarmaNG * parent, Model * model, const wxString & title
 	// Track close
 	Connect(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(MainFrame::OnClose));
 
-	// set up the accounts
-	accounts = new AccountList("accounts.txt");
-	Account * acct = new Account("ekiga.net", "mvolk@ekiga.net", "stun.ekiga.net");
-	accounts->AddAccount(acct);
+	// read accounts & establish default if none present
+	accounts = model->GetAccountList(ACCOUNTS_FILE);
+	if (accounts->GetCount() == 0) {
+		Account * a = new Account("","","stun.ekiga.net");
+		a->setName("Default");
+		accounts->AddAccount(a);
+	}
+
+	// use icon
+	//SetIcon(wxIcon(wxT("tkng.xpm")));
 
 	// initialize GUI 
 	OnAdjustControls(STATE_UNINITIALIZED);
@@ -254,6 +296,7 @@ void MainFrame::OnAdjustControls(const StateID state)
 	menuBar->Enable(editAccounts, false);
 	//menuBar->Enable(editContacts, false);
 	menuBar->Enable(callDial, StateHelper::CanDial(state));
+	menuBar->Enable(callDialPad, (state == STATE_CONNECTED));
 	menuBar->Enable(callHold, StateHelper::CanHold(state));
 	menuBar->Enable(callAutoHold, StateHelper::CanHold(state));
 	menuBar->Enable(callRetrieve, StateHelper::CanRetrieve(state));
@@ -261,13 +304,13 @@ void MainFrame::OnAdjustControls(const StateID state)
 	menuBar->Enable(helpAbout, true);
 	if (StateHelper::CanDial(state)) {
 		btnDial->Enable(true);
-		Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnHangUp));
-		Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnDial));
+		Disconnect(tkID_DIAL_BTN, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnHangUp));
+		Connect(tkID_DIAL_BTN, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnDial));
 		btnDial->SetLabel(_("&Dial"));
 	} else if (StateHelper::CanHangUp(state)) {
 		btnDial->Enable(true);
-		Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnDial));
-		Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnHangUp));
+		Disconnect(tkID_DIAL_BTN, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnDial));
+		Connect(tkID_DIAL_BTN, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::OnHangUp));
 		btnDial->SetLabel(_("&Hang Up"));
 	} else {
 		btnDial->Enable(false);
@@ -275,143 +318,181 @@ void MainFrame::OnAdjustControls(const StateID state)
 	//btnContacts->Enable(false);
 }
 
-void MainFrame::OnStateChange(wxStateChangeEvent & evt)
+void MainFrame::OnStateChange(wxStateChangeEvent & event)
 {
-	State * s = parent->DequeueState();
+	State * s = view->DequeueState();
 	if (s == NULL) return;
-	tstringstream text;
-	text << s->message;
-	wxString msg;
-	msg = text.str().c_str();
-	if (turn == s->turn) {
-		// state hasn't changed, but status probably has
-		Trace(StateHelper::ToTrace(s->id, s->status, msg, model, initialized));
-	} else {
-		// state has changed
-		SetStatusText(StateHelper::ToStatus(s->id));
-		turn = s->turn;
-		OnAdjustControls(s->id);
-		switch (s->id) {
+	previousStateID = currentStateID;
+	currentStateID = s->id;
+	if (!(initialized && currentStateID == STATE_INITIALIZED)) {
+		Trace(StateHelper::ToTrace(currentStateID, s->status, _Pstr2wxStr(s->message), model, initialized));
+	}
+	if (s->status == STATUS_FAILED) {
+		if (currentStateID == STATE_INITIALIZING) {
+			// registration attempt failed - alert user forcefully
+			wxString msg(_("Unable to to initialize telephony subsystems.\nCheck STUN server, network connection, and NAT type."));
+			wxMessageDialog * md = new wxMessageDialog(this, msg, _("Registration failed"), wxOK | wxICON_EXCLAMATION | wxCENTRE);
+			md->ShowModal();
+			if (!registerDialogIsOpen) {
+				registerDialogIsOpen = true;
+				new RegisterDialog(this, accounts);
+			}
+		} else if (currentStateID == STATE_REGISTERING) {
+			// registration attempt failed - alert user forcefully
+			wxString msg(_("Unable to register.\nCheck your account details and network connection."));
+			wxMessageDialog * md = new wxMessageDialog(this, msg, _("Registration failed"), wxOK | wxICON_EXCLAMATION | wxCENTRE);
+			md->ShowModal();
+			if (!registerDialogIsOpen) {
+				registerDialogIsOpen = true;
+				new RegisterDialog(this, accounts);
+			}
+		}
+	}
+	if (currentTurn != s->turn) {
+		// state has changed (not just a status change)
+		currentTurn = s->turn;
+		SetStatusText(StateHelper::ToStatus(currentStateID));
+		OnAdjustControls(currentStateID);
+		if (wxIsBusy()) wxEndBusyCursor();
+		switch (currentStateID) {
 
 			case STATE_UNINITIALIZED:
-				{
-					Trace(StateHelper::ToTrace(s->id, s->status, msg, model, initialized));
-					state = s->id;
-					RegisterDialog * d = new RegisterDialog(this, accounts);
+				if (!registerDialogIsOpen) {
+					registerDialogIsOpen = true;
+					new RegisterDialog(this, accounts);
 				}
 				break;
 
+			case STATE_INITIALIZING:
+				wxBeginBusyCursor();
+				break;
+
 			case STATE_INITIALIZED:
-				if (initialized) {
-					// attempt to register failed ... try again
-					state = s->id;
-					wxString msg(_("Unable to register. Check your account details and network connection."));
-					wxMessageDialog * md = new wxMessageDialog(this, msg, _("Registration failed"), wxOK | wxICON_EXCLAMATION | wxCENTRE);
-					md->ShowModal();
-					RegisterDialog * d = new RegisterDialog(this, accounts);
-				} else {
-					Trace(StateHelper::ToTrace(s->id, s->status, msg, model, initialized));
-					state = s->id;
-					if (reg != NULL) {
-						// ready to register
-						reg = new RegisterAction(reg->registrar, reg->user, reg->password, s->turn);
-						parent->DoAction(reg);
-					} else {
-						RegisterDialog * d = new RegisterDialog(this, accounts);
-					}
+				if (regAction != NULL) {
+					// ready to register
+					RegisterAction * r = regAction;
+					regAction = new RegisterAction(r->registrar, r->user, r->password, currentTurn);
+					delete r;
+					view->DoAction(regAction);
+					regAction = NULL;
 				}
 				initialized = true;
 				break;
 
-			case STATE_CONNECTED:
-				Trace(StateHelper::ToTrace(s->id, s->status, msg, model, initialized));
-				if (state == STATE_AUTOHOLD) {
-					// were in AUTO_HOLD, now CONNECTED, no RETRIEVE...
-					// ...means that a human was detected
-#ifdef WIN32
-					PlaySound(TEXT("alert.wav"), NULL, SND_FILENAME);
-#endif
+			case STATE_REGISTERING:
+				wxBeginBusyCursor();
+				break;
+
+			case STATE_DIALING:
+				wxBeginBusyCursor();
+				break;
+
+			case STATE_AUTOHOLD:
+			case STATE_MUTEAUTOHOLD:
+				if (s->status == STATUS_AUTO_RETRIEVE) {
+					// human was detected - play sound
+					view->DoAction(new PlaySoundAction(HUMAN_DETECTED_WAV, currentTurn));
 				}
+				break;
+				
+			case STATE_DISCONNECTING:
+				wxBeginBusyCursor();
 				break;
 
 			default:
-				Trace(StateHelper::ToTrace(s->id, s->status, msg, model, initialized));
 				break;
 
 		}
 	}
-	state = s->id;
+	delete s;
 }
 
 void MainFrame::OnOpenRegisterDialog(wxCommandEvent & event)
 {
-	RegisterDialog * d = new RegisterDialog(this, accounts);
+	if (!registerDialogIsOpen) {
+		registerDialogIsOpen = true;
+		new RegisterDialog(this, accounts);
+	}
+}
+
+void MainFrame::OnCloseRegisterDialog(wxRegisterDialogClosedEvent & event)
+{
+	registerDialogIsOpen = false;
+}
+
+void MainFrame::OnOpenDialPad(wxCommandEvent & event)
+{
+	if (!dialPadIsOpen) {
+		dialPadIsOpen = true;
+		new DialPad(this, view);
+	}
+}
+
+void MainFrame::OnCloseDialPad(wxDialPadClosedEvent & event)
+{
+	dialPadIsOpen = false;
 }
 
 void MainFrame::OnRegister(const wxString & s, const wxString & r, const wxString & u, const wxString & p)
 {
-	reg = new RegisterAction(_wxStr2Pstr(r), _wxStr2Pstr(u), _wxStr2Pstr(p), turn);
-	if (state == STATE_UNINITIALIZED) {
-		Action * a = new InitializeAction(_wxStr2Pstr(s), turn);
-		parent->DoAction(a);
-	} else if (state == STATE_INITIALIZED) {
-		parent->DoAction(reg);
-		reg = NULL;
-	} else {
-		Trace(StateHelper::ToTrace(state, STATUS_UNSPECIFIED, _(""), model, initialized));
+	if (regAction != NULL) {
+		// regAction set NULL immediately after send, so if not NULL then not sent,
+		// and if not sent, this thread still "owns" responsibility for delete
+		delete regAction;
 	}
+	regAction = new RegisterAction(_wxStr2Pstr(r), _wxStr2Pstr(u), _wxStr2Pstr(p), currentTurn);
+	if (currentStateID == STATE_UNINITIALIZED) {
+		Action * a = new InitializeAction(_wxStr2Pstr(s), currentTurn);
+		view->DoAction(a);
+	} else if (currentStateID == STATE_INITIALIZED) {
+		view->DoAction(regAction);
+		regAction = NULL;
+	}
+	registerDialogIsOpen = false;
 }
 
 void MainFrame::OnDial(wxCommandEvent & event)
 {
-	wxString val = tcDest->GetValue();
-	Action * a = new DialAction(_wxStr2Pstr(val), turn);
-	parent->DoAction(a);
+	Action * a = new DialAction(_wxStr2Pstr(tcDest->GetValue()), currentTurn);
+	view->DoAction(a);
 }
 
 void MainFrame::OnHangUp(wxCommandEvent & event)
 {
-	Action * a = new DisconnectAction(turn);
-	parent->DoAction(a);
+	view->DoAction(new DisconnectAction(currentTurn));
 }
 
 void MainFrame::OnHold(wxCommandEvent & event)
 {
-	Action * a = new HoldAction(turn);
-	parent->DoAction(a);
+	view->DoAction(new HoldAction(currentTurn));
 }
 
 void MainFrame::OnAutoHold(wxCommandEvent & event)
 {
-	Action * a = new AutoHoldAction(turn);
-	parent->DoAction(a);
+	view->DoAction(new AutoHoldAction(currentTurn));
 }
 
 void MainFrame::OnMuteAutoHold(wxCommandEvent & event)
 {
-//	Action * a = new MuteAutoHoldAction(turn);
-//	model->EnqueueAction(a);
+//	view->DoAction(new MuteAutoHoldAction(currentTurn));
 }
 
 void MainFrame::OnRetrieve(wxCommandEvent & event)
 {
-	Action * a = new RetrieveAction(turn);
-	parent->DoAction(a);
+	view->DoAction(new RetrieveAction(currentTurn));
 }
 
 void MainFrame::OnQuit(wxCommandEvent & WXUNUSED(event))
 {
-	Action * a = new QuitAction(turn);
-	parent->DoAction(a);
-	parent->OnWindowDone();
+	view->DoAction(new QuitAction(currentTurn));
+	view->OnCloseApplication();
 	Destroy();
 }
 
 void MainFrame::OnClose(wxCloseEvent & event)
 {
-	Action * a = new QuitAction(turn);
-	parent->DoAction(a);
-	parent->OnWindowDone();
+	view->DoAction(new QuitAction(currentTurn));
+	view->OnCloseApplication();
 	Destroy();
 }
 
@@ -433,41 +514,41 @@ void MainFrame::OnAbout(wxCommandEvent & WXUNUSED(event))
 
 void MainFrame::Trace(const wxString & msg)
 {
-	tcTrace->WriteText(msg);
-	/* The code below caused flickering...
-	// HACK: Under Windows (using wxTE_RICH2) we have trouble ensuring that the last
-	// entered line is really at the bottom of the screen. We jump through some
-	// hoops to get this working.
-
-	// Count number of newlines (i.e lines)
+	// freeze the control to prevent scrollbar jumping
+	tcTrace->Freeze();
+	// print line-by-line to avoid scroll bugs in MSW
+	wxString rhs = msg;
+	rhs.Trim();
+	wxString lhs;
 	int lines = 0;
-	const char * cstr = (const char *)msg.c_str();
-	for ( ; *cstr ; ++cstr )
-		if ( *cstr == '\n' )
-			++lines;
-
-	// Dance...
-	tcTrace->Freeze();                 // Freeze the window to prevent scrollbar jumping
-	tcTrace->AppendText( msg );        // Add the text
-	tcTrace->ScrollLines( lines + 1 ); // Scroll down correct number of lines + one (the extra line is important for some cases!)
-	tcTrace->ShowPosition( tcTrace->GetLastPosition() ); // Ensure the last line is shown at the very bottom of the window
-	tcTrace->Thaw();                   // Allow the window to redraw
-	*/
+	while (!rhs.IsEmpty()) {
+		lhs = rhs.BeforeFirst('\n');
+		lhs += _("\n");
+		rhs = rhs.AfterFirst('\n').Trim();
+		if (lhs.IsEmpty()) continue;
+		++lines;
+		tcTrace->AppendText(lhs);
+	}
+	// scroll down by the correct number of lines + 1
+	// (the extra line is important in special cases)
+	tcTrace->ScrollLines( lines + 1);
+	// Ensure that the last line is shown at the very bottom of the window
+	tcTrace->ShowPosition( tcTrace->GetLastPosition() );
+	// now thaw
+	tcTrace->Thaw();
 }
 
 //////////////////////////////////////////////////////////////////////////////
 // RegisterDialog
 
-RegisterDialog::RegisterDialog(MainFrame * parent, AccountList * accounts)
-	: wxDialog(parent, wxID_ANY, _("Register with SIP service"), wxDefaultPosition, wxSize(300, 212)),
-	  mainFrame(parent),
+RegisterDialog::RegisterDialog(MainFrame * pwin, AccountList * accounts)
+	: wxDialog(pwin, wxID_ANY, _("Register with SIP service"), wxDefaultPosition, wxSize(300, 212)),
+	  pwin(pwin),
 	  accounts(accounts),
 	  tcStun(NULL),
 	  tcRegistrar(NULL),
 	  tcUser(NULL),
-	  tcPassword(NULL),
-	  btnCancel(NULL),
-	  btnRegister(NULL)
+	  tcPassword(NULL)
 {
 
 	wxPanel * panel = new wxPanel(this, wxID_ANY);
@@ -516,9 +597,9 @@ RegisterDialog::RegisterDialog(MainFrame * parent, AccountList * accounts)
 	// Buttons
 	//
 
-	btnRegister = new wxButton(this, tkID_REGISTER_BTN, wxT("&Register"));
+	wxButton * btnRegister = new wxButton(this, tkID_REGISTER_BTN, wxT("&Register"));
 	Connect(tkID_REGISTER_BTN, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(RegisterDialog::OnRegister));
-	btnCancel = new wxButton(this, wxID_CANCEL, wxT("&Cancel"));
+	wxButton * btnCancel = new wxButton(this, wxID_CANCEL, wxT("&Cancel"));
 	Connect(wxID_CANCEL, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(RegisterDialog::OnCancel));
 	
 	hbox = new wxBoxSizer(wxHORIZONTAL);
@@ -531,6 +612,9 @@ RegisterDialog::RegisterDialog(MainFrame * parent, AccountList * accounts)
 	// Track close
 	Connect(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(RegisterDialog::OnClose));
 	
+	// Tie enter in ANY text control to register
+	Connect(wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler(RegisterDialog::OnRegister));
+
 	btnRegister->SetFocus();
 
 	Centre();
@@ -539,19 +623,165 @@ RegisterDialog::RegisterDialog(MainFrame * parent, AccountList * accounts)
 
 void RegisterDialog::OnClose(wxCloseEvent & event)
 {
+	wxRegisterDialogClosedEvent evt( this );
+	pwin->AddPendingEvent(evt);
 	Destroy();
 }
 
 void RegisterDialog::OnRegister(wxCommandEvent & event)
 {
-	mainFrame->OnRegister(tcStun->GetValue(), tcRegistrar->GetValue(), tcUser->GetValue(), tcPassword->GetValue());
+	pwin->OnRegister(tcStun->GetValue(), tcRegistrar->GetValue(), tcUser->GetValue(), tcPassword->GetValue());
 	Destroy();
 }
 
 void RegisterDialog::OnCancel(wxCommandEvent & event)
 {
+	wxRegisterDialogClosedEvent evt( this );
+	pwin->AddPendingEvent(evt);
 	Destroy();
 }
+
+
+//////////////////////////////////////////////////////////////////////////////
+// DialPad
+
+DialPad::DialPad(MainFrame * pwin, View * view)
+	: wxDialog(pwin, wxID_ANY, _("Touch tone dial pad"), wxDefaultPosition, wxSize(200, 200), wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT),
+	  pwin(pwin),
+	  view(view)
+{
+	
+	wxGridSizer * grid = new wxGridSizer(4, 3, 3, 3);
+
+	// row 1 buttons
+	grid->Add(new wxButton(this, tkID_DIALPAD_ONE, wxT("1\n ")), 0, wxEXPAND);
+	grid->Add(new wxButton(this, tkID_DIALPAD_TWO, wxT("2\nabd")), 0, wxEXPAND);
+	grid->Add(new wxButton(this, tkID_DIALPAD_THREE, wxT("3\ndef")), 0, wxEXPAND);
+
+	// row 2 buttons
+	grid->Add(new wxButton(this, tkID_DIALPAD_FOUR, wxT("4\nghi")), 0, wxEXPAND);
+	grid->Add(new wxButton(this, tkID_DIALPAD_FIVE, wxT("5\njkl")), 0, wxEXPAND);
+	grid->Add(new wxButton(this, tkID_DIALPAD_SIX, wxT("6\nmno")), 0, wxEXPAND);
+
+	// row 3 buttons
+	grid->Add(new wxButton(this, tkID_DIALPAD_SEVEN, wxT("7\npqrs")), 0, wxEXPAND);
+	grid->Add(new wxButton(this, tkID_DIALPAD_EIGHT, wxT("8\ntuv")), 0, wxEXPAND);
+	grid->Add(new wxButton(this, tkID_DIALPAD_NINE, wxT("9\nwxyz")), 0, wxEXPAND);
+
+	// row 4 buttons
+	grid->Add(new wxButton(this, tkID_DIALPAD_STAR, wxT("*")), 0, wxEXPAND);
+	grid->Add(new wxButton(this, tkID_DIALPAD_ZERO, wxT("0")), 0, wxEXPAND);
+	grid->Add(new wxButton(this, tkID_DIALPAD_POUND, wxT("#")), 0, wxEXPAND);
+
+	wxBoxSizer * vbox = new wxBoxSizer(wxVERTICAL);
+	vbox->Add(grid, 1, wxEXPAND | wxALL, 5);
+	SetSizer(vbox);
+	SetMinSize(wxSize(200,200));
+
+	// Set up a "dummy" button to take the focus
+	dummy = new wxButton(this, wxID_ANY, wxT(" "), wxPoint(-500,-500));
+	dummy->SetFocus();
+
+	// Track close
+	Connect(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(DialPad::OnClose));
+
+	// Track button presses
+	Connect(tkID_DIALPAD_ONE,   wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(DialPad::OnPressOne  ));
+	Connect(tkID_DIALPAD_TWO,   wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(DialPad::OnPressTwo  ));
+	Connect(tkID_DIALPAD_THREE, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(DialPad::OnPressThree));
+	Connect(tkID_DIALPAD_FOUR,  wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(DialPad::OnPressFour ));
+	Connect(tkID_DIALPAD_FIVE,  wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(DialPad::OnPressFive ));
+	Connect(tkID_DIALPAD_SIX,   wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(DialPad::OnPressSix  ));
+	Connect(tkID_DIALPAD_SEVEN, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(DialPad::OnPressSeven));
+	Connect(tkID_DIALPAD_EIGHT, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(DialPad::OnPressEight));
+	Connect(tkID_DIALPAD_NINE,  wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(DialPad::OnPressNine ));
+	Connect(tkID_DIALPAD_STAR,  wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(DialPad::OnPressStar ));
+	Connect(tkID_DIALPAD_ZERO,  wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(DialPad::OnPressZero ));
+	Connect(tkID_DIALPAD_POUND, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(DialPad::OnPressPound));
+
+	// Reveal the dialog
+	Show(true);
+
+}
+
+void DialPad::OnClose(wxCloseEvent & event)
+{
+	wxDialPadClosedEvent evt( this );
+	pwin->AddPendingEvent(evt);
+	Destroy();
+}
+
+void DialPad::OnPressOne(wxCommandEvent & event)
+{
+	SendTouchTone('1');
+}
+
+void DialPad::OnPressTwo(wxCommandEvent & event)
+{
+	SendTouchTone('2');
+}
+
+void DialPad::OnPressThree(wxCommandEvent & event)
+{
+	SendTouchTone('3');
+}
+
+void DialPad::OnPressFour(wxCommandEvent & event)
+{
+	SendTouchTone('4');
+}
+
+void DialPad::OnPressFive(wxCommandEvent & event)
+{
+	SendTouchTone('5');
+}
+
+void DialPad::OnPressSix(wxCommandEvent & event)
+{
+	SendTouchTone('6');
+}
+
+void DialPad::OnPressSeven(wxCommandEvent & event)
+{
+	SendTouchTone('7');
+}
+
+void DialPad::OnPressEight(wxCommandEvent & event)
+{
+	SendTouchTone('8');
+}
+
+void DialPad::OnPressNine(wxCommandEvent & event)
+{
+	SendTouchTone('9');
+}
+
+void DialPad::OnPressStar(wxCommandEvent & event)
+{
+	SendTouchTone('*');
+}
+
+void DialPad::OnPressZero(wxCommandEvent & event)
+{
+	SendTouchTone('0');
+}
+
+void DialPad::OnPressPound(wxCommandEvent & event)
+{
+	SendTouchTone('#');
+}
+
+void DialPad::SendTouchTone(char ch)
+{
+	State * s = view->GetState();
+	if (s != NULL && s->id == STATE_CONNECTED) {
+		Action * a = new SendToneAction(s->turn, ch);
+		view->DoAction(a);
+	}
+	dummy->SetFocus();
+	delete s;
+}
+
 
 //////////////////////////////////////////////////////////////////////////////
 // StateHelper
