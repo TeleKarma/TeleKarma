@@ -38,14 +38,61 @@ enum StatusID
 class State
 {
 	public:
+		/**
+		 * Serial identifier used to conditionally accept action requests 
+		 * based on the state in which they were generated.
+		 */
 		const int turn;
+		/**
+		 * Uniquely identifies the state type.
+		 */
 		const StateID id;
+		/**
+		 * Identifies the status associated with this state.
+		 */
 		const StatusID status;
+		/** 
+		 * Empty string or a message that may be useful to display to
+		 * the user relating to the status.
+		 */
 		const PString message;
+		/**
+		 * Constructor.
+		 * @param id   the type of this state
+		 * @param turn previous state's id + 1 if previous state not of same
+		 *             type as this state; otherwise, previous state's turn
+		 */
 		State(StateID id, int turn);
+		/**
+		 * Constructor.
+		 * @param id   the type of this state
+		 * @param turn previous state's id + 1 if previous state not of same
+		 *             type as this state; otherwise, previous state's turn
+		 * @param status the status to associate with this state
+		 */
 		State(StateID id, int turn, StatusID status);
+		/**
+		 * Constructor.
+		 * @param id     the type of this state
+		 * @param turn   previous state's id + 1 if previous state not of same
+		 *               type as this state; otherwise, previous state's turn
+		 * @param status the status to associate with this state
+		 * @param msg    user-friendly elaboration on the status
+		 */
 		State(StateID id, int turn, StatusID status, const char * msg);
+		/**
+		 * Constructor.
+		 * @param id     the type of this state
+		 * @param turn   previous state's id + 1 if previous state not of same
+		 *               type as this state; otherwise, previous state's turn
+		 * @param status the status to associate with this state
+		 * @param msg    user-friendly elaboration on the status
+		 */
 		State(StateID id, int turn, StatusID status, const PString & msg);
+		/**
+		 * Creates a copy of this class. Subclasses must implement this
+		 * method.
+		 */
 		virtual State * Clone() const;
 	// disable copy & assignment later...
 };
