@@ -263,6 +263,9 @@ void CLIView::Main() {
 				if (!message.IsEmpty()) {
 					PrintMessage("\n" + message + "\n");
 				}
+				if (stateID == STATE_INITIALIZING) {
+					break;
+				}
 			}
 			if (stateID == STATE_TERMINATING) {
 				PrintMessage("\nCleaning up... (this may take a few moments)\n");
