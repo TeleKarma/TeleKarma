@@ -267,6 +267,10 @@ void CLIView::Main() {
 			if (stateID == STATE_TERMINATING) {
 				PrintMessage("\nCleaning up... (this may take a few moments)\n");
 			}
+
+			if (stateID == STATE_DISCONNECTED) {
+				PrintMessage("\n\n *** Call disconnected ***\n");
+			}
 			if (stateID == STATE_TERMINATED) {
 				break;
 			}
