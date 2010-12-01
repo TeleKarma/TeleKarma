@@ -54,9 +54,9 @@ void TelephonyIfc::Initialise(const PString & stunAddr)
 #endif
 
 	///////////////////////////////////////
-	// Optionally set STUN Server
+	// Set STUN Server
 
-	SetSTUNServer("stun.ekiga.net");
+	SetSTUNServer(stunAddr);
 
 	///////////////////////////////////////
 	// PC Sound System (PCSS) handler
