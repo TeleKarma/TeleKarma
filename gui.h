@@ -392,7 +392,9 @@ enum
 	/** Dial pad button. */
 	tkID_DIALPAD_STAR  = 113,
 	/** Dial/Hang Up button in main frame. */
-	tkID_DIAL_BTN      = 114
+	tkID_DIAL_BTN      = 114,
+	/** SIP phone number text box */
+	tkID_DESTINATION   = 115
 };
 
 // Binds events generated in the main window to event handlers

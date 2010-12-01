@@ -237,7 +237,7 @@ MainFrame::MainFrame(TeleKarmaNG * view, Model * model, const wxString & title, 
 	//btnContacts->SetFocus();
 
 	// Address
-	tcDest = new wxTextCtrl(panel, wxID_ANY, _("sip:"), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER | wxSUNKEN_BORDER);
+	tcDest = new wxTextCtrl(panel, tkID_DESTINATION, _("sip:"), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER | wxSUNKEN_BORDER);
 	tcDest->SetForegroundColour(wxColour(0,0,0));	// black
 	tcDest->SetBackgroundColour(wxColour(255,255,255));	// white
 
@@ -272,6 +272,9 @@ MainFrame::MainFrame(TeleKarmaNG * view, Model * model, const wxString & title, 
 
 	// Track close
 	Connect(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(MainFrame::OnClose));
+
+	// Tie enter in the SIP number text control to dial handler
+	Connect(tkID_DESTINATION, wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler(MainFrame::OnDial));
 
 	// read accounts & establish default if none present
 	accounts = model->GetAccountList(ACCOUNTS_FILE);
@@ -453,6 +456,7 @@ void MainFrame::OnRegister(const wxString & s, const wxString & r, const wxStrin
 
 void MainFrame::OnDial(wxCommandEvent & event)
 {
+	if (currentStateID != STATE_REGISTERED) return;
 	Action * a = new DialAction(_wxStr2Pstr(tcDest->GetValue()), currentTurn);
 	view->DoAction(a);
 }
