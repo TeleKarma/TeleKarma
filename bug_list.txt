@@ -1,3 +1,4 @@
+
 1. Assertion Fail (Tom mailing them?)
 
 2. Recording stops when we don't want it to (old bug)
