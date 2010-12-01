@@ -294,7 +294,7 @@ State * TeleKarma::Initialize(Action * a, State * s)
 			PString logFName("logs/log");
 			logFName += now.AsString("_yyyy.MM.dd_hh.mm.ss");
 			logFName += ".txt";
-			PTrace::Initialise(5, logFName);
+			PTrace::Initialise(3, logFName);
 			// initialize telephony (blocking call)
 			phone->Initialise(ia->stunServer);
 			PSTUNClient * stunClient = phone->GetSTUNClient();
