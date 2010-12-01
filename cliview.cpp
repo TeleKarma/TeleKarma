@@ -251,12 +251,18 @@ void CLIView::Main() {
 		if(state) {
 			enum StateID stateID = state->id;
 			enum StatusID statusID = state->status;
+			PString message = state->message;
 			SetState(state);
 			if (statusID == STATUS_AUTO_RETRIEVE || statusID == STATUS_RETRIEVE) {
 				PlaySound(HUMAN_DETECTED_WAV);
 			}
 			if (statusID == STATUS_UNSPECIFIED) {
 				UpdateHelp(stateID);
+			}
+			if (statusID == STATUS_FAILED) {
+				if (!message.IsEmpty()) {
+					PrintMessage("\n" + message + "\n");
+				}
 			}
 			if (stateID == STATE_TERMINATING) {
 				PrintMessage("\nCleaning up... (this may take a few moments)\n");
