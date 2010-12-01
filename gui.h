@@ -188,6 +188,7 @@ class MainFrame: public wxFrame
 		RegisterAction * regAction;
 		AccountList * accounts;
 		bool initialized;			// true after first STATE_INITIALIZED
+		bool initAttempted;			// true after first STATE_INITIALIZING
 		bool dialPadIsOpen;
 		bool registerDialogIsOpen;
 		//PSemaphore mutex;

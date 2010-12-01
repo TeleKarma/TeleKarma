@@ -171,6 +171,7 @@ MainFrame::MainFrame(TeleKarmaNG * view, Model * model, const wxString & title, 
 	  regAction(NULL),
 	  accounts(NULL),
 	  initialized(false),
+	  initAttempted(false),
 	  registerDialogIsOpen(false),
 	  dialPadIsOpen(false)
 {
@@ -333,13 +334,9 @@ void MainFrame::OnStateChange(wxStateChangeEvent & event)
 	if (s->status == STATUS_FAILED) {
 		if (currentStateID == STATE_INITIALIZING) {
 			// registration attempt failed - alert user forcefully
-			wxString msg(_("Unable to to initialize telephony subsystems.\nCheck STUN server, network connection, and NAT type."));
+			wxString msg(_("Unable to to initialize telephony subsystems.\nCheck STUN server, network connection, folders, and NAT type."));
 			wxMessageDialog * md = new wxMessageDialog(this, msg, _("Registration failed"), wxOK | wxICON_EXCLAMATION | wxCENTRE);
 			md->ShowModal();
-			if (!registerDialogIsOpen) {
-				registerDialogIsOpen = true;
-				new RegisterDialog(this, accounts);
-			}
 		} else if (currentStateID == STATE_REGISTERING) {
 			// registration attempt failed - alert user forcefully
 			wxString msg(_("Unable to register.\nCheck your account details and network connection."));
@@ -360,7 +357,7 @@ void MainFrame::OnStateChange(wxStateChangeEvent & event)
 		switch (currentStateID) {
 
 			case STATE_UNINITIALIZED:
-				if (!registerDialogIsOpen) {
+				if (!registerDialogIsOpen && !initAttempted) {
 					registerDialogIsOpen = true;
 					new RegisterDialog(this, accounts);
 				}
@@ -368,6 +365,7 @@ void MainFrame::OnStateChange(wxStateChangeEvent & event)
 
 			case STATE_INITIALIZING:
 				wxBeginBusyCursor();
+				initAttempted = true;
 				break;
 
 			case STATE_INITIALIZED:

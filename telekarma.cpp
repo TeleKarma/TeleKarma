@@ -275,14 +275,18 @@ State * TeleKarma::Initialize(Action * a, State * s)
 		const char * strPath1 = "logs";
 		struct stat status;
 		stat(strPath1, &status);
-		if ((ACCESS(strPath1, 0) == -1) || !(status.st_mode & S_IFDIR)){
-			result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Please create a \"logs\" folder in your TeleKarma program folder."));
-			flag = true;
-		}
+		bool existsLogs = !((ACCESS(strPath1, 0) == -1) || !(status.st_mode & S_IFDIR));
 		// verify existence and type of 'recordings' folder
 		const char * strPath2 = "recordings";
 		stat(strPath2, &status);
-		if ((ACCESS(strPath2, 0) == -1) || !(status.st_mode & S_IFDIR)){
+		bool existsRecordings = !((ACCESS(strPath2, 0) == -1) || !(status.st_mode & S_IFDIR));
+		if (!(existsLogs || existsRecordings)){
+			result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Please create \"logs\" and \"recordings\" folders in your TeleKarma program folder."));
+			flag = true;
+		} else if (!existsLogs) {
+			result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Please create a \"logs\" folder in your TeleKarma program folder."));
+			flag = true;
+		} else if (!existsRecordings) {
 			result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Please create a \"recordings\" folder in your TeleKarma program folder."));
 			flag = true;
 		}
