@@ -253,7 +253,7 @@ void CLIView::Main() {
 			enum StatusID statusID = state->status;
 			PString message = state->message;
 			SetState(state);
-			if (statusID == STATUS_AUTO_RETRIEVE || statusID == STATUS_RETRIEVE) {
+			if (statusID == STATUS_AUTO_RETRIEVE) {
 				PlaySound(HUMAN_DETECTED_WAV);
 			}
 			if (statusID == STATUS_UNSPECIFIED) {
