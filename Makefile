@@ -31,11 +31,10 @@ WX_GTK_LIBS=		\
 -lwx_baseu_net-2.8	\
 -lwx_baseu-2.8
 
-telekarma: main.o cliview.o clicontext.o $(CORE_OBJECTS)
+tk: main.o cliview.o clicontext.o $(CORE_OBJECTS)
 	g++ -o $@ $^ $(CORE_LIBS)  -L$(PREFIX)/lib
-	@echo "Please copy the telekarma executable to the bin directory."
 
-telekarma-gui: gui.o $(CORE_OBJECTS)
+tk-gui: gui.o $(CORE_OBJECTS)
 	g++ -o  $@ $^  $(WX_GTK_LIBS) $(CORE_LIBS) -L$(PREFIX)/lib
 
 gui.o: gui.cpp
