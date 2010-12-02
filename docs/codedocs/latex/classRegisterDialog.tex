@@ -1,0 +1,85 @@
+\hypertarget{classRegisterDialog}{
+\section{RegisterDialog Class Reference}
+\label{classRegisterDialog}\index{RegisterDialog@{RegisterDialog}}
+}
+Modal registration dialog box.  
+
+
+{\tt \#include $<$gui.h$>$}
+
+Collaboration diagram for RegisterDialog:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=400pt]{classRegisterDialog__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{classRegisterDialog_b07d91afc6ed60fd752ee324c322e2d8}{RegisterDialog} (\hyperlink{classMainFrame}{MainFrame} $\ast$pwin, \hyperlink{classAccountList}{AccountList} $\ast$accounts)
+\begin{CompactList}\small\item\em Constructor. \item\end{CompactList}\item 
+void \hyperlink{classRegisterDialog_6c95acf152a19de81ab996dcef977827}{OnClose} (wxCloseEvent \&event)
+\begin{CompactList}\small\item\em Handles system-prompted close events. \item\end{CompactList}\item 
+void \hyperlink{classRegisterDialog_334ccf10990ab1ec905088ea69187c2b}{OnRegister} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Initiates registration via pwin and closes the dialog. \item\end{CompactList}\item 
+void \hyperlink{classRegisterDialog_3389f6b8e9ec03901de4f5424d8ea201}{OnCancel} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Closes this dialog when the cancel button is clicked. \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+Modal registration dialog box. 
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classRegisterDialog_b07d91afc6ed60fd752ee324c322e2d8}{
+\index{RegisterDialog@{RegisterDialog}!RegisterDialog@{RegisterDialog}}
+\index{RegisterDialog@{RegisterDialog}!RegisterDialog@{RegisterDialog}}
+\subsubsection[{RegisterDialog}]{\setlength{\rightskip}{0pt plus 5cm}RegisterDialog::RegisterDialog ({\bf MainFrame} $\ast$ {\em pwin}, \/  {\bf AccountList} $\ast$ {\em accounts})}}
+\label{classRegisterDialog_b07d91afc6ed60fd752ee324c322e2d8}
+
+
+Constructor. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em pwin}]the parent window. \item[{\em accounts}]user's account list. \end{description}
+\end{Desc}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classRegisterDialog_3389f6b8e9ec03901de4f5424d8ea201}{
+\index{RegisterDialog@{RegisterDialog}!OnCancel@{OnCancel}}
+\index{OnCancel@{OnCancel}!RegisterDialog@{RegisterDialog}}
+\subsubsection[{OnCancel}]{\setlength{\rightskip}{0pt plus 5cm}void RegisterDialog::OnCancel (wxCommandEvent \& {\em event})}}
+\label{classRegisterDialog_3389f6b8e9ec03901de4f5424d8ea201}
+
+
+Closes this dialog when the cancel button is clicked. 
+
+Notifies pwin. Exclusively for use by wxWidgets event dispatcher. \hypertarget{classRegisterDialog_6c95acf152a19de81ab996dcef977827}{
+\index{RegisterDialog@{RegisterDialog}!OnClose@{OnClose}}
+\index{OnClose@{OnClose}!RegisterDialog@{RegisterDialog}}
+\subsubsection[{OnClose}]{\setlength{\rightskip}{0pt plus 5cm}void RegisterDialog::OnClose (wxCloseEvent \& {\em event})}}
+\label{classRegisterDialog_6c95acf152a19de81ab996dcef977827}
+
+
+Handles system-prompted close events. 
+
+Notifies pwin. Exclusively for use by wxWidgets event dispatcher. \hypertarget{classRegisterDialog_334ccf10990ab1ec905088ea69187c2b}{
+\index{RegisterDialog@{RegisterDialog}!OnRegister@{OnRegister}}
+\index{OnRegister@{OnRegister}!RegisterDialog@{RegisterDialog}}
+\subsubsection[{OnRegister}]{\setlength{\rightskip}{0pt plus 5cm}void RegisterDialog::OnRegister (wxCommandEvent \& {\em event})}}
+\label{classRegisterDialog_334ccf10990ab1ec905088ea69187c2b}
+
+
+Initiates registration via pwin and closes the dialog. 
+
+Exclusively for use by wxWidgets event dispatcher. 
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+\hyperlink{gui_8h}{gui.h}\item 
+\hyperlink{gui_8cpp}{gui.cpp}\end{CompactItemize}

@@ -1,0 +1,165 @@
+\hypertarget{classState}{
+\section{State Class Reference}
+\label{classState}\index{State@{State}}
+}
+{\tt \#include $<$state-new.h$>$}
+
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{classState_1b4e314c21378ef15c4ef854d4c88001}{State} (const int \hyperlink{classState_f747db9527dfb6ea0a58fe7bfeb3ac80}{id}, const int \hyperlink{classState_97418aee9e2f52608a6ab606c4594aff}{turn})
+\item 
+\hyperlink{classState_efadc9ab55d44f059e139b65c759dc14}{State} (\hyperlink{state_8h_2c309f64131cbfdae6d95e6591f208e6}{StateID} \hyperlink{classState_f747db9527dfb6ea0a58fe7bfeb3ac80}{id}, int \hyperlink{classState_97418aee9e2f52608a6ab606c4594aff}{turn})
+\begin{CompactList}\small\item\em Constructor. \item\end{CompactList}\item 
+\hyperlink{classState_0bfcbd427c3d009f71c627516ec17b25}{State} (\hyperlink{state_8h_2c309f64131cbfdae6d95e6591f208e6}{StateID} \hyperlink{classState_f747db9527dfb6ea0a58fe7bfeb3ac80}{id}, int \hyperlink{classState_97418aee9e2f52608a6ab606c4594aff}{turn}, \hyperlink{state_8h_26688ca6a181d6c6cf4f21d9839d4125}{StatusID} \hyperlink{classState_75d3a38b16f7081c4e961f6e7e2708b7}{status})
+\begin{CompactList}\small\item\em Constructor. \item\end{CompactList}\item 
+\hyperlink{classState_4ff7773f710d19259128cd975945b8d2}{State} (\hyperlink{state_8h_2c309f64131cbfdae6d95e6591f208e6}{StateID} \hyperlink{classState_f747db9527dfb6ea0a58fe7bfeb3ac80}{id}, int \hyperlink{classState_97418aee9e2f52608a6ab606c4594aff}{turn}, \hyperlink{state_8h_26688ca6a181d6c6cf4f21d9839d4125}{StatusID} \hyperlink{classState_75d3a38b16f7081c4e961f6e7e2708b7}{status}, const char $\ast$msg)
+\begin{CompactList}\small\item\em Constructor. \item\end{CompactList}\item 
+\hyperlink{classState_380fc79d928e017522e3b1c91e9aa66e}{State} (\hyperlink{state_8h_2c309f64131cbfdae6d95e6591f208e6}{StateID} \hyperlink{classState_f747db9527dfb6ea0a58fe7bfeb3ac80}{id}, int \hyperlink{classState_97418aee9e2f52608a6ab606c4594aff}{turn}, \hyperlink{state_8h_26688ca6a181d6c6cf4f21d9839d4125}{StatusID} \hyperlink{classState_75d3a38b16f7081c4e961f6e7e2708b7}{status}, const PString \&msg)
+\begin{CompactList}\small\item\em Constructor. \item\end{CompactList}\item 
+virtual \hyperlink{classState}{State} $\ast$ \hyperlink{classState_1e0489c0ec718afbb95d43edfcdafaab}{Clone} () const 
+\begin{CompactList}\small\item\em Creates a copy of this class. \item\end{CompactList}\end{CompactItemize}
+\subsection*{Public Attributes}
+\begin{CompactItemize}
+\item 
+const int \hyperlink{classState_97418aee9e2f52608a6ab606c4594aff}{turn}
+\begin{CompactList}\small\item\em Serial identifier used to conditionally accept action requests based on the state in which they were generated. \item\end{CompactList}\item 
+const int \hyperlink{classState_f747db9527dfb6ea0a58fe7bfeb3ac80}{id}
+\item 
+const \hyperlink{state_8h_2c309f64131cbfdae6d95e6591f208e6}{StateID} \hyperlink{classState_3e78ec8b6887cfe32f68049e85398a42}{id}
+\begin{CompactList}\small\item\em Uniquely identifies the state type. \item\end{CompactList}\item 
+const \hyperlink{state_8h_26688ca6a181d6c6cf4f21d9839d4125}{StatusID} \hyperlink{classState_75d3a38b16f7081c4e961f6e7e2708b7}{status}
+\begin{CompactList}\small\item\em Identifies the status associated with this state. \item\end{CompactList}\item 
+const PString \hyperlink{classState_e85e97971c5a76295158e8225e468c32}{message}
+\begin{CompactList}\small\item\em Empty string or a message that may be useful to display to the user relating to the status. \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classState_1b4e314c21378ef15c4ef854d4c88001}{
+\index{State@{State}!State@{State}}
+\index{State@{State}!State@{State}}
+\subsubsection[{State}]{\setlength{\rightskip}{0pt plus 5cm}State::State (const int {\em id}, \/  const int {\em turn})}}
+\label{classState_1b4e314c21378ef15c4ef854d4c88001}
+
+
+\hypertarget{classState_efadc9ab55d44f059e139b65c759dc14}{
+\index{State@{State}!State@{State}}
+\index{State@{State}!State@{State}}
+\subsubsection[{State}]{\setlength{\rightskip}{0pt plus 5cm}State::State ({\bf StateID} {\em id}, \/  int {\em turn})}}
+\label{classState_efadc9ab55d44f059e139b65c759dc14}
+
+
+Constructor. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em id}]the type of this state \item[{\em turn}]previous state's id + 1 if previous state not of same type as this state; otherwise, previous state's turn \end{description}
+\end{Desc}
+\hypertarget{classState_0bfcbd427c3d009f71c627516ec17b25}{
+\index{State@{State}!State@{State}}
+\index{State@{State}!State@{State}}
+\subsubsection[{State}]{\setlength{\rightskip}{0pt plus 5cm}State::State ({\bf StateID} {\em id}, \/  int {\em turn}, \/  {\bf StatusID} {\em status})}}
+\label{classState_0bfcbd427c3d009f71c627516ec17b25}
+
+
+Constructor. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em id}]the type of this state \item[{\em turn}]previous state's id + 1 if previous state not of same type as this state; otherwise, previous state's turn \item[{\em status}]the status to associate with this state \end{description}
+\end{Desc}
+\hypertarget{classState_4ff7773f710d19259128cd975945b8d2}{
+\index{State@{State}!State@{State}}
+\index{State@{State}!State@{State}}
+\subsubsection[{State}]{\setlength{\rightskip}{0pt plus 5cm}State::State ({\bf StateID} {\em id}, \/  int {\em turn}, \/  {\bf StatusID} {\em status}, \/  const char $\ast$ {\em msg})}}
+\label{classState_4ff7773f710d19259128cd975945b8d2}
+
+
+Constructor. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em id}]the type of this state \item[{\em turn}]previous state's id + 1 if previous state not of same type as this state; otherwise, previous state's turn \item[{\em status}]the status to associate with this state \item[{\em msg}]user-friendly elaboration on the status \end{description}
+\end{Desc}
+\hypertarget{classState_380fc79d928e017522e3b1c91e9aa66e}{
+\index{State@{State}!State@{State}}
+\index{State@{State}!State@{State}}
+\subsubsection[{State}]{\setlength{\rightskip}{0pt plus 5cm}State::State ({\bf StateID} {\em id}, \/  int {\em turn}, \/  {\bf StatusID} {\em status}, \/  const PString \& {\em msg})}}
+\label{classState_380fc79d928e017522e3b1c91e9aa66e}
+
+
+Constructor. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em id}]the type of this state \item[{\em turn}]previous state's id + 1 if previous state not of same type as this state; otherwise, previous state's turn \item[{\em status}]the status to associate with this state \item[{\em msg}]user-friendly elaboration on the status \end{description}
+\end{Desc}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classState_1e0489c0ec718afbb95d43edfcdafaab}{
+\index{State@{State}!Clone@{Clone}}
+\index{Clone@{Clone}!State@{State}}
+\subsubsection[{Clone}]{\setlength{\rightskip}{0pt plus 5cm}{\bf State} $\ast$ State::Clone () const\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classState_1e0489c0ec718afbb95d43edfcdafaab}
+
+
+Creates a copy of this class. 
+
+Subclasses must implement this method. 
+
+\subsection{Member Data Documentation}
+\hypertarget{classState_3e78ec8b6887cfe32f68049e85398a42}{
+\index{State@{State}!id@{id}}
+\index{id@{id}!State@{State}}
+\subsubsection[{id}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf StateID} {\bf State::id}}}
+\label{classState_3e78ec8b6887cfe32f68049e85398a42}
+
+
+Uniquely identifies the state type. 
+
+\hypertarget{classState_f747db9527dfb6ea0a58fe7bfeb3ac80}{
+\index{State@{State}!id@{id}}
+\index{id@{id}!State@{State}}
+\subsubsection[{id}]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf State::id}}}
+\label{classState_f747db9527dfb6ea0a58fe7bfeb3ac80}
+
+
+\hypertarget{classState_e85e97971c5a76295158e8225e468c32}{
+\index{State@{State}!message@{message}}
+\index{message@{message}!State@{State}}
+\subsubsection[{message}]{\setlength{\rightskip}{0pt plus 5cm}const PString {\bf State::message}}}
+\label{classState_e85e97971c5a76295158e8225e468c32}
+
+
+Empty string or a message that may be useful to display to the user relating to the status. 
+
+\hypertarget{classState_75d3a38b16f7081c4e961f6e7e2708b7}{
+\index{State@{State}!status@{status}}
+\index{status@{status}!State@{State}}
+\subsubsection[{status}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf StatusID} {\bf State::status}}}
+\label{classState_75d3a38b16f7081c4e961f6e7e2708b7}
+
+
+Identifies the status associated with this state. 
+
+\hypertarget{classState_97418aee9e2f52608a6ab606c4594aff}{
+\index{State@{State}!turn@{turn}}
+\index{turn@{turn}!State@{State}}
+\subsubsection[{turn}]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf State::turn}}}
+\label{classState_97418aee9e2f52608a6ab606c4594aff}
+
+
+Serial identifier used to conditionally accept action requests based on the state in which they were generated. 
+
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+\hyperlink{state-new_8h}{state-new.h}\item 
+\hyperlink{state_8h}{state.h}\item 
+\hyperlink{state_8cpp}{state.cpp}\end{CompactItemize}

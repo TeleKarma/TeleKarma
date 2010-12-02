@@ -1,0 +1,232 @@
+\hypertarget{classMainFrame}{
+\section{MainFrame Class Reference}
+\label{classMainFrame}\index{MainFrame@{MainFrame}}
+}
+The main window.  
+
+
+{\tt \#include $<$gui.h$>$}
+
+Collaboration diagram for MainFrame:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=400pt]{classMainFrame__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{classMainFrame_09f15beb9d0af78bd614358ad05b09f7}{MainFrame} (\hyperlink{classTeleKarmaNG}{TeleKarmaNG} $\ast$view, \hyperlink{classModel}{Model} $\ast$model, const wxString \&title, const wxPoint \&pos, const wxSize \&size)
+\begin{CompactList}\small\item\em Constructs the main window. \item\end{CompactList}\item 
+void \hyperlink{classMainFrame_5981c8c376f0b84971cd2f0574046ec7}{OnOpenRegisterDialog} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Handles registration initiation request. \item\end{CompactList}\item 
+void \hyperlink{classMainFrame_330d1881b7c14a2d29235f3f437b0456}{OnOpenDialPad} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Handles opening of dial pad dialog. \item\end{CompactList}\item 
+void \hyperlink{classMainFrame_b287a8d769abe22d71300beb96b14f03}{OnRegister} (const wxString \&s, const wxString \&r, const wxString \&u, const wxString \&p)
+\begin{CompactList}\small\item\em Handles registration information submission. \item\end{CompactList}\item 
+void \hyperlink{classMainFrame_6c21335bf2a3393f54b46889c8a559e5}{OnQuit} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Handles evExit (file-$>$exit). \item\end{CompactList}\item 
+void \hyperlink{classMainFrame_9f6f7f89d8b9aded1334cfa6eaca22bc}{OnClose} (wxCloseEvent \&event)
+\begin{CompactList}\small\item\em Handles system-prompted close events. \item\end{CompactList}\item 
+void \hyperlink{classMainFrame_a6cb4bffa152fb2adad782a440af5de2}{OnAbout} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Handles evAbout. \item\end{CompactList}\item 
+void \hyperlink{classMainFrame_5f4f33d38822481ad0608334a798325f}{OnStateChange} (\hyperlink{classwxStateChangeEvent}{wxStateChangeEvent} \&event)
+\begin{CompactList}\small\item\em Responds to state changes. \item\end{CompactList}\item 
+void \hyperlink{classMainFrame_90d32f36e1682ed4f5d2c2612ce6e2e3}{OnDial} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Dials. \item\end{CompactList}\item 
+void \hyperlink{classMainFrame_dbb9352129402cc4595446460c80d09f}{OnHangUp} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Hangs Up. \item\end{CompactList}\item 
+void \hyperlink{classMainFrame_343bfdcd2c0c3a32a58e11136408969b}{OnHold} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Place call on hold. \item\end{CompactList}\item 
+void \hyperlink{classMainFrame_bcbd80572652cfe2bc9736704149d003}{OnAutoHold} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Place call on autohold. \item\end{CompactList}\item 
+void \hyperlink{classMainFrame_cc537fb606070bc855356caef79efde8}{OnMuteAutoHold} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Place call on mute autohold. \item\end{CompactList}\item 
+void \hyperlink{classMainFrame_0972eb674b39fe851271e432c2d0eb6c}{OnRetrieve} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Retrieve call from autohold. \item\end{CompactList}\item 
+void \hyperlink{classMainFrame_a23ae1cbbe9db200b96285a46f23b6c3}{OnCloseRegisterDialog} (\hyperlink{classwxRegisterDialogClosedEvent}{wxRegisterDialogClosedEvent} \&event)
+\begin{CompactList}\small\item\em Adjust to closure of register dialog. \item\end{CompactList}\item 
+void \hyperlink{classMainFrame_c334df080d070c2f82c9457ad132ce18}{OnCloseDialPad} (\hyperlink{classwxDialPadClosedEvent}{wxDialPadClosedEvent} \&event)
+\begin{CompactList}\small\item\em Adjust to closure of dial pad. \item\end{CompactList}\item 
+void \hyperlink{classMainFrame_cf26ae04d239c8275ea85c5c4fc410e7}{OnAdjustControls} (const \hyperlink{state_8h_2c309f64131cbfdae6d95e6591f208e6}{StateID} state)
+\begin{CompactList}\small\item\em Adjust the enabled/disabled states of controls. \item\end{CompactList}\item 
+void \hyperlink{classMainFrame_f32b38c49c7276b789284ed9ee92a0c5}{Trace} (const wxString \&msg)
+\begin{CompactList}\small\item\em Add a trace message to the console. \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+The main window. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classMainFrame_09f15beb9d0af78bd614358ad05b09f7}{
+\index{MainFrame@{MainFrame}!MainFrame@{MainFrame}}
+\index{MainFrame@{MainFrame}!MainFrame@{MainFrame}}
+\subsubsection[{MainFrame}]{\setlength{\rightskip}{0pt plus 5cm}MainFrame::MainFrame ({\bf TeleKarmaNG} $\ast$ {\em view}, \/  {\bf Model} $\ast$ {\em model}, \/  const wxString \& {\em title}, \/  const wxPoint \& {\em pos}, \/  const wxSize \& {\em size})}}
+\label{classMainFrame_09f15beb9d0af78bd614358ad05b09f7}
+
+
+Constructs the main window. 
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classMainFrame_a6cb4bffa152fb2adad782a440af5de2}{
+\index{MainFrame@{MainFrame}!OnAbout@{OnAbout}}
+\index{OnAbout@{OnAbout}!MainFrame@{MainFrame}}
+\subsubsection[{OnAbout}]{\setlength{\rightskip}{0pt plus 5cm}void MainFrame::OnAbout (wxCommandEvent \& {\em event})}}
+\label{classMainFrame_a6cb4bffa152fb2adad782a440af5de2}
+
+
+Handles evAbout. 
+
+\hypertarget{classMainFrame_cf26ae04d239c8275ea85c5c4fc410e7}{
+\index{MainFrame@{MainFrame}!OnAdjustControls@{OnAdjustControls}}
+\index{OnAdjustControls@{OnAdjustControls}!MainFrame@{MainFrame}}
+\subsubsection[{OnAdjustControls}]{\setlength{\rightskip}{0pt plus 5cm}void MainFrame::OnAdjustControls (const {\bf StateID} {\em state})}}
+\label{classMainFrame_cf26ae04d239c8275ea85c5c4fc410e7}
+
+
+Adjust the enabled/disabled states of controls. 
+
+\hypertarget{classMainFrame_bcbd80572652cfe2bc9736704149d003}{
+\index{MainFrame@{MainFrame}!OnAutoHold@{OnAutoHold}}
+\index{OnAutoHold@{OnAutoHold}!MainFrame@{MainFrame}}
+\subsubsection[{OnAutoHold}]{\setlength{\rightskip}{0pt plus 5cm}void MainFrame::OnAutoHold (wxCommandEvent \& {\em event})}}
+\label{classMainFrame_bcbd80572652cfe2bc9736704149d003}
+
+
+Place call on autohold. 
+
+\hypertarget{classMainFrame_9f6f7f89d8b9aded1334cfa6eaca22bc}{
+\index{MainFrame@{MainFrame}!OnClose@{OnClose}}
+\index{OnClose@{OnClose}!MainFrame@{MainFrame}}
+\subsubsection[{OnClose}]{\setlength{\rightskip}{0pt plus 5cm}void MainFrame::OnClose (wxCloseEvent \& {\em event})}}
+\label{classMainFrame_9f6f7f89d8b9aded1334cfa6eaca22bc}
+
+
+Handles system-prompted close events. 
+
+\hypertarget{classMainFrame_c334df080d070c2f82c9457ad132ce18}{
+\index{MainFrame@{MainFrame}!OnCloseDialPad@{OnCloseDialPad}}
+\index{OnCloseDialPad@{OnCloseDialPad}!MainFrame@{MainFrame}}
+\subsubsection[{OnCloseDialPad}]{\setlength{\rightskip}{0pt plus 5cm}void MainFrame::OnCloseDialPad ({\bf wxDialPadClosedEvent} \& {\em event})}}
+\label{classMainFrame_c334df080d070c2f82c9457ad132ce18}
+
+
+Adjust to closure of dial pad. 
+
+\hypertarget{classMainFrame_a23ae1cbbe9db200b96285a46f23b6c3}{
+\index{MainFrame@{MainFrame}!OnCloseRegisterDialog@{OnCloseRegisterDialog}}
+\index{OnCloseRegisterDialog@{OnCloseRegisterDialog}!MainFrame@{MainFrame}}
+\subsubsection[{OnCloseRegisterDialog}]{\setlength{\rightskip}{0pt plus 5cm}void MainFrame::OnCloseRegisterDialog ({\bf wxRegisterDialogClosedEvent} \& {\em event})}}
+\label{classMainFrame_a23ae1cbbe9db200b96285a46f23b6c3}
+
+
+Adjust to closure of register dialog. 
+
+\hypertarget{classMainFrame_90d32f36e1682ed4f5d2c2612ce6e2e3}{
+\index{MainFrame@{MainFrame}!OnDial@{OnDial}}
+\index{OnDial@{OnDial}!MainFrame@{MainFrame}}
+\subsubsection[{OnDial}]{\setlength{\rightskip}{0pt plus 5cm}void MainFrame::OnDial (wxCommandEvent \& {\em event})}}
+\label{classMainFrame_90d32f36e1682ed4f5d2c2612ce6e2e3}
+
+
+Dials. 
+
+\hypertarget{classMainFrame_dbb9352129402cc4595446460c80d09f}{
+\index{MainFrame@{MainFrame}!OnHangUp@{OnHangUp}}
+\index{OnHangUp@{OnHangUp}!MainFrame@{MainFrame}}
+\subsubsection[{OnHangUp}]{\setlength{\rightskip}{0pt plus 5cm}void MainFrame::OnHangUp (wxCommandEvent \& {\em event})}}
+\label{classMainFrame_dbb9352129402cc4595446460c80d09f}
+
+
+Hangs Up. 
+
+\hypertarget{classMainFrame_343bfdcd2c0c3a32a58e11136408969b}{
+\index{MainFrame@{MainFrame}!OnHold@{OnHold}}
+\index{OnHold@{OnHold}!MainFrame@{MainFrame}}
+\subsubsection[{OnHold}]{\setlength{\rightskip}{0pt plus 5cm}void MainFrame::OnHold (wxCommandEvent \& {\em event})}}
+\label{classMainFrame_343bfdcd2c0c3a32a58e11136408969b}
+
+
+Place call on hold. 
+
+\hypertarget{classMainFrame_cc537fb606070bc855356caef79efde8}{
+\index{MainFrame@{MainFrame}!OnMuteAutoHold@{OnMuteAutoHold}}
+\index{OnMuteAutoHold@{OnMuteAutoHold}!MainFrame@{MainFrame}}
+\subsubsection[{OnMuteAutoHold}]{\setlength{\rightskip}{0pt plus 5cm}void MainFrame::OnMuteAutoHold (wxCommandEvent \& {\em event})}}
+\label{classMainFrame_cc537fb606070bc855356caef79efde8}
+
+
+Place call on mute autohold. 
+
+\hypertarget{classMainFrame_330d1881b7c14a2d29235f3f437b0456}{
+\index{MainFrame@{MainFrame}!OnOpenDialPad@{OnOpenDialPad}}
+\index{OnOpenDialPad@{OnOpenDialPad}!MainFrame@{MainFrame}}
+\subsubsection[{OnOpenDialPad}]{\setlength{\rightskip}{0pt plus 5cm}void MainFrame::OnOpenDialPad (wxCommandEvent \& {\em event})}}
+\label{classMainFrame_330d1881b7c14a2d29235f3f437b0456}
+
+
+Handles opening of dial pad dialog. 
+
+\hypertarget{classMainFrame_5981c8c376f0b84971cd2f0574046ec7}{
+\index{MainFrame@{MainFrame}!OnOpenRegisterDialog@{OnOpenRegisterDialog}}
+\index{OnOpenRegisterDialog@{OnOpenRegisterDialog}!MainFrame@{MainFrame}}
+\subsubsection[{OnOpenRegisterDialog}]{\setlength{\rightskip}{0pt plus 5cm}void MainFrame::OnOpenRegisterDialog (wxCommandEvent \& {\em event})}}
+\label{classMainFrame_5981c8c376f0b84971cd2f0574046ec7}
+
+
+Handles registration initiation request. 
+
+\hypertarget{classMainFrame_6c21335bf2a3393f54b46889c8a559e5}{
+\index{MainFrame@{MainFrame}!OnQuit@{OnQuit}}
+\index{OnQuit@{OnQuit}!MainFrame@{MainFrame}}
+\subsubsection[{OnQuit}]{\setlength{\rightskip}{0pt plus 5cm}void MainFrame::OnQuit (wxCommandEvent \& {\em event})}}
+\label{classMainFrame_6c21335bf2a3393f54b46889c8a559e5}
+
+
+Handles evExit (file-$>$exit). 
+
+\hypertarget{classMainFrame_b287a8d769abe22d71300beb96b14f03}{
+\index{MainFrame@{MainFrame}!OnRegister@{OnRegister}}
+\index{OnRegister@{OnRegister}!MainFrame@{MainFrame}}
+\subsubsection[{OnRegister}]{\setlength{\rightskip}{0pt plus 5cm}void MainFrame::OnRegister (const wxString \& {\em s}, \/  const wxString \& {\em r}, \/  const wxString \& {\em u}, \/  const wxString \& {\em p})}}
+\label{classMainFrame_b287a8d769abe22d71300beb96b14f03}
+
+
+Handles registration information submission. 
+
+\hypertarget{classMainFrame_0972eb674b39fe851271e432c2d0eb6c}{
+\index{MainFrame@{MainFrame}!OnRetrieve@{OnRetrieve}}
+\index{OnRetrieve@{OnRetrieve}!MainFrame@{MainFrame}}
+\subsubsection[{OnRetrieve}]{\setlength{\rightskip}{0pt plus 5cm}void MainFrame::OnRetrieve (wxCommandEvent \& {\em event})}}
+\label{classMainFrame_0972eb674b39fe851271e432c2d0eb6c}
+
+
+Retrieve call from autohold. 
+
+\hypertarget{classMainFrame_5f4f33d38822481ad0608334a798325f}{
+\index{MainFrame@{MainFrame}!OnStateChange@{OnStateChange}}
+\index{OnStateChange@{OnStateChange}!MainFrame@{MainFrame}}
+\subsubsection[{OnStateChange}]{\setlength{\rightskip}{0pt plus 5cm}void MainFrame::OnStateChange ({\bf wxStateChangeEvent} \& {\em event})}}
+\label{classMainFrame_5f4f33d38822481ad0608334a798325f}
+
+
+Responds to state changes. 
+
+\hypertarget{classMainFrame_f32b38c49c7276b789284ed9ee92a0c5}{
+\index{MainFrame@{MainFrame}!Trace@{Trace}}
+\index{Trace@{Trace}!MainFrame@{MainFrame}}
+\subsubsection[{Trace}]{\setlength{\rightskip}{0pt plus 5cm}void MainFrame::Trace (const wxString \& {\em msg})}}
+\label{classMainFrame_f32b38c49c7276b789284ed9ee92a0c5}
+
+
+Add a trace message to the console. 
+
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+\hyperlink{gui_8h}{gui.h}\item 
+\hyperlink{gui_8cpp}{gui.cpp}\end{CompactItemize}

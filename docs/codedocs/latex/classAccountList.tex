@@ -1,0 +1,144 @@
+\hypertarget{classAccountList}{
+\section{AccountList Class Reference}
+\label{classAccountList}\index{AccountList@{AccountList}}
+}
+Represents a persistant list of SIP service provider accounts.  
+
+
+{\tt \#include $<$account.h$>$}
+
+Collaboration diagram for AccountList:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=112pt]{classAccountList__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{classAccountList_8e8092c5a958a03625dc9ff1915c8225}{AccountList} (const PString \&filename)
+\begin{CompactList}\small\item\em Loads a new \hyperlink{classAccountList}{AccountList} from a file. \item\end{CompactList}\item 
+virtual \hyperlink{classAccountList_77acd32be8700d21271e8802d87e2b15}{$\sim$AccountList} ()
+\begin{CompactList}\small\item\em Deallocates all internal memory plus all \hyperlink{classAccount}{Account} objects. \item\end{CompactList}\item 
+\hyperlink{classAccount}{Account} $\ast$ \hyperlink{classAccountList_c3d69942a3a661112f5a141bbbb80909}{GetAccount} (int index=0)
+\begin{CompactList}\small\item\em Returns a pointer to an account in the list of accounts, or NULL if no such account exists. \item\end{CompactList}\item 
+void \hyperlink{classAccountList_58880040232e0a6ba7e77096e26b6347}{AddAccount} (\hyperlink{classAccount}{Account} $\ast$account)
+\begin{CompactList}\small\item\em Add a new account to this list. \item\end{CompactList}\item 
+void \hyperlink{classAccountList_16a6b337fc14bce5ee4dd31f854592fc}{RemoveAccount} (const \hyperlink{classAccount}{Account} $\ast$account)
+\begin{CompactList}\small\item\em Remove an account from the list. \item\end{CompactList}\item 
+void \hyperlink{classAccountList_e94a2c11a78e44ac3724018d4142cbd7}{SetDefault} (const \hyperlink{classAccount}{Account} $\ast$account)
+\begin{CompactList}\small\item\em Moves an account to the first array index. \item\end{CompactList}\item 
+int \hyperlink{classAccountList_b83a124132b34cf82e5601609776daf9}{GetCount} () const 
+\begin{CompactList}\small\item\em Returns the number of Accounts in the list. \item\end{CompactList}\item 
+bool \hyperlink{classAccountList_f070ee0999c8406ed4c79ba4e131545a}{Save} () const 
+\begin{CompactList}\small\item\em Saves the \hyperlink{classAccountList}{AccountList} to the file provided in the constructor. \item\end{CompactList}\item 
+bool \hyperlink{classAccountList_1a289fad4cfa2e10362a3de84e2bd091}{SaveTo} (const PString \&filename) const 
+\begin{CompactList}\small\item\em Saves the \hyperlink{classAccountList}{AccountList} to a file whose name is provided by the caller. \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+Represents a persistant list of SIP service provider accounts. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classAccountList_8e8092c5a958a03625dc9ff1915c8225}{
+\index{AccountList@{AccountList}!AccountList@{AccountList}}
+\index{AccountList@{AccountList}!AccountList@{AccountList}}
+\subsubsection[{AccountList}]{\setlength{\rightskip}{0pt plus 5cm}AccountList::AccountList (const PString \& {\em filename})}}
+\label{classAccountList_8e8092c5a958a03625dc9ff1915c8225}
+
+
+Loads a new \hyperlink{classAccountList}{AccountList} from a file. 
+
+If the file does not exist, the \hyperlink{classAccountList}{AccountList} will be empty. \hypertarget{classAccountList_77acd32be8700d21271e8802d87e2b15}{
+\index{AccountList@{AccountList}!$\sim$AccountList@{$\sim$AccountList}}
+\index{$\sim$AccountList@{$\sim$AccountList}!AccountList@{AccountList}}
+\subsubsection[{$\sim$AccountList}]{\setlength{\rightskip}{0pt plus 5cm}AccountList::$\sim$AccountList ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classAccountList_77acd32be8700d21271e8802d87e2b15}
+
+
+Deallocates all internal memory plus all \hyperlink{classAccount}{Account} objects. 
+
+Note that deleting this object will render pointers returned by \hyperlink{classAccountList_c3d69942a3a661112f5a141bbbb80909}{GetAccount()} unusable, since that heap memory will be deallocated. 
+
+\subsection{Member Function Documentation}
+\hypertarget{classAccountList_58880040232e0a6ba7e77096e26b6347}{
+\index{AccountList@{AccountList}!AddAccount@{AddAccount}}
+\index{AddAccount@{AddAccount}!AccountList@{AccountList}}
+\subsubsection[{AddAccount}]{\setlength{\rightskip}{0pt plus 5cm}void AccountList::AddAccount ({\bf Account} $\ast$ {\em account})}}
+\label{classAccountList_58880040232e0a6ba7e77096e26b6347}
+
+
+Add a new account to this list. 
+
+Note that it is an error to add the same \hyperlink{classAccount}{Account} (the same heap memory space) to multiple \hyperlink{classAccountList}{AccountList} objects. This \hyperlink{classAccountList}{AccountList} will assume responsibility for managing the memory associated with the passed \hyperlink{classAccount}{Account}. It is an error for the caller to subsequently delete the heap memory allocated to the pointer passed into this method. \hypertarget{classAccountList_c3d69942a3a661112f5a141bbbb80909}{
+\index{AccountList@{AccountList}!GetAccount@{GetAccount}}
+\index{GetAccount@{GetAccount}!AccountList@{AccountList}}
+\subsubsection[{GetAccount}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Account} $\ast$ AccountList::GetAccount (int {\em index} = {\tt 0})}}
+\label{classAccountList_c3d69942a3a661112f5a141bbbb80909}
+
+
+Returns a pointer to an account in the list of accounts, or NULL if no such account exists. 
+
+This class retains responsibility for memory management. Deleting the returned pointer is an error. However, modification of the \hyperlink{classAccount}{Account} is allowed and expected as the means of editing contents of the list in place. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em index}]optional; the array index of the account sought; zero is the default index. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]requested account or NULL if the index is out of range. \end{Desc}
+\hypertarget{classAccountList_b83a124132b34cf82e5601609776daf9}{
+\index{AccountList@{AccountList}!GetCount@{GetCount}}
+\index{GetCount@{GetCount}!AccountList@{AccountList}}
+\subsubsection[{GetCount}]{\setlength{\rightskip}{0pt plus 5cm}int AccountList::GetCount () const}}
+\label{classAccountList_b83a124132b34cf82e5601609776daf9}
+
+
+Returns the number of Accounts in the list. 
+
+\hypertarget{classAccountList_16a6b337fc14bce5ee4dd31f854592fc}{
+\index{AccountList@{AccountList}!RemoveAccount@{RemoveAccount}}
+\index{RemoveAccount@{RemoveAccount}!AccountList@{AccountList}}
+\subsubsection[{RemoveAccount}]{\setlength{\rightskip}{0pt plus 5cm}void AccountList::RemoveAccount (const {\bf Account} $\ast$ {\em account})}}
+\label{classAccountList_16a6b337fc14bce5ee4dd31f854592fc}
+
+
+Remove an account from the list. 
+
+Note that this Account's heap memory will be deallocated, and pointers to this account retrieved using \hyperlink{classAccountList_c3d69942a3a661112f5a141bbbb80909}{GetAccount()} and the pointer passed in via \hyperlink{classAccountList_58880040232e0a6ba7e77096e26b6347}{AddAccount(Account $\ast$)} (when applicable) will be left dangling. Also note that the parameter must appear in this list and must be managed only by this \hyperlink{classAccountList}{AccountList}. \hypertarget{classAccountList_f070ee0999c8406ed4c79ba4e131545a}{
+\index{AccountList@{AccountList}!Save@{Save}}
+\index{Save@{Save}!AccountList@{AccountList}}
+\subsubsection[{Save}]{\setlength{\rightskip}{0pt plus 5cm}bool AccountList::Save () const}}
+\label{classAccountList_f070ee0999c8406ed4c79ba4e131545a}
+
+
+Saves the \hyperlink{classAccountList}{AccountList} to the file provided in the constructor. 
+
+If that file does not exist, it will be created if possible. \begin{Desc}
+\item[Returns:]if successful \end{Desc}
+\hypertarget{classAccountList_1a289fad4cfa2e10362a3de84e2bd091}{
+\index{AccountList@{AccountList}!SaveTo@{SaveTo}}
+\index{SaveTo@{SaveTo}!AccountList@{AccountList}}
+\subsubsection[{SaveTo}]{\setlength{\rightskip}{0pt plus 5cm}bool AccountList::SaveTo (const PString \& {\em filename}) const}}
+\label{classAccountList_1a289fad4cfa2e10362a3de84e2bd091}
+
+
+Saves the \hyperlink{classAccountList}{AccountList} to a file whose name is provided by the caller. 
+
+If that file does not exist, it will be created if possible. Use to make a backup copy of the account config file. \begin{Desc}
+\item[Returns:]if successful \end{Desc}
+\hypertarget{classAccountList_e94a2c11a78e44ac3724018d4142cbd7}{
+\index{AccountList@{AccountList}!SetDefault@{SetDefault}}
+\index{SetDefault@{SetDefault}!AccountList@{AccountList}}
+\subsubsection[{SetDefault}]{\setlength{\rightskip}{0pt plus 5cm}void AccountList::SetDefault (const {\bf Account} $\ast$ {\em account})}}
+\label{classAccountList_e94a2c11a78e44ac3724018d4142cbd7}
+
+
+Moves an account to the first array index. 
+
+The parameter must exist in the list. 
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+\hyperlink{account_8h}{account.h}\item 
+\hyperlink{account_8cpp}{account.cpp}\end{CompactItemize}
