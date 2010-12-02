@@ -507,12 +507,7 @@ State * TeleKarma::PlaySound(Action * a, State * s)
 	if (psa == NULL) {
 		result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Unable to play WAV file"));
 	} else {
-#ifdef WIN32
-		PlaySound(TEXT(psa->fname), NULL, psa->fname);
-#else
 		phone->PlayWAVSpeaker(psa->fname);
-#endif
-
 		result = SetState(new State(result->id, result->turn, STATUS_UNSPECIFIED, "Playing WAV file"));
 	}
 	return result;
