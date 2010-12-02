@@ -60,6 +60,13 @@ void TeleKarma::Main() {
 
 State * TeleKarma::SetState(State * s)
 {
+	/* This could possibly be handled better, but tracking down all the places
+	 * in the code where this needs to be done and making thos changes is too
+	 * risky.
+	 */
+	if (s->id == STATE_DISCONNECTED) {
+		phone->Disconnect();
+	}
 	model->SetState(s);
 	return s;
 }
