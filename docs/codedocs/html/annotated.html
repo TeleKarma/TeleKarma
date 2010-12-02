@@ -23,20 +23,41 @@
 </div>
 <div class="contents">
 <h1>Class List</h1>Here are the classes, structs, unions and interfaces with brief descriptions:<table>
-  <tr><td class="indexkey"><a class="el" href="classAutoHoldStateHandler.html">AutoHoldStateHandler</a></td><td class="indexvalue">This class is responsible for placing a connected call on detect human hold, including recording, muting mic, playing a wav loop, detecting a DTMF tone, alerting the user if a human is detected, monitoring call connection state, and restoring the connection and mic upon retrieval or human detection </td></tr>
-  <tr><td class="indexkey"><a class="el" href="classConnectedStateHandler.html">ConnectedStateHandler</a></td><td class="indexvalue">This class is responsible for user options and connection state handling when in a normal call connection (as opposed to one of the hold modes) </td></tr>
-  <tr><td class="indexkey"><a class="el" href="classDialStateHandler.html">DialStateHandler</a></td><td class="indexvalue">This class is responsible for obtaining a SIP number from the user, initiating dialing, and confirming success or failure of the connection </td></tr>
-  <tr><td class="indexkey"><a class="el" href="classDisconnectStateHandler.html">DisconnectStateHandler</a></td><td class="indexvalue">This class is responsible for disconnecting a call </td></tr>
-  <tr><td class="indexkey"><a class="el" href="classExitStateHandler.html">ExitStateHandler</a></td><td class="indexvalue">This class does nothing </td></tr>
-  <tr><td class="indexkey"><a class="el" href="classHoldStateHandler.html">HoldStateHandler</a></td><td class="indexvalue">This class is responsible for placing a connected call on standard hold, including recording, playing a wav loop, presenting user options, detecting user commands and responding those commands and connection state appropriately </td></tr>
-  <tr><td class="indexkey"><a class="el" href="classMenuStateHandler.html">MenuStateHandler</a></td><td class="indexvalue">This class is responsible for displaying the simple menu presenting 'call' or 'quit' options and responding to either command </td></tr>
-  <tr><td class="indexkey"><a class="el" href="classRegisterStateHandler.html">RegisterStateHandler</a></td><td class="indexvalue">This class is responsible for initializing telephony and registering the user with an SIP registrar, including gathering SIP account information from the user, initiating registration, and verifying successful registration </td></tr>
-  <tr><td class="indexkey"><a class="el" href="classStateHandler.html">StateHandler</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classAccount.html">Account</a></td><td class="indexvalue">Represents a user's account with a SIP service provider </td></tr>
+  <tr><td class="indexkey"><a class="el" href="classAccountList.html">AccountList</a></td><td class="indexvalue">Represents a persistant list of SIP service provider accounts </td></tr>
+  <tr><td class="indexkey"><a class="el" href="classAction.html">Action</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classAutoHoldAction.html">AutoHoldAction</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classCLIContext.html">CLIContext</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classCLIView.html">CLIView</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classController.html">Controller</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classDialAction.html">DialAction</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classDialPad.html">DialPad</a></td><td class="indexvalue">Dial pad for touch tone transmission </td></tr>
+  <tr><td class="indexkey"><a class="el" href="classDisconnectAction.html">DisconnectAction</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classHoldAction.html">HoldAction</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classInitializeAction.html">InitializeAction</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classMainFrame.html">MainFrame</a></td><td class="indexvalue">The main window </td></tr>
+  <tr><td class="indexkey"><a class="el" href="classModel.html">Model</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classModelListener.html">ModelListener</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classPlaySoundAction.html">PlaySoundAction</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classQuitAction.html">QuitAction</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classRegisterAction.html">RegisterAction</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classRegisterDialog.html">RegisterDialog</a></td><td class="indexvalue">Modal registration dialog box </td></tr>
+  <tr><td class="indexkey"><a class="el" href="classRetrieveAction.html">RetrieveAction</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classSendToneAction.html">SendToneAction</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classState.html">State</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classStateHelper.html">StateHelper</a></td><td class="indexvalue">Utilities for mapping state id and other state-derived data to meaningful semantics and messages </td></tr>
   <tr><td class="indexkey"><a class="el" href="classTeleKarma.html">TeleKarma</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classTeleKarmaNG.html">TeleKarmaNG</a></td><td class="indexvalue">The main process </td></tr>
   <tr><td class="indexkey"><a class="el" href="classTelephonyIfc.html">TelephonyIfc</a></td><td class="indexvalue">This class is the interface between telekarama and the Opal telephony library </td></tr>
+  <tr><td class="indexkey"><a class="el" href="classTkPCSSEndPoint.html">TkPCSSEndPoint</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classTkSIPEndPoint.html">TkSIPEndPoint</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classView.html">View</a></td><td class="indexvalue">Abstract superclass for all <a class="el" href="classTeleKarma.html">TeleKarma</a> views </td></tr>
+  <tr><td class="indexkey"><a class="el" href="classwxDialPadClosedEvent.html">wxDialPadClosedEvent</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classwxRegisterDialogClosedEvent.html">wxRegisterDialogClosedEvent</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey"><a class="el" href="classwxStateChangeEvent.html">wxStateChangeEvent</a></td><td class="indexvalue"></td></tr>
 </table>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Mon Oct 25 21:10:24 2010 by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Dec 1 20:10:24 2010 by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.8 </small></address>
 </body>
