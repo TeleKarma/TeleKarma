@@ -1,0 +1,4 @@
+>default
+stun:stun.ekiga.net
+username:your_username_here
+registrar:ekiga.net
