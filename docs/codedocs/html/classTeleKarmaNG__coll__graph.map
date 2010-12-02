@@ -1,0 +1,10 @@
+<area shape="rect" id="node16" href="$classMainFrame.html" title="The main window." alt="" coords="151,502,239,530">
+<area shape="rect" id="node2" href="$classView.html" title="Abstract superclass for all TeleKarma views." alt="" coords="240,315,291,343">
+<area shape="rect" id="node4" href="$classModelListener.html" title="ModelListener" alt="" coords="308,6,412,34">
+<area shape="rect" id="node6" href="$classModel.html" title="Model" alt="" coords="199,115,257,143">
+<area shape="rect" id="node13" href="$classController.html" title="Controller" alt="" coords="188,222,268,250">
+<area shape="rect" id="node9" href="$classAction.html" title="Action" alt="" coords="87,6,145,34">
+<area shape="rect" id="node24" href="$classRegisterAction.html" title="RegisterAction" alt="" coords="5,169,115,197">
+<area shape="rect" id="node11" href="$classState.html" title="State" alt="" coords="201,6,255,34">
+<area shape="rect" id="node18" href="$classAccountList.html" title="Represents a persistant list of SIP service provider accounts." alt="" coords="324,409,415,437">
+<area shape="rect" id="node20" href="$classAccount.html" title="Represents a user&#39;s account with a SIP service provider." alt="" coords="333,315,405,343">

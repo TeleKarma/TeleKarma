@@ -1,0 +1,345 @@
+\hypertarget{gui_8h}{
+\section{gui.h File Reference}
+\label{gui_8h}\index{gui.h@{gui.h}}
+}
+
+
+This graph shows which files directly or indirectly include this file:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=46pt]{gui_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{CompactItemize}
+\item 
+class \hyperlink{classwxStateChangeEvent}{wxStateChangeEvent}
+\item 
+class \hyperlink{classwxRegisterDialogClosedEvent}{wxRegisterDialogClosedEvent}
+\item 
+class \hyperlink{classwxDialPadClosedEvent}{wxDialPadClosedEvent}
+\item 
+class \hyperlink{classTeleKarmaNG}{TeleKarmaNG}
+\begin{CompactList}\small\item\em The main process. \item\end{CompactList}\item 
+class \hyperlink{classMainFrame}{MainFrame}
+\begin{CompactList}\small\item\em The main window. \item\end{CompactList}\item 
+class \hyperlink{classRegisterDialog}{RegisterDialog}
+\begin{CompactList}\small\item\em Modal registration dialog box. \item\end{CompactList}\item 
+class \hyperlink{classDialPad}{DialPad}
+\begin{CompactList}\small\item\em Dial pad for touch tone transmission. \item\end{CompactList}\item 
+class \hyperlink{classStateHelper}{StateHelper}
+\begin{CompactList}\small\item\em Utilities for mapping state id and other state-derived data to meaningful semantics and messages. \item\end{CompactList}\end{CompactItemize}
+\subsection*{Defines}
+\begin{CompactItemize}
+\item 
+\#define \hyperlink{gui_8h_2fd81ded1b6a151f629441182c358d5b}{PRODUCT\_\-NAME}~\char`\"{}TeleKarma NG\char`\"{}
+\item 
+\#define \hyperlink{gui_8h_1c6d5de492ac61ad29aec7aa9a436bbf}{VERSION}~\char`\"{}0.1.002\char`\"{}
+\item 
+\#define \hyperlink{gui_8h_0bff94a0d5c29e72fd5459933019db7d}{COPYRIGHT\_\-HOLDER}~\char`\"{}Thomas Stellard, Michael Volk, Nikhil Tripathi and Peter Batzel\char`\"{}
+\item 
+\#define \hyperlink{gui_8h_ceec47906f5ee7badf2b8398941cd016}{EVT\_\-STATE}(id, fn)
+\item 
+\#define \hyperlink{gui_8h_380ef9893c751b2aa536614bb06667bc}{EVT\_\-REGISTER\_\-DIALOG\_\-CLOSED}(id, fn)
+\item 
+\#define \hyperlink{gui_8h_a7a14de65321aae213fa1bf6296d4da7}{EVT\_\-DIAL\_\-PAD\_\-CLOSED}(id, fn)
+\end{CompactItemize}
+\subsection*{Typedefs}
+\begin{CompactItemize}
+\item 
+typedef void(wxEvtHandler::$\ast$ \hyperlink{gui_8h_2bd601b6476eb4a30ff58a621ac77dbc}{wxStateChangeEventFunction} )(\hyperlink{classwxStateChangeEvent}{wxStateChangeEvent} \&)
+\item 
+typedef void(wxEvtHandler::$\ast$ \hyperlink{gui_8h_6f5c9031b4afd4c6c1b837beacf5909d}{wxRegisterDialogClosedEventFunction} )(\hyperlink{classwxRegisterDialogClosedEvent}{wxRegisterDialogClosedEvent} \&)
+\item 
+typedef void(wxEvtHandler::$\ast$ \hyperlink{gui_8h_f0e8a28d7b4e8891661fef371286e7e7}{wxDialPadClosedEventFunction} )(\hyperlink{classwxDialPadClosedEvent}{wxDialPadClosedEvent} \&)
+\end{CompactItemize}
+\subsection*{Enumerations}
+\begin{CompactItemize}
+\item 
+enum \{ \par
+\hyperlink{gui_8h_06fc87d81c62e9abb8790b6e5713c55b982306e68d56775c32654fc2b29cf3bf}{evRegister} =  1, 
+\hyperlink{gui_8h_06fc87d81c62e9abb8790b6e5713c55be6e396e0cbe1e9ef1ecc7bcc5a68fb09}{evAccounts} =  2, 
+\hyperlink{gui_8h_06fc87d81c62e9abb8790b6e5713c55bffd9f6d137fb7c87e4258ffb36f8ddc2}{evContacts} =  3, 
+\hyperlink{gui_8h_06fc87d81c62e9abb8790b6e5713c55b154b51d77fad1182dd4b595d90b1595c}{evDial} =  4, 
+\par
+\hyperlink{gui_8h_06fc87d81c62e9abb8790b6e5713c55b89af2bef3ffc25bb3b378c8e0375c064}{evDialPad} =  5, 
+\hyperlink{gui_8h_06fc87d81c62e9abb8790b6e5713c55bb57fc4769eade43752b65c0235508e19}{evHold} =  6, 
+\hyperlink{gui_8h_06fc87d81c62e9abb8790b6e5713c55b64add398a0c4ca5e33e2779d157c7115}{evAutoHold} =  7, 
+\hyperlink{gui_8h_06fc87d81c62e9abb8790b6e5713c55b7becd2da33fc4be1963ecb16d9a8eea4}{evRetrieve} =  8, 
+\par
+\hyperlink{gui_8h_06fc87d81c62e9abb8790b6e5713c55beefa3c83f7e7731bb43e8a0fbd1d14ae}{evHangUp} =  9
+ \}
+\begin{CompactList}\small\item\em Events the GUI can generate. \item\end{CompactList}\item 
+enum \{ \par
+\hyperlink{gui_8h_df764cbdea00d65edcd07bb9953ad2b71e3411649f99cf860485c2f9372e299b}{tkID\_\-REGISTER\_\-BTN} =  101, 
+\hyperlink{gui_8h_df764cbdea00d65edcd07bb9953ad2b7b101a4f812671a45f9d2bcf39f2eea0d}{tkID\_\-DIALPAD\_\-ONE} =  102, 
+\hyperlink{gui_8h_df764cbdea00d65edcd07bb9953ad2b7dcbbcaf1d0b7fd54d58c3610e9c47d52}{tkID\_\-DIALPAD\_\-TWO} =  103, 
+\hyperlink{gui_8h_df764cbdea00d65edcd07bb9953ad2b7d7b2d45b4b4f6a4cfd2cab5c531710e0}{tkID\_\-DIALPAD\_\-THREE} =  104, 
+\par
+\hyperlink{gui_8h_df764cbdea00d65edcd07bb9953ad2b76997077e0775572ccfa39aec17f1ccf5}{tkID\_\-DIALPAD\_\-FOUR} =  105, 
+\hyperlink{gui_8h_df764cbdea00d65edcd07bb9953ad2b7908c3c091bb10972b18757b8893fd704}{tkID\_\-DIALPAD\_\-FIVE} =  106, 
+\hyperlink{gui_8h_df764cbdea00d65edcd07bb9953ad2b7426ca3c541712a94602f64aa15f384df}{tkID\_\-DIALPAD\_\-SIX} =  107, 
+\hyperlink{gui_8h_df764cbdea00d65edcd07bb9953ad2b7149a567b69b43f9549b2fd8d00df0136}{tkID\_\-DIALPAD\_\-SEVEN} =  108, 
+\par
+\hyperlink{gui_8h_df764cbdea00d65edcd07bb9953ad2b744b3c73d711463dcbf1cb265b0a68285}{tkID\_\-DIALPAD\_\-EIGHT} =  109, 
+\hyperlink{gui_8h_df764cbdea00d65edcd07bb9953ad2b780098dcdc781de83212015e9fea0f08c}{tkID\_\-DIALPAD\_\-NINE} =  110, 
+\hyperlink{gui_8h_df764cbdea00d65edcd07bb9953ad2b7febd119a40367a83c6416b52070d03bf}{tkID\_\-DIALPAD\_\-ZERO} =  111, 
+\hyperlink{gui_8h_df764cbdea00d65edcd07bb9953ad2b7eea5f1d8b453a2e6272e8eb7a4146f15}{tkID\_\-DIALPAD\_\-POUND} =  112, 
+\par
+\hyperlink{gui_8h_df764cbdea00d65edcd07bb9953ad2b7a79efe614e5a9d29ec4272e46261c815}{tkID\_\-DIALPAD\_\-STAR} =  113, 
+\hyperlink{gui_8h_df764cbdea00d65edcd07bb9953ad2b7a85ecc98e1bd7d40fa8f1bc90c71cbd9}{tkID\_\-DIAL\_\-BTN} =  114, 
+\hyperlink{gui_8h_df764cbdea00d65edcd07bb9953ad2b768f2e3c9943d51a7f4a6febbc44639a8}{tkID\_\-DESTINATION} =  115
+ \}
+\begin{CompactList}\small\item\em Unique widget identifiers. \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Define Documentation}
+\hypertarget{gui_8h_0bff94a0d5c29e72fd5459933019db7d}{
+\index{gui.h@{gui.h}!COPYRIGHT\_\-HOLDER@{COPYRIGHT\_\-HOLDER}}
+\index{COPYRIGHT\_\-HOLDER@{COPYRIGHT\_\-HOLDER}!gui.h@{gui.h}}
+\subsubsection[{COPYRIGHT\_\-HOLDER}]{\setlength{\rightskip}{0pt plus 5cm}\#define COPYRIGHT\_\-HOLDER~\char`\"{}Thomas Stellard, Michael Volk, Nikhil Tripathi and Peter Batzel\char`\"{}}}
+\label{gui_8h_0bff94a0d5c29e72fd5459933019db7d}
+
+
+\hypertarget{gui_8h_a7a14de65321aae213fa1bf6296d4da7}{
+\index{gui.h@{gui.h}!EVT\_\-DIAL\_\-PAD\_\-CLOSED@{EVT\_\-DIAL\_\-PAD\_\-CLOSED}}
+\index{EVT\_\-DIAL\_\-PAD\_\-CLOSED@{EVT\_\-DIAL\_\-PAD\_\-CLOSED}!gui.h@{gui.h}}
+\subsubsection[{EVT\_\-DIAL\_\-PAD\_\-CLOSED}]{\setlength{\rightskip}{0pt plus 5cm}\#define EVT\_\-DIAL\_\-PAD\_\-CLOSED(id, \/  fn)}}
+\label{gui_8h_a7a14de65321aae213fa1bf6296d4da7}
+
+
+\textbf{Value:}
+
+\begin{Code}\begin{verbatim}DECLARE_EVENT_TABLE_ENTRY( wxEVT_DIAL_PAD_CLOSED, id, -1, \
+    (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxNotifyEventFunction) \
+    wxStaticCastEvent( wxDialPadClosedEventFunction, & fn ), (wxObject *) NULL ),
+\end{verbatim}
+\end{Code}
+\hypertarget{gui_8h_380ef9893c751b2aa536614bb06667bc}{
+\index{gui.h@{gui.h}!EVT\_\-REGISTER\_\-DIALOG\_\-CLOSED@{EVT\_\-REGISTER\_\-DIALOG\_\-CLOSED}}
+\index{EVT\_\-REGISTER\_\-DIALOG\_\-CLOSED@{EVT\_\-REGISTER\_\-DIALOG\_\-CLOSED}!gui.h@{gui.h}}
+\subsubsection[{EVT\_\-REGISTER\_\-DIALOG\_\-CLOSED}]{\setlength{\rightskip}{0pt plus 5cm}\#define EVT\_\-REGISTER\_\-DIALOG\_\-CLOSED(id, \/  fn)}}
+\label{gui_8h_380ef9893c751b2aa536614bb06667bc}
+
+
+\textbf{Value:}
+
+\begin{Code}\begin{verbatim}DECLARE_EVENT_TABLE_ENTRY( wxEVT_REGISTER_DIALOG_CLOSED, id, -1, \
+    (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxNotifyEventFunction) \
+    wxStaticCastEvent( wxRegisterDialogClosedEventFunction, & fn ), (wxObject *) NULL ),
+\end{verbatim}
+\end{Code}
+\hypertarget{gui_8h_ceec47906f5ee7badf2b8398941cd016}{
+\index{gui.h@{gui.h}!EVT\_\-STATE@{EVT\_\-STATE}}
+\index{EVT\_\-STATE@{EVT\_\-STATE}!gui.h@{gui.h}}
+\subsubsection[{EVT\_\-STATE}]{\setlength{\rightskip}{0pt plus 5cm}\#define EVT\_\-STATE(id, \/  fn)}}
+\label{gui_8h_ceec47906f5ee7badf2b8398941cd016}
+
+
+\textbf{Value:}
+
+\begin{Code}\begin{verbatim}DECLARE_EVENT_TABLE_ENTRY( wxEVT_STATE_CHANGE, id, -1, \
+    (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxNotifyEventFunction) \
+    wxStaticCastEvent( wxStateChangeEventFunction, & fn ), (wxObject *) NULL ),
+\end{verbatim}
+\end{Code}
+\hypertarget{gui_8h_2fd81ded1b6a151f629441182c358d5b}{
+\index{gui.h@{gui.h}!PRODUCT\_\-NAME@{PRODUCT\_\-NAME}}
+\index{PRODUCT\_\-NAME@{PRODUCT\_\-NAME}!gui.h@{gui.h}}
+\subsubsection[{PRODUCT\_\-NAME}]{\setlength{\rightskip}{0pt plus 5cm}\#define PRODUCT\_\-NAME~\char`\"{}TeleKarma NG\char`\"{}}}
+\label{gui_8h_2fd81ded1b6a151f629441182c358d5b}
+
+
+\hypertarget{gui_8h_1c6d5de492ac61ad29aec7aa9a436bbf}{
+\index{gui.h@{gui.h}!VERSION@{VERSION}}
+\index{VERSION@{VERSION}!gui.h@{gui.h}}
+\subsubsection[{VERSION}]{\setlength{\rightskip}{0pt plus 5cm}\#define VERSION~\char`\"{}0.1.002\char`\"{}}}
+\label{gui_8h_1c6d5de492ac61ad29aec7aa9a436bbf}
+
+
+
+
+\subsection{Typedef Documentation}
+\hypertarget{gui_8h_f0e8a28d7b4e8891661fef371286e7e7}{
+\index{gui.h@{gui.h}!wxDialPadClosedEventFunction@{wxDialPadClosedEventFunction}}
+\index{wxDialPadClosedEventFunction@{wxDialPadClosedEventFunction}!gui.h@{gui.h}}
+\subsubsection[{wxDialPadClosedEventFunction}]{\setlength{\rightskip}{0pt plus 5cm}typedef void(wxEvtHandler::$\ast$ {\bf wxDialPadClosedEventFunction})({\bf wxDialPadClosedEvent} \&)}}
+\label{gui_8h_f0e8a28d7b4e8891661fef371286e7e7}
+
+
+\hypertarget{gui_8h_6f5c9031b4afd4c6c1b837beacf5909d}{
+\index{gui.h@{gui.h}!wxRegisterDialogClosedEventFunction@{wxRegisterDialogClosedEventFunction}}
+\index{wxRegisterDialogClosedEventFunction@{wxRegisterDialogClosedEventFunction}!gui.h@{gui.h}}
+\subsubsection[{wxRegisterDialogClosedEventFunction}]{\setlength{\rightskip}{0pt plus 5cm}typedef void(wxEvtHandler::$\ast$ {\bf wxRegisterDialogClosedEventFunction})({\bf wxRegisterDialogClosedEvent} \&)}}
+\label{gui_8h_6f5c9031b4afd4c6c1b837beacf5909d}
+
+
+\hypertarget{gui_8h_2bd601b6476eb4a30ff58a621ac77dbc}{
+\index{gui.h@{gui.h}!wxStateChangeEventFunction@{wxStateChangeEventFunction}}
+\index{wxStateChangeEventFunction@{wxStateChangeEventFunction}!gui.h@{gui.h}}
+\subsubsection[{wxStateChangeEventFunction}]{\setlength{\rightskip}{0pt plus 5cm}typedef void(wxEvtHandler::$\ast$ {\bf wxStateChangeEventFunction})({\bf wxStateChangeEvent} \&)}}
+\label{gui_8h_2bd601b6476eb4a30ff58a621ac77dbc}
+
+
+
+
+\subsection{Enumeration Type Documentation}
+\hypertarget{gui_8h_06fc87d81c62e9abb8790b6e5713c55b}{
+\subsubsection[{"@0}]{\setlength{\rightskip}{0pt plus 5cm}anonymous enum}}
+\label{gui_8h_06fc87d81c62e9abb8790b6e5713c55b}
+
+
+Events the GUI can generate. 
+
+\begin{Desc}
+\item[Enumerator: ]\par
+\begin{description}
+\index{evRegister@{evRegister}!gui.h@{gui.h}}\index{gui.h@{gui.h}!evRegister@{evRegister}}\item[{\em 
+\hypertarget{gui_8h_06fc87d81c62e9abb8790b6e5713c55b982306e68d56775c32654fc2b29cf3bf}{
+evRegister}
+\label{gui_8h_06fc87d81c62e9abb8790b6e5713c55b982306e68d56775c32654fc2b29cf3bf}
+}]File -$>$ Register. 
+
+.. \index{evAccounts@{evAccounts}!gui.h@{gui.h}}\index{gui.h@{gui.h}!evAccounts@{evAccounts}}\item[{\em 
+\hypertarget{gui_8h_06fc87d81c62e9abb8790b6e5713c55be6e396e0cbe1e9ef1ecc7bcc5a68fb09}{
+evAccounts}
+\label{gui_8h_06fc87d81c62e9abb8790b6e5713c55be6e396e0cbe1e9ef1ecc7bcc5a68fb09}
+}]Edit -$>$ Accounts. 
+
+.. \index{evContacts@{evContacts}!gui.h@{gui.h}}\index{gui.h@{gui.h}!evContacts@{evContacts}}\item[{\em 
+\hypertarget{gui_8h_06fc87d81c62e9abb8790b6e5713c55bffd9f6d137fb7c87e4258ffb36f8ddc2}{
+evContacts}
+\label{gui_8h_06fc87d81c62e9abb8790b6e5713c55bffd9f6d137fb7c87e4258ffb36f8ddc2}
+}]Edit -$>$ Contacts. 
+
+.. \index{evDial@{evDial}!gui.h@{gui.h}}\index{gui.h@{gui.h}!evDial@{evDial}}\item[{\em 
+\hypertarget{gui_8h_06fc87d81c62e9abb8790b6e5713c55b154b51d77fad1182dd4b595d90b1595c}{
+evDial}
+\label{gui_8h_06fc87d81c62e9abb8790b6e5713c55b154b51d77fad1182dd4b595d90b1595c}
+}]Call -$>$ Dial. \index{evDialPad@{evDialPad}!gui.h@{gui.h}}\index{gui.h@{gui.h}!evDialPad@{evDialPad}}\item[{\em 
+\hypertarget{gui_8h_06fc87d81c62e9abb8790b6e5713c55b89af2bef3ffc25bb3b378c8e0375c064}{
+evDialPad}
+\label{gui_8h_06fc87d81c62e9abb8790b6e5713c55b89af2bef3ffc25bb3b378c8e0375c064}
+}]Call -$>$ Touch Tones. 
+
+.. \index{evHold@{evHold}!gui.h@{gui.h}}\index{gui.h@{gui.h}!evHold@{evHold}}\item[{\em 
+\hypertarget{gui_8h_06fc87d81c62e9abb8790b6e5713c55bb57fc4769eade43752b65c0235508e19}{
+evHold}
+\label{gui_8h_06fc87d81c62e9abb8790b6e5713c55bb57fc4769eade43752b65c0235508e19}
+}]Call -$>$ Hold. \index{evAutoHold@{evAutoHold}!gui.h@{gui.h}}\index{gui.h@{gui.h}!evAutoHold@{evAutoHold}}\item[{\em 
+\hypertarget{gui_8h_06fc87d81c62e9abb8790b6e5713c55b64add398a0c4ca5e33e2779d157c7115}{
+evAutoHold}
+\label{gui_8h_06fc87d81c62e9abb8790b6e5713c55b64add398a0c4ca5e33e2779d157c7115}
+}]Call -$>$ AutoHold. \index{evRetrieve@{evRetrieve}!gui.h@{gui.h}}\index{gui.h@{gui.h}!evRetrieve@{evRetrieve}}\item[{\em 
+\hypertarget{gui_8h_06fc87d81c62e9abb8790b6e5713c55b7becd2da33fc4be1963ecb16d9a8eea4}{
+evRetrieve}
+\label{gui_8h_06fc87d81c62e9abb8790b6e5713c55b7becd2da33fc4be1963ecb16d9a8eea4}
+}]Call -$>$ Retrieve. \index{evHangUp@{evHangUp}!gui.h@{gui.h}}\index{gui.h@{gui.h}!evHangUp@{evHangUp}}\item[{\em 
+\hypertarget{gui_8h_06fc87d81c62e9abb8790b6e5713c55beefa3c83f7e7731bb43e8a0fbd1d14ae}{
+evHangUp}
+\label{gui_8h_06fc87d81c62e9abb8790b6e5713c55beefa3c83f7e7731bb43e8a0fbd1d14ae}
+}]Call -$>$ Hang Up. \end{description}
+\end{Desc}
+
+\hypertarget{gui_8h_df764cbdea00d65edcd07bb9953ad2b7}{
+\subsubsection[{"@1}]{\setlength{\rightskip}{0pt plus 5cm}anonymous enum}}
+\label{gui_8h_df764cbdea00d65edcd07bb9953ad2b7}
+
+
+Unique widget identifiers. 
+
+\begin{Desc}
+\item[Enumerator: ]\par
+\begin{description}
+\index{tkID\_\-REGISTER\_\-BTN@{tkID\_\-REGISTER\_\-BTN}!gui.h@{gui.h}}\index{gui.h@{gui.h}!tkID\_\-REGISTER\_\-BTN@{tkID\_\-REGISTER\_\-BTN}}\item[{\em 
+\hypertarget{gui_8h_df764cbdea00d65edcd07bb9953ad2b71e3411649f99cf860485c2f9372e299b}{
+tkID\_\-REGISTER\_\-BTN}
+\label{gui_8h_df764cbdea00d65edcd07bb9953ad2b71e3411649f99cf860485c2f9372e299b}
+}]Register button on register dialog. 
+
+\index{tkID\_\-DIALPAD\_\-ONE@{tkID\_\-DIALPAD\_\-ONE}!gui.h@{gui.h}}\index{gui.h@{gui.h}!tkID\_\-DIALPAD\_\-ONE@{tkID\_\-DIALPAD\_\-ONE}}\item[{\em 
+\hypertarget{gui_8h_df764cbdea00d65edcd07bb9953ad2b7b101a4f812671a45f9d2bcf39f2eea0d}{
+tkID\_\-DIALPAD\_\-ONE}
+\label{gui_8h_df764cbdea00d65edcd07bb9953ad2b7b101a4f812671a45f9d2bcf39f2eea0d}
+}]Dial pad button. 
+
+\index{tkID\_\-DIALPAD\_\-TWO@{tkID\_\-DIALPAD\_\-TWO}!gui.h@{gui.h}}\index{gui.h@{gui.h}!tkID\_\-DIALPAD\_\-TWO@{tkID\_\-DIALPAD\_\-TWO}}\item[{\em 
+\hypertarget{gui_8h_df764cbdea00d65edcd07bb9953ad2b7dcbbcaf1d0b7fd54d58c3610e9c47d52}{
+tkID\_\-DIALPAD\_\-TWO}
+\label{gui_8h_df764cbdea00d65edcd07bb9953ad2b7dcbbcaf1d0b7fd54d58c3610e9c47d52}
+}]Dial pad button. 
+
+\index{tkID\_\-DIALPAD\_\-THREE@{tkID\_\-DIALPAD\_\-THREE}!gui.h@{gui.h}}\index{gui.h@{gui.h}!tkID\_\-DIALPAD\_\-THREE@{tkID\_\-DIALPAD\_\-THREE}}\item[{\em 
+\hypertarget{gui_8h_df764cbdea00d65edcd07bb9953ad2b7d7b2d45b4b4f6a4cfd2cab5c531710e0}{
+tkID\_\-DIALPAD\_\-THREE}
+\label{gui_8h_df764cbdea00d65edcd07bb9953ad2b7d7b2d45b4b4f6a4cfd2cab5c531710e0}
+}]Dial pad button. 
+
+\index{tkID\_\-DIALPAD\_\-FOUR@{tkID\_\-DIALPAD\_\-FOUR}!gui.h@{gui.h}}\index{gui.h@{gui.h}!tkID\_\-DIALPAD\_\-FOUR@{tkID\_\-DIALPAD\_\-FOUR}}\item[{\em 
+\hypertarget{gui_8h_df764cbdea00d65edcd07bb9953ad2b76997077e0775572ccfa39aec17f1ccf5}{
+tkID\_\-DIALPAD\_\-FOUR}
+\label{gui_8h_df764cbdea00d65edcd07bb9953ad2b76997077e0775572ccfa39aec17f1ccf5}
+}]Dial pad button. 
+
+\index{tkID\_\-DIALPAD\_\-FIVE@{tkID\_\-DIALPAD\_\-FIVE}!gui.h@{gui.h}}\index{gui.h@{gui.h}!tkID\_\-DIALPAD\_\-FIVE@{tkID\_\-DIALPAD\_\-FIVE}}\item[{\em 
+\hypertarget{gui_8h_df764cbdea00d65edcd07bb9953ad2b7908c3c091bb10972b18757b8893fd704}{
+tkID\_\-DIALPAD\_\-FIVE}
+\label{gui_8h_df764cbdea00d65edcd07bb9953ad2b7908c3c091bb10972b18757b8893fd704}
+}]Dial pad button. 
+
+\index{tkID\_\-DIALPAD\_\-SIX@{tkID\_\-DIALPAD\_\-SIX}!gui.h@{gui.h}}\index{gui.h@{gui.h}!tkID\_\-DIALPAD\_\-SIX@{tkID\_\-DIALPAD\_\-SIX}}\item[{\em 
+\hypertarget{gui_8h_df764cbdea00d65edcd07bb9953ad2b7426ca3c541712a94602f64aa15f384df}{
+tkID\_\-DIALPAD\_\-SIX}
+\label{gui_8h_df764cbdea00d65edcd07bb9953ad2b7426ca3c541712a94602f64aa15f384df}
+}]Dial pad button. 
+
+\index{tkID\_\-DIALPAD\_\-SEVEN@{tkID\_\-DIALPAD\_\-SEVEN}!gui.h@{gui.h}}\index{gui.h@{gui.h}!tkID\_\-DIALPAD\_\-SEVEN@{tkID\_\-DIALPAD\_\-SEVEN}}\item[{\em 
+\hypertarget{gui_8h_df764cbdea00d65edcd07bb9953ad2b7149a567b69b43f9549b2fd8d00df0136}{
+tkID\_\-DIALPAD\_\-SEVEN}
+\label{gui_8h_df764cbdea00d65edcd07bb9953ad2b7149a567b69b43f9549b2fd8d00df0136}
+}]Dial pad button. 
+
+\index{tkID\_\-DIALPAD\_\-EIGHT@{tkID\_\-DIALPAD\_\-EIGHT}!gui.h@{gui.h}}\index{gui.h@{gui.h}!tkID\_\-DIALPAD\_\-EIGHT@{tkID\_\-DIALPAD\_\-EIGHT}}\item[{\em 
+\hypertarget{gui_8h_df764cbdea00d65edcd07bb9953ad2b744b3c73d711463dcbf1cb265b0a68285}{
+tkID\_\-DIALPAD\_\-EIGHT}
+\label{gui_8h_df764cbdea00d65edcd07bb9953ad2b744b3c73d711463dcbf1cb265b0a68285}
+}]Dial pad button. 
+
+\index{tkID\_\-DIALPAD\_\-NINE@{tkID\_\-DIALPAD\_\-NINE}!gui.h@{gui.h}}\index{gui.h@{gui.h}!tkID\_\-DIALPAD\_\-NINE@{tkID\_\-DIALPAD\_\-NINE}}\item[{\em 
+\hypertarget{gui_8h_df764cbdea00d65edcd07bb9953ad2b780098dcdc781de83212015e9fea0f08c}{
+tkID\_\-DIALPAD\_\-NINE}
+\label{gui_8h_df764cbdea00d65edcd07bb9953ad2b780098dcdc781de83212015e9fea0f08c}
+}]Dial pad button. 
+
+\index{tkID\_\-DIALPAD\_\-ZERO@{tkID\_\-DIALPAD\_\-ZERO}!gui.h@{gui.h}}\index{gui.h@{gui.h}!tkID\_\-DIALPAD\_\-ZERO@{tkID\_\-DIALPAD\_\-ZERO}}\item[{\em 
+\hypertarget{gui_8h_df764cbdea00d65edcd07bb9953ad2b7febd119a40367a83c6416b52070d03bf}{
+tkID\_\-DIALPAD\_\-ZERO}
+\label{gui_8h_df764cbdea00d65edcd07bb9953ad2b7febd119a40367a83c6416b52070d03bf}
+}]Dial pad button. 
+
+\index{tkID\_\-DIALPAD\_\-POUND@{tkID\_\-DIALPAD\_\-POUND}!gui.h@{gui.h}}\index{gui.h@{gui.h}!tkID\_\-DIALPAD\_\-POUND@{tkID\_\-DIALPAD\_\-POUND}}\item[{\em 
+\hypertarget{gui_8h_df764cbdea00d65edcd07bb9953ad2b7eea5f1d8b453a2e6272e8eb7a4146f15}{
+tkID\_\-DIALPAD\_\-POUND}
+\label{gui_8h_df764cbdea00d65edcd07bb9953ad2b7eea5f1d8b453a2e6272e8eb7a4146f15}
+}]Dial pad button. 
+
+\index{tkID\_\-DIALPAD\_\-STAR@{tkID\_\-DIALPAD\_\-STAR}!gui.h@{gui.h}}\index{gui.h@{gui.h}!tkID\_\-DIALPAD\_\-STAR@{tkID\_\-DIALPAD\_\-STAR}}\item[{\em 
+\hypertarget{gui_8h_df764cbdea00d65edcd07bb9953ad2b7a79efe614e5a9d29ec4272e46261c815}{
+tkID\_\-DIALPAD\_\-STAR}
+\label{gui_8h_df764cbdea00d65edcd07bb9953ad2b7a79efe614e5a9d29ec4272e46261c815}
+}]Dial pad button. 
+
+\index{tkID\_\-DIAL\_\-BTN@{tkID\_\-DIAL\_\-BTN}!gui.h@{gui.h}}\index{gui.h@{gui.h}!tkID\_\-DIAL\_\-BTN@{tkID\_\-DIAL\_\-BTN}}\item[{\em 
+\hypertarget{gui_8h_df764cbdea00d65edcd07bb9953ad2b7a85ecc98e1bd7d40fa8f1bc90c71cbd9}{
+tkID\_\-DIAL\_\-BTN}
+\label{gui_8h_df764cbdea00d65edcd07bb9953ad2b7a85ecc98e1bd7d40fa8f1bc90c71cbd9}
+}]Dial/Hang Up button in main frame. 
+
+\index{tkID\_\-DESTINATION@{tkID\_\-DESTINATION}!gui.h@{gui.h}}\index{gui.h@{gui.h}!tkID\_\-DESTINATION@{tkID\_\-DESTINATION}}\item[{\em 
+\hypertarget{gui_8h_df764cbdea00d65edcd07bb9953ad2b768f2e3c9943d51a7f4a6febbc44639a8}{
+tkID\_\-DESTINATION}
+\label{gui_8h_df764cbdea00d65edcd07bb9953ad2b768f2e3c9943d51a7f4a6febbc44639a8}
+}]SIP phone number text box. \end{description}
+\end{Desc}
+

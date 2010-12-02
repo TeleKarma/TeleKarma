@@ -16,119 +16,98 @@
   <div class="tabs">
     <ul>
       <li><a href="files.html"><span>File&nbsp;List</span></a></li>
+      <li><a href="globals.html"><span>File&nbsp;Members</span></a></li>
     </ul>
   </div>
-<h1>telekarma.h</h1><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/*</span>
+<h1>telekarma.h</h1><a href="telekarma_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/*</span>
 <a name="l00002"></a>00002 <span class="comment"> *</span>
 <a name="l00003"></a>00003 <span class="comment"> * telekarma.h</span>
 <a name="l00004"></a>00004 <span class="comment"> *</span>
-<a name="l00005"></a>00005 <span class="comment"> * The TeleKarma main application thread.</span>
+<a name="l00005"></a>00005 <span class="comment"> * TeleKarma's Controller.</span>
 <a name="l00006"></a>00006 <span class="comment"> *</span>
 <a name="l00007"></a>00007 <span class="comment"> */</span>
 <a name="l00008"></a>00008 
 <a name="l00009"></a>00009 <span class="preprocessor">#ifndef _TELEKARMA_H_</span>
 <a name="l00010"></a>00010 <span class="preprocessor"></span><span class="preprocessor">#define _TELEKARMA_H_</span>
 <a name="l00011"></a>00011 <span class="preprocessor"></span>
-<a name="l00012"></a>00012 <span class="preprocessor">#include &lt;ptlib/pprocess.h&gt;</span>
-<a name="l00013"></a>00013 <span class="preprocessor">#include "telephony.h"</span>
-<a name="l00014"></a>00014 <span class="preprocessor">#include "state.h"</span>
-<a name="l00015"></a>00015 
-<a name="l00016"></a>00016 
-<a name="l00022"></a>00022 <span class="preprocessor">#define SLEEP_DURATION   50</span>
-<a name="l00023"></a>00023 <span class="preprocessor"></span>
-<a name="l00029"></a>00029 <span class="preprocessor">#define PAUSE_TIME        0</span>
-<a name="l00030"></a>00030 <span class="preprocessor"></span>
-<a name="l00037"></a>00037 <span class="preprocessor">#define IVR_REPEATS   10000</span>
-<a name="l00038"></a>00038 <span class="preprocessor"></span>
-<a name="l00045"></a>00045 <span class="preprocessor">#define EXIT_DELAY     1000</span>
-<a name="l00046"></a>00046 <span class="preprocessor"></span>
-<a name="l00054"></a>00054 <span class="preprocessor">#define IS_HUMAN_TONE    '1'</span>
-<a name="l00055"></a>00055 <span class="preprocessor"></span>
-<a name="l00065"></a>00065 <span class="preprocessor">#define AUTO_HOLD_WAV   "press1.wav"</span>
-<a name="l00066"></a>00066 <span class="preprocessor"></span>
-<a name="l00074"></a>00074 <span class="preprocessor">#define HOLD_WAV        "pleasehold.wav"</span>
-<a name="l00075"></a>00075 <span class="preprocessor"></span>
-<a name="l00076"></a>00076 
-<a name="l00095"></a><a class="code" href="classTeleKarma.html">00095</a> <span class="keyword">class </span><a class="code" href="classTeleKarma.html">TeleKarma</a> : <span class="keyword">public</span> PProcess {
-<a name="l00096"></a>00096 
-<a name="l00097"></a>00097         <span class="comment">// PTLib macro for setting up methods required by the PProcess class.</span>
-<a name="l00098"></a>00098         PCLASSINFO(<a class="code" href="classTeleKarma.html">TeleKarma</a>, PProcess);
-<a name="l00099"></a>00099 
-<a name="l00100"></a>00100         <span class="keyword">public</span>:
-<a name="l00101"></a>00101 
-<a name="l00105"></a>00105                 <a class="code" href="classTeleKarma.html#e51315e12cf9e918a0eacce8333e298e" title="Constructor.">TeleKarma</a>();
-<a name="l00106"></a>00106 
-<a name="l00111"></a>00111                 <span class="keyword">virtual</span> <a class="code" href="classTeleKarma.html#5486e84d7320be3da1139e9d48d02401" title="Destructor.">~TeleKarma</a>();
-<a name="l00112"></a>00112 
-<a name="l00126"></a>00126                 <span class="keywordtype">void</span> <a class="code" href="classTeleKarma.html#addd554bf6335422cc896c894005a031">Main</a>();
-<a name="l00127"></a>00127 
-<a name="l00136"></a>00136                 <span class="keywordtype">void</span> <a class="code" href="classTeleKarma.html#22107597af9789cf4162ac2bb32f0482" title="Called by state handler to transition to a new state.">EnterState</a>(<span class="keywordtype">int</span> stateId);
-<a name="l00137"></a>00137 
-<a name="l00146"></a>00146                 <span class="keywordtype">void</span> <a class="code" href="classTeleKarma.html#94f24d2895a64c49d1d5daf9a5a40c7e" title="Instantiates the TelephonyIfc.">Initialize</a>(<span class="keyword">const</span> PString &amp; stun, <span class="keyword">const</span> PString &amp; user);
-<a name="l00147"></a>00147 
-<a name="l00154"></a>00154                 PString <a class="code" href="classTeleKarma.html#394f0108ecd1628e510c79a5f84a8d7d" title="Returns a description of the STUN server type.">GetSTUNType</a>();
-<a name="l00155"></a>00155 
-<a name="l00165"></a>00165                 <span class="keywordtype">void</span> <a class="code" href="classTeleKarma.html#94c53557510b5373b400128ded8cb7a6" title="Registers the user with an SIP registrar.">Register</a>(<span class="keyword">const</span> PString &amp; registrar, <span class="keyword">const</span> PString &amp; user, <span class="keyword">const</span> PString &amp; password);
+<a name="l00012"></a>00012 <span class="preprocessor">#include &lt;ptlib.h&gt;</span>
+<a name="l00013"></a>00013 <span class="preprocessor">#include "<a class="code" href="controller_8h.html">controller.h</a>"</span>
+<a name="l00014"></a>00014 
+<a name="l00015"></a>00015 <span class="keyword">class </span><a class="code" href="classModel.html">Model</a>;
+<a name="l00016"></a>00016 <span class="keyword">class </span><a class="code" href="classTelephonyIfc.html" title="This class is the interface between telekarama and the Opal telephony library.">TelephonyIfc</a>;
+<a name="l00017"></a>00017 <span class="keyword">class </span><a class="code" href="classAction.html">Action</a>;
+<a name="l00018"></a>00018 
+<a name="l00024"></a><a class="code" href="telekarma_8h.html#4af2a8a383f07fec0d9f78f2db1c987a">00024</a> <span class="preprocessor">#define SLEEP_DURATION   50</span>
+<a name="l00025"></a>00025 <span class="preprocessor"></span>
+<a name="l00031"></a><a class="code" href="telekarma_8h.html#e0edb34f25808edbd9c240ce645d36db">00031</a> <span class="preprocessor">#define PAUSE_TIME        0</span>
+<a name="l00032"></a>00032 <span class="preprocessor"></span>
+<a name="l00039"></a><a class="code" href="telekarma_8h.html#6d87d074354c891b4bf9847003bc6be7">00039</a> <span class="preprocessor">#define IVR_REPEATS   10000</span>
+<a name="l00040"></a>00040 <span class="preprocessor"></span>
+<a name="l00047"></a><a class="code" href="telekarma_8h.html#36554d6c57b18df85466ed9424676b16">00047</a> <span class="preprocessor">#define EXIT_DELAY     1000</span>
+<a name="l00048"></a>00048 <span class="preprocessor"></span>
+<a name="l00056"></a><a class="code" href="telekarma_8h.html#a2c5891331d3c285a8705be0397c92af">00056</a> <span class="preprocessor">#define IS_HUMAN_TONE    '1'</span>
+<a name="l00057"></a>00057 <span class="preprocessor"></span>
+<a name="l00067"></a><a class="code" href="telekarma_8h.html#5958fe3d2eaf64cc44c7f0ecdcde5a3c">00067</a> <span class="preprocessor">#define AUTO_HOLD_WAV   "press1.wav"</span>
+<a name="l00068"></a>00068 <span class="preprocessor"></span>
+<a name="l00076"></a><a class="code" href="telekarma_8h.html#491b1ae757a7494b35cdd4e58aa3fe0a">00076</a> <span class="preprocessor">#define HOLD_WAV        "pleasehold.wav"</span>
+<a name="l00077"></a>00077 <span class="preprocessor"></span>
+<a name="l00081"></a><a class="code" href="telekarma_8h.html#79b9c64188ba6b1ebd310a44ad46ddb8">00081</a> <span class="preprocessor">#define REGISTRATION_TIMEOUT (10*1000)</span>
+<a name="l00082"></a>00082 <span class="preprocessor"></span>
+<a name="l00083"></a>00083 <span class="comment">// XXX need to update the documentation...</span>
+<a name="l00102"></a><a class="code" href="classTeleKarma.html">00102</a> <span class="comment"></span><span class="keyword">class </span><a class="code" href="classTeleKarma.html">TeleKarma</a> : <span class="keyword">public</span> <a class="code" href="classController.html">Controller</a> {
+<a name="l00103"></a>00103 
+<a name="l00104"></a>00104         <span class="keyword">public</span>:
+<a name="l00105"></a>00105 
+<a name="l00110"></a>00110                 <a class="code" href="classTeleKarma.html#ffedc7e09446314b687922735cd7818f" title="Constructor.">TeleKarma</a>(<a class="code" href="classModel.html">Model</a> * <a class="code" href="classController.html#6f6ea54052742d3940adfcfce885bae9">model</a>);
+<a name="l00111"></a>00111 
+<a name="l00125"></a>00125                 <span class="keywordtype">void</span> <a class="code" href="classTeleKarma.html#addd554bf6335422cc896c894005a031">Main</a>();
+<a name="l00126"></a>00126 
+<a name="l00127"></a>00127         <span class="keyword">private</span>:
+<a name="l00128"></a>00128 
+<a name="l00129"></a>00129                 <span class="comment">//</span>
+<a name="l00130"></a>00130                 <span class="comment">// fields</span>
+<a name="l00131"></a>00131                 <span class="comment">//</span>
+<a name="l00132"></a>00132 
+<a name="l00133"></a>00133                 <span class="keywordtype">int</span> countdown;                                                  <span class="comment">// timeout support</span>
+<a name="l00134"></a>00134                 <a class="code" href="classTelephonyIfc.html" title="This class is the interface between telekarama and the Opal telephony library.">TelephonyIfc</a> * phone;                                   <span class="comment">// telephony services</span>
+<a name="l00135"></a>00135 
+<a name="l00136"></a>00136                 <span class="comment">//</span>
+<a name="l00137"></a>00137                 <span class="comment">// disabled assignment operator &amp; copy constructor</span>
+<a name="l00138"></a>00138                 <span class="comment">//</span>
+<a name="l00139"></a>00139 
+<a name="l00140"></a>00140                 <a class="code" href="classTeleKarma.html">TeleKarma</a> &amp; operator=(<span class="keyword">const</span> <a class="code" href="classTeleKarma.html">TeleKarma</a> &amp; rhs);
+<a name="l00141"></a>00141                 <a class="code" href="classTeleKarma.html#ffedc7e09446314b687922735cd7818f" title="Constructor.">TeleKarma</a>(<span class="keyword">const</span> <a class="code" href="classTeleKarma.html">TeleKarma</a> &amp; rhs);
+<a name="l00142"></a>00142 
+<a name="l00143"></a>00143                 <span class="comment">//</span>
+<a name="l00144"></a>00144                 <span class="comment">// helper methods</span>
+<a name="l00145"></a>00145                 <span class="comment">//</span>
+<a name="l00146"></a>00146 
+<a name="l00147"></a>00147                 <a class="code" href="classState.html">State</a> * SetState(<a class="code" href="classState.html">State</a> * s);
+<a name="l00148"></a>00148                 <a class="code" href="classState.html">State</a> * UpdateState(<a class="code" href="classState.html">State</a> * s);
+<a name="l00149"></a>00149                 <a class="code" href="classState.html">State</a> * DoAction(<a class="code" href="classAction.html">Action</a> * a, <a class="code" href="classState.html">State</a> * s);
+<a name="l00150"></a>00150                 <a class="code" href="classState.html">State</a> * Initialize(<a class="code" href="classAction.html">Action</a> * a, <a class="code" href="classState.html">State</a> * s);
+<a name="l00151"></a>00151                 <a class="code" href="classState.html">State</a> * Register(<a class="code" href="classAction.html">Action</a> * a, <a class="code" href="classState.html">State</a> * s);
+<a name="l00152"></a>00152                 <a class="code" href="classState.html">State</a> * Dial(<a class="code" href="classAction.html">Action</a> * a, <a class="code" href="classState.html">State</a> * s);
+<a name="l00153"></a>00153                 <a class="code" href="classState.html">State</a> * Hold(<a class="code" href="classAction.html">Action</a> * a, <a class="code" href="classState.html">State</a> * s);
+<a name="l00154"></a>00154                 <a class="code" href="classState.html">State</a> * AutoHold(<a class="code" href="classAction.html">Action</a> * a, <a class="code" href="classState.html">State</a> * s);
+<a name="l00155"></a>00155                 <a class="code" href="classState.html">State</a> * MuteAutoHold(<a class="code" href="classAction.html">Action</a> * a, <a class="code" href="classState.html">State</a> * s);
+<a name="l00156"></a>00156                 <a class="code" href="classState.html">State</a> * Retrieve(<a class="code" href="classAction.html">Action</a> * a, <a class="code" href="classState.html">State</a> * s);
+<a name="l00157"></a>00157                 <a class="code" href="classState.html">State</a> * SendTone(<a class="code" href="classAction.html">Action</a> * a, <a class="code" href="classState.html">State</a> * s);
+<a name="l00158"></a>00158                 <a class="code" href="classState.html">State</a> * Disconnect(<a class="code" href="classAction.html">Action</a> * a, <a class="code" href="classState.html">State</a> * s);
+<a name="l00159"></a>00159                 <a class="code" href="classState.html">State</a> * Quit(<a class="code" href="classAction.html">Action</a> * a, <a class="code" href="classState.html">State</a> * s);
+<a name="l00160"></a>00160                 <a class="code" href="classState.html">State</a> * PlaySound(<a class="code" href="classAction.html">Action</a> * a, <a class="code" href="classState.html">State</a> * s);
+<a name="l00161"></a>00161                 <span class="keywordtype">bool</span>    IsConnectedState(<a class="code" href="classState.html">State</a> * s);
+<a name="l00162"></a>00162                 <span class="keywordtype">bool</span>    IsHoldingState(<a class="code" href="classState.html">State</a> * s);
+<a name="l00163"></a>00163                 <a class="code" href="classState.html">State</a> * StartRecording(<a class="code" href="classState.html">State</a> * currentState);
+<a name="l00164"></a>00164 
+<a name="l00165"></a>00165 };
 <a name="l00166"></a>00166 
-<a name="l00173"></a>00173                 <span class="keywordtype">void</span> <a class="code" href="classTeleKarma.html#2fe3ca9129b35b8543a1ecdb88740e3d" title="Dials an SIP phone number.">Dial</a>(<span class="keyword">const</span> PString &amp; destination);
-<a name="l00174"></a>00174 
-<a name="l00180"></a>00180                 <span class="keywordtype">void</span> <a class="code" href="classTeleKarma.html#318d959306b0c1e5a39c531be100387c" title="Disconnects a phone call.">Disconnect</a>();
-<a name="l00181"></a>00181 
-<a name="l00188"></a>00188                 <span class="keywordtype">bool</span> <a class="code" href="classTeleKarma.html#ac8cc89975dcba9feefeb0f79684836e" title="Returns true if the user is registered with an SIP service.">IsRegistered</a>();
-<a name="l00189"></a>00189 
-<a name="l00196"></a>00196                 <span class="keywordtype">bool</span> <a class="code" href="classTeleKarma.html#4c060e114d5e1d4f7ec2b4532a843443" title="Returns true if a call is in the process of being dialed.">IsDialing</a>();
-<a name="l00197"></a>00197 
-<a name="l00203"></a>00203                 <span class="keywordtype">bool</span> <a class="code" href="classTeleKarma.html#d971a263dc085039322afa915a6ff350" title="Returns true if a call is connected.">IsConnected</a>();
-<a name="l00204"></a>00204 
-<a name="l00211"></a>00211                 PString <a class="code" href="classTeleKarma.html#be2a73dfd1cdae97ef435325ab74c7db" title="Returns a user-friendly description of the reason why the most recent call in the...">DisconnectReason</a>();
-<a name="l00212"></a>00212 
-<a name="l00220"></a>00220                 <span class="keywordtype">bool</span> <a class="code" href="classTeleKarma.html#4b4ffc065dbc11f5b0afa9ba30c9620d" title="Indicates whether a WAV is or has been played since the current call began.">IsPlayingWAV</a>(<span class="keywordtype">bool</span> onLine = <span class="keyword">true</span>, <span class="keywordtype">bool</span> onSpeakers = <span class="keyword">false</span>);
-<a name="l00221"></a>00221 
-<a name="l00230"></a>00230                 <span class="keywordtype">void</span> <a class="code" href="classTeleKarma.html#ca737d1deeb1da27f12d84f8c4b6819b" title="Plays a WAV file over the current call.">PlayWAV</a>(<span class="keyword">const</span> PString &amp; src, <span class="keywordtype">int</span> repeat = 0, <span class="keywordtype">int</span> delay = 0);
-<a name="l00231"></a>00231 
-<a name="l00235"></a>00235                 <span class="keywordtype">void</span> <a class="code" href="classTeleKarma.html#ecc8d8bd546be13afb320151a0c5014b" title="Inoperative.">SetMicVolume</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> volume);
-<a name="l00236"></a>00236 
-<a name="l00240"></a>00240                 <span class="keywordtype">void</span> <a class="code" href="classTeleKarma.html#3b434ca4effe173e19b9334da432a79f" title="Inoperative.">SetSpeakerVolume</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> volume);
-<a name="l00241"></a>00241 
-<a name="l00249"></a>00249                 <span class="keywordtype">void</span> <a class="code" href="classTeleKarma.html#e7fa2e0e51af227908ddf46de42732f2" title="Called upon entry of standard hold and detect human hold modes.">StartIVR</a>(<span class="keyword">const</span> PString &amp;fname);
-<a name="l00250"></a>00250 
-<a name="l00255"></a>00255                 <span class="keywordtype">void</span> <a class="code" href="classTeleKarma.html#9b93b7a0b3af465d07a5facaa445344f" title="Called upon termination of standard hold and detect human hold modes.">StopIVR</a>();
-<a name="l00256"></a>00256 
-<a name="l00260"></a>00260                 <span class="keywordtype">void</span> <a class="code" href="classTeleKarma.html#9f928ce40bb1f6663772e07022783b7a" title="Invokes TelephonyIfc#StopWav().">StopWAV</a>();
-<a name="l00261"></a>00261 
-<a name="l00267"></a>00267                 <span class="keywordtype">void</span> <a class="code" href="classTeleKarma.html#e5de07b5de99a85c3703be973e7230df" title="Inverts the recording state.">ToggleRecording</a>();
-<a name="l00268"></a>00268 
-<a name="l00274"></a>00274                 <span class="keywordtype">void</span> <a class="code" href="classTeleKarma.html#724b39dce3dd92f25a7de9e4a39ccfa7" title="Begins recording of the call.">StartRecording</a>();
-<a name="l00275"></a>00275 
-<a name="l00283"></a>00283                 <span class="keywordtype">bool</span> <a class="code" href="classTeleKarma.html#2799e28d5e0736a0149c5a212b24e6c0" title="Indicates whether the touch tone associated with the given character has been received...">ToneReceived</a>(<span class="keywordtype">char</span> key, <span class="keywordtype">bool</span> clear = <span class="keyword">true</span>);
-<a name="l00284"></a>00284 
-<a name="l00289"></a>00289                 <span class="keywordtype">void</span> <a class="code" href="classTeleKarma.html#5d1ced337173e7260efdb3f13fe54bf9" title="Clears the contents of the touch tone queue.">ClearTones</a>();
-<a name="l00290"></a>00290 
-<a name="l00295"></a>00295                 <span class="keywordtype">void</span> <a class="code" href="classTeleKarma.html#85b9f9bf83876f3fa9cc326a7124f6d5" title="Sends the DTMF tone associated with the given key to the remote party.">SendTone</a>(<span class="keywordtype">char</span> key);
-<a name="l00296"></a>00296 
-<a name="l00303"></a>00303                 <span class="keywordtype">char</span> <a class="code" href="classTeleKarma.html#5dd175d49c7a2f9f36ff9c3c7c34d230" title="Obtains a single character of input from the console.">GetChar</a>();
-<a name="l00304"></a>00304 
-<a name="l00309"></a>00309                 <span class="keywordtype">void</span> <a class="code" href="classTeleKarma.html#8f93d5531f5914eb77d7f0fe341e20cf" title="Prints the given number of backspaces to the console.">Backspace</a>(<span class="keywordtype">int</span> n);
-<a name="l00310"></a>00310 
-<a name="l00315"></a>00315                 <span class="keywordtype">void</span> <a class="code" href="classTeleKarma.html#523695bc8f4ab8c3f6cb950c53efc026" title="Prints the given number of spaces to the console.">Space</a>(<span class="keywordtype">int</span> n);
-<a name="l00316"></a>00316 
-<a name="l00317"></a>00317         <span class="keyword">private</span>:
-<a name="l00318"></a>00318                 <a class="code" href="classStateHandler.html">StateHandler</a> * currentState;                    <span class="comment">// the state handler object that</span>
-<a name="l00319"></a>00319                 <a class="code" href="classStateHandler.html">StateHandler</a> * states[STATE_COUNT];             <span class="comment">// an array of state handler objects, pre-instantiated</span>
-<a name="l00320"></a>00320                 <a class="code" href="classTelephonyIfc.html" title="This class is the interface between telekarama and the Opal telephony library.">TelephonyIfc</a> * phone;                                   <span class="comment">// telephony services</span>
-<a name="l00321"></a>00321 
-<a name="l00322"></a>00322                 <span class="comment">// disabled assignment operator &amp; copy constructor</span>
-<a name="l00323"></a>00323                 <a class="code" href="classTeleKarma.html">TeleKarma</a> &amp; operator=(<span class="keyword">const</span> <a class="code" href="classTeleKarma.html">TeleKarma</a> &amp; rhs);
-<a name="l00324"></a>00324                 <a class="code" href="classTeleKarma.html#e51315e12cf9e918a0eacce8333e298e" title="Constructor.">TeleKarma</a>(<span class="keyword">const</span> <a class="code" href="classTeleKarma.html">TeleKarma</a> &amp; rhs);
-<a name="l00325"></a>00325 
-<a name="l00326"></a>00326 };
-<a name="l00327"></a>00327 
-<a name="l00328"></a>00328 
-<a name="l00329"></a>00329 <span class="preprocessor">#endif // _TELEKARMA_H_</span>
-<a name="l00330"></a>00330 <span class="preprocessor"></span>
-<a name="l00331"></a>00331 <span class="comment">// End of File ///////////////////////////////////////////////////////////////</span>
+<a name="l00167"></a>00167 
+<a name="l00168"></a>00168 <span class="preprocessor">#endif // _TELEKARMA_H_</span>
+<a name="l00169"></a>00169 <span class="preprocessor"></span>
+<a name="l00170"></a>00170 <span class="comment">// End of File ///////////////////////////////////////////////////////////////</span>
 </pre></div></div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Mon Oct 25 21:10:24 2010 by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Dec 1 20:38:58 2010 by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.8 </small></address>
 </body>

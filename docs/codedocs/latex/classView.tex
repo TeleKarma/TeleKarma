@@ -1,0 +1,150 @@
+\hypertarget{classView}{
+\section{View Class Reference}
+\label{classView}\index{View@{View}}
+}
+Abstract superclass for all \hyperlink{classTeleKarma}{TeleKarma} views.  
+
+
+{\tt \#include $<$view.h$>$}
+
+Inheritance diagram for View:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=198pt]{classView__inherit__graph}
+\end{center}
+\end{figure}
+Collaboration diagram for View:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=250pt]{classView__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{classView_44ad60a768422d3fa8fbd7576950080a}{View} ()
+\begin{CompactList}\small\item\em Default constructor. \item\end{CompactList}\item 
+virtual \hyperlink{classView_a02a820358e1a7bf7e34d205212ae8f3}{$\sim$View} ()
+\begin{CompactList}\small\item\em Virtual destructor, does nothing. \item\end{CompactList}\item 
+virtual void \hyperlink{classView_92a0d9fd64b52e7f85d45c46c28a6546}{OnStateChange} ()
+\begin{CompactList}\small\item\em Implementation of \hyperlink{classModelListener}{ModelListener}. \item\end{CompactList}\item 
+virtual \hyperlink{classState}{State} $\ast$ \hyperlink{classView_b766758f8cf0667f20305f5b52cbe64e}{GetState} ()
+\begin{CompactList}\small\item\em Returns the current \hyperlink{classState}{State} of the \hyperlink{classModel}{Model}. \item\end{CompactList}\item 
+virtual \hyperlink{classState}{State} $\ast$ \hyperlink{classView_8d0521fb0bd96564906deab7fb58d411}{DequeueState} ()
+\begin{CompactList}\small\item\em Dequeues a state from the model and returns it. \item\end{CompactList}\item 
+virtual void \hyperlink{classView_cb2535000de204a5e4202c6ecce64666}{DoAction} (\hyperlink{classAction}{Action} $\ast$action)
+\begin{CompactList}\small\item\em Enqueues an \hyperlink{classAction}{Action} in the \hyperlink{classModel}{Model}. \item\end{CompactList}\end{CompactItemize}
+\subsection*{Protected Attributes}
+\begin{CompactItemize}
+\item 
+\hyperlink{classModel}{Model} $\ast$ \hyperlink{classView_f9f5eea17223c374879af02bd02dfdfb}{model}
+\begin{CompactList}\small\item\em The model used by the view. \item\end{CompactList}\item 
+\hyperlink{classController}{Controller} $\ast$ \hyperlink{classView_e097997e36de3c065f600e768e62c249}{controller}
+\begin{CompactList}\small\item\em The controller used by the view. \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+Abstract superclass for all \hyperlink{classTeleKarma}{TeleKarma} views. 
+
+Subclass this class to create a new view. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classView_44ad60a768422d3fa8fbd7576950080a}{
+\index{View@{View}!View@{View}}
+\index{View@{View}!View@{View}}
+\subsubsection[{View}]{\setlength{\rightskip}{0pt plus 5cm}View::View ()\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classView_44ad60a768422d3fa8fbd7576950080a}
+
+
+Default constructor. 
+
+Initializes controller and model pointers to NULL. Note that subclasses are responsible for instantiating an appropriate model and controller. \hypertarget{classView_a02a820358e1a7bf7e34d205212ae8f3}{
+\index{View@{View}!$\sim$View@{$\sim$View}}
+\index{$\sim$View@{$\sim$View}!View@{View}}
+\subsubsection[{$\sim$View}]{\setlength{\rightskip}{0pt plus 5cm}virtual View::$\sim$View ()\hspace{0.3cm}{\tt  \mbox{[}inline, virtual\mbox{]}}}}
+\label{classView_a02a820358e1a7bf7e34d205212ae8f3}
+
+
+Virtual destructor, does nothing. 
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classView_8d0521fb0bd96564906deab7fb58d411}{
+\index{View@{View}!DequeueState@{DequeueState}}
+\index{DequeueState@{DequeueState}!View@{View}}
+\subsubsection[{DequeueState}]{\setlength{\rightskip}{0pt plus 5cm}{\bf State} $\ast$ View::DequeueState ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classView_8d0521fb0bd96564906deab7fb58d411}
+
+
+Dequeues a state from the model and returns it. 
+
+\begin{Desc}
+\item[Returns:]a pointer to an instance of a state that the caller is responsible for deleting, or NULL if the there have already been at least as many \hyperlink{classModel_a92abd0332df9f768033423b0cd8b3ae}{calls as  Model\#SetState(State $\ast$)} calls. \end{Desc}
+\hypertarget{classView_cb2535000de204a5e4202c6ecce64666}{
+\index{View@{View}!DoAction@{DoAction}}
+\index{DoAction@{DoAction}!View@{View}}
+\subsubsection[{DoAction}]{\setlength{\rightskip}{0pt plus 5cm}void View::DoAction ({\bf Action} $\ast$ {\em action})\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classView_cb2535000de204a5e4202c6ecce64666}
+
+
+Enqueues an \hyperlink{classAction}{Action} in the \hyperlink{classModel}{Model}. 
+
+Caller should not modify the \hyperlink{classAction}{Action} after enqueuing it. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em action}]an action for the controller to take. \end{description}
+\end{Desc}
+\hypertarget{classView_b766758f8cf0667f20305f5b52cbe64e}{
+\index{View@{View}!GetState@{GetState}}
+\index{GetState@{GetState}!View@{View}}
+\subsubsection[{GetState}]{\setlength{\rightskip}{0pt plus 5cm}{\bf State} $\ast$ View::GetState ()\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{classView_b766758f8cf0667f20305f5b52cbe64e}
+
+
+Returns the current \hyperlink{classState}{State} of the \hyperlink{classModel}{Model}. 
+
+\begin{Desc}
+\item[Returns:]the current \hyperlink{classState}{State} of the \hyperlink{classModel}{Model}. \end{Desc}
+\hypertarget{classView_92a0d9fd64b52e7f85d45c46c28a6546}{
+\index{View@{View}!OnStateChange@{OnStateChange}}
+\index{OnStateChange@{OnStateChange}!View@{View}}
+\subsubsection[{OnStateChange}]{\setlength{\rightskip}{0pt plus 5cm}virtual void View::OnStateChange ()\hspace{0.3cm}{\tt  \mbox{[}inline, virtual\mbox{]}}}}
+\label{classView_92a0d9fd64b52e7f85d45c46c28a6546}
+
+
+Implementation of \hyperlink{classModelListener}{ModelListener}. 
+
+Does nothing. Subclasses may or may not wish to reimplement this method. 
+
+Implements \hyperlink{classModelListener_63070a6f75480904846b7cfc6389aa4c}{ModelListener}.
+
+Reimplemented in \hyperlink{classTeleKarmaNG_ce1e8d62f3e1d586e2aa5d2012c9a766}{TeleKarmaNG}.
+
+\subsection{Member Data Documentation}
+\hypertarget{classView_e097997e36de3c065f600e768e62c249}{
+\index{View@{View}!controller@{controller}}
+\index{controller@{controller}!View@{View}}
+\subsubsection[{controller}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Controller}$\ast$ {\bf View::controller}\hspace{0.3cm}{\tt  \mbox{[}protected\mbox{]}}}}
+\label{classView_e097997e36de3c065f600e768e62c249}
+
+
+The controller used by the view. 
+
+Subclasses are responsible for instantiation. \hypertarget{classView_f9f5eea17223c374879af02bd02dfdfb}{
+\index{View@{View}!model@{model}}
+\index{model@{model}!View@{View}}
+\subsubsection[{model}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Model}$\ast$ {\bf View::model}\hspace{0.3cm}{\tt  \mbox{[}protected\mbox{]}}}}
+\label{classView_f9f5eea17223c374879af02bd02dfdfb}
+
+
+The model used by the view. 
+
+Subclasses are responsible for instantiation. 
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+\hyperlink{view_8h}{view.h}\item 
+\hyperlink{view_8cpp}{view.cpp}\end{CompactItemize}

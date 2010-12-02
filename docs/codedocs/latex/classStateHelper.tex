@@ -1,0 +1,152 @@
+\hypertarget{classStateHelper}{
+\section{StateHelper Class Reference}
+\label{classStateHelper}\index{StateHelper@{StateHelper}}
+}
+Utilities for mapping state id and other state-derived data to meaningful semantics and messages.  
+
+
+{\tt \#include $<$gui.h$>$}
+
+\subsection*{Static Public Member Functions}
+\begin{CompactItemize}
+\item 
+static wxString \hyperlink{classStateHelper_b33007a2d3887bbaff4acce948301579}{ToStatus} (const \hyperlink{state_8h_2c309f64131cbfdae6d95e6591f208e6}{StateID} \&state)
+\begin{CompactList}\small\item\em Translate from state id to status bar message. \item\end{CompactList}\item 
+static wxString \hyperlink{classStateHelper_c1c01103481e034cdcd4c679cf3bb45e}{ToTrace} (const \hyperlink{state_8h_2c309f64131cbfdae6d95e6591f208e6}{StateID} \&state, const \hyperlink{state_8h_26688ca6a181d6c6cf4f21d9839d4125}{StatusID} \&status, const wxString \&message, \hyperlink{classModel}{Model} $\ast$model, bool initialized)
+\begin{CompactList}\small\item\em Generate a message suitable for display in the trace window. \item\end{CompactList}\item 
+static bool \hyperlink{classStateHelper_2b3caf1bdd542b47e46dfbfedccead7f}{CanRegister} (const \hyperlink{state_8h_2c309f64131cbfdae6d95e6591f208e6}{StateID} \&state)
+\begin{CompactList}\small\item\em Determine whether the registration is allowed. \item\end{CompactList}\item 
+static bool \hyperlink{classStateHelper_dd3c36b37666dde08e682f49d999b510}{CanDial} (const \hyperlink{state_8h_2c309f64131cbfdae6d95e6591f208e6}{StateID} \&state)
+\begin{CompactList}\small\item\em Determine whether a call can be placed in the current state. \item\end{CompactList}\item 
+static bool \hyperlink{classStateHelper_c946e6f713969a2092d3e2c7ec004a7a}{CanHold} (const \hyperlink{state_8h_2c309f64131cbfdae6d95e6591f208e6}{StateID} \&state)
+\begin{CompactList}\small\item\em Determine whether a connection exists and can be put on hold. \item\end{CompactList}\item 
+static bool \hyperlink{classStateHelper_8ab96f1d7b7413154e5297ef22af93bb}{CanHangUp} (const \hyperlink{state_8h_2c309f64131cbfdae6d95e6591f208e6}{StateID} \&state)
+\begin{CompactList}\small\item\em Determine whether hanging up is allowed. \item\end{CompactList}\item 
+static bool \hyperlink{classStateHelper_a563c5e68e7da3e9b763d402da50605c}{CanRetrieve} (const \hyperlink{state_8h_2c309f64131cbfdae6d95e6591f208e6}{StateID} \&state)
+\begin{CompactList}\small\item\em Determine whether it is possible to retrieve a call from any form of hold. \item\end{CompactList}\item 
+static bool \hyperlink{classStateHelper_9c0a814cd8b3104a30dc9b6d5a4c1aab}{IsRegistered} (const \hyperlink{state_8h_2c309f64131cbfdae6d95e6591f208e6}{StateID} \&state)
+\begin{CompactList}\small\item\em Determine whether the user is registered with a SIP registrar. \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+Utilities for mapping state id and other state-derived data to meaningful semantics and messages. 
+
+\subsection{Member Function Documentation}
+\hypertarget{classStateHelper_dd3c36b37666dde08e682f49d999b510}{
+\index{StateHelper@{StateHelper}!CanDial@{CanDial}}
+\index{CanDial@{CanDial}!StateHelper@{StateHelper}}
+\subsubsection[{CanDial}]{\setlength{\rightskip}{0pt plus 5cm}bool StateHelper::CanDial (const {\bf StateID} \& {\em state})\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{classStateHelper_dd3c36b37666dde08e682f49d999b510}
+
+
+Determine whether a call can be placed in the current state. 
+
+Calls can be placed only in \hyperlink{}{STATE\_\-REGISTERED} state. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em state}]from \hyperlink{classState_f747db9527dfb6ea0a58fe7bfeb3ac80}{State\#id}. \end{description}
+\end{Desc}
+\hypertarget{classStateHelper_8ab96f1d7b7413154e5297ef22af93bb}{
+\index{StateHelper@{StateHelper}!CanHangUp@{CanHangUp}}
+\index{CanHangUp@{CanHangUp}!StateHelper@{StateHelper}}
+\subsubsection[{CanHangUp}]{\setlength{\rightskip}{0pt plus 5cm}bool StateHelper::CanHangUp (const {\bf StateID} \& {\em state})\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{classStateHelper_8ab96f1d7b7413154e5297ef22af93bb}
+
+
+Determine whether hanging up is allowed. 
+
+Hanging up is allowed at any time during dialing and any form of connected state, including hold and autohold, but not during the disconnection process or if it is known that the remote party has disconnected. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em state}]from \hyperlink{classState_f747db9527dfb6ea0a58fe7bfeb3ac80}{State\#id}. \end{description}
+\end{Desc}
+\hypertarget{classStateHelper_c946e6f713969a2092d3e2c7ec004a7a}{
+\index{StateHelper@{StateHelper}!CanHold@{CanHold}}
+\index{CanHold@{CanHold}!StateHelper@{StateHelper}}
+\subsubsection[{CanHold}]{\setlength{\rightskip}{0pt plus 5cm}bool StateHelper::CanHold (const {\bf StateID} \& {\em state})\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{classStateHelper_c946e6f713969a2092d3e2c7ec004a7a}
+
+
+Determine whether a connection exists and can be put on hold. 
+
+A call already on hold or autohold or not connected cannot be put on hold. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em state}]from \hyperlink{classState_f747db9527dfb6ea0a58fe7bfeb3ac80}{State\#id}. \end{description}
+\end{Desc}
+\hypertarget{classStateHelper_2b3caf1bdd542b47e46dfbfedccead7f}{
+\index{StateHelper@{StateHelper}!CanRegister@{CanRegister}}
+\index{CanRegister@{CanRegister}!StateHelper@{StateHelper}}
+\subsubsection[{CanRegister}]{\setlength{\rightskip}{0pt plus 5cm}bool StateHelper::CanRegister (const {\bf StateID} \& {\em state})\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{classStateHelper_2b3caf1bdd542b47e46dfbfedccead7f}
+
+
+Determine whether the registration is allowed. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em state}]from \hyperlink{classState_f747db9527dfb6ea0a58fe7bfeb3ac80}{State\#id}. \end{description}
+\end{Desc}
+\hypertarget{classStateHelper_a563c5e68e7da3e9b763d402da50605c}{
+\index{StateHelper@{StateHelper}!CanRetrieve@{CanRetrieve}}
+\index{CanRetrieve@{CanRetrieve}!StateHelper@{StateHelper}}
+\subsubsection[{CanRetrieve}]{\setlength{\rightskip}{0pt plus 5cm}bool StateHelper::CanRetrieve (const {\bf StateID} \& {\em state})\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{classStateHelper_a563c5e68e7da3e9b763d402da50605c}
+
+
+Determine whether it is possible to retrieve a call from any form of hold. 
+
+A call must be on hold or autohold to be retrievable. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em state}]from \hyperlink{classState_f747db9527dfb6ea0a58fe7bfeb3ac80}{State\#id}. \end{description}
+\end{Desc}
+\hypertarget{classStateHelper_9c0a814cd8b3104a30dc9b6d5a4c1aab}{
+\index{StateHelper@{StateHelper}!IsRegistered@{IsRegistered}}
+\index{IsRegistered@{IsRegistered}!StateHelper@{StateHelper}}
+\subsubsection[{IsRegistered}]{\setlength{\rightskip}{0pt plus 5cm}bool StateHelper::IsRegistered (const {\bf StateID} \& {\em state})\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{classStateHelper_9c0a814cd8b3104a30dc9b6d5a4c1aab}
+
+
+Determine whether the user is registered with a SIP registrar. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em state}]from \hyperlink{classState_f747db9527dfb6ea0a58fe7bfeb3ac80}{State\#id}. \end{description}
+\end{Desc}
+\hypertarget{classStateHelper_b33007a2d3887bbaff4acce948301579}{
+\index{StateHelper@{StateHelper}!ToStatus@{ToStatus}}
+\index{ToStatus@{ToStatus}!StateHelper@{StateHelper}}
+\subsubsection[{ToStatus}]{\setlength{\rightskip}{0pt plus 5cm}wxString StateHelper::ToStatus (const {\bf StateID} \& {\em state})\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{classStateHelper_b33007a2d3887bbaff4acce948301579}
+
+
+Translate from state id to status bar message. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em state}]from \hyperlink{classState_f747db9527dfb6ea0a58fe7bfeb3ac80}{State\#id}. \end{description}
+\end{Desc}
+\hypertarget{classStateHelper_c1c01103481e034cdcd4c679cf3bb45e}{
+\index{StateHelper@{StateHelper}!ToTrace@{ToTrace}}
+\index{ToTrace@{ToTrace}!StateHelper@{StateHelper}}
+\subsubsection[{ToTrace}]{\setlength{\rightskip}{0pt plus 5cm}wxString StateHelper::ToTrace (const {\bf StateID} \& {\em state}, \/  const {\bf StatusID} \& {\em status}, \/  const wxString \& {\em message}, \/  {\bf Model} $\ast$ {\em model}, \/  bool {\em initialized})\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{classStateHelper_c1c01103481e034cdcd4c679cf3bb45e}
+
+
+Generate a message suitable for display in the trace window. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em state}]from \hyperlink{classState_f747db9527dfb6ea0a58fe7bfeb3ac80}{State\#id}. \item[{\em status}]from \hyperlink{classState_f747db9527dfb6ea0a58fe7bfeb3ac80}{State\#id}. \item[{\em message}]from \hyperlink{classState_f747db9527dfb6ea0a58fe7bfeb3ac80}{State\#id}., converted to wxString. \item[{\em model}]the \hyperlink{classModel}{Model}. \item[{\em initialized}]true if \hyperlink{state_8h_2c309f64131cbfdae6d95e6591f208e6033f1b9c62140635eb6f0e3035a72c34}{State\#STATE\_\-INITIALIZED} has already been seen at least once. \end{description}
+\end{Desc}
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+\hyperlink{gui_8h}{gui.h}\item 
+\hyperlink{gui_8cpp}{gui.cpp}\end{CompactItemize}

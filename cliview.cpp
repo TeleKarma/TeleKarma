@@ -7,7 +7,6 @@
 #include "clicontext.h"
 #include "controller.h"
 #include "model.h"
-#include "sms.h"
 #include "state.h"
 #include "telekarma.h"
 
@@ -148,42 +147,6 @@ void CLIView::DestInputHandler::ReceiveInput(PString input)
 	cli.SetInputHandler(cli.defaultInputHandler);
 }
 
-CLIView::SMSDestInputHandler::SMSDestInputHandler(CLIView & cli, PString defaultValue) :
-	InputHandler(cli, defaultValue)
-	{ }
-
-void CLIView::SMSDestInputHandler::WaitForInput()
-{
-	cli.SetPrompt("Enter phone number for SMS message: ");
-}
-
-void CLIView::SMSDestInputHandler::ReceiveInput(PString input)
-{
-	InputHandler::ReceiveInput(input);
-	cli.SetInputHandler(cli.smsMessageInputHandler);
-}
-
-CLIView::SMSMessageInputHandler::SMSMessageInputHandler(CLIView & cli, PString defaultValue) :
-	InputHandler(cli, defaultValue)
-	{ }
-
-void CLIView::SMSMessageInputHandler::WaitForInput()
-{
-	cli.SetPrompt("Enter your SMS message: ");
-}
-
-void CLIView::SMSMessageInputHandler::ReceiveInput(PString input)
-{
-	InputHandler::ReceiveInput(input);
-	cli.PrintMessage("\nSending SMS...");
-	if (cli.SendSMS(cli.smsDestInputHandler->inputValue, inputValue)) {
-		cli.PrintMessage("Done.\n\n");
-	} else {
-		cli.PrintMessage("Failed\n\n");
-	}
-	cli.SetInputHandler(cli.defaultInputHandler);
-}
-
 CLIView::Command::Command(const char * command, const PNotifier notifier, const char * help, const char * usage) :
 	notifier(notifier),
 	help(help),
@@ -238,8 +201,6 @@ void CLIView::Main() {
 	userInputHandler = new UserInputHandler(*this, USER);
 	passwordInputHandler = new PasswordInputHandler(*this);
 	destInputHandler = new DestInputHandler(*this);
-	smsDestInputHandler = new SMSDestInputHandler(*this);
-	smsMessageInputHandler = new SMSMessageInputHandler(*this);
 
 	SetInputHandler(stunInputHandler);
 	SetExitCommand(PString::Empty());
@@ -487,17 +448,6 @@ void CLIView::Disconnect(PCLI::Arguments & args, INT) {
 void CLIView::Quit(PCLI::Arguments & args, INT) {
 	DoAction(new QuitAction(GetTurn()));
 	while(true);
-}
-
-bool CLIView::SendSMS(PString dest, PString message) {
-	SMS * sms = new SMS(dest, message);
-	sms->Send();
-	delete sms;
-	return false;	// added by MV - return value req'd by compiler
-}
-
-void CLIView::SendSMS(PCLI::Arguments & args, INT) {
-	SetInputHandler(smsDestInputHandler);
 }
 
 void CLIView::NoAction(PCLI::Arguments & args, INT) {

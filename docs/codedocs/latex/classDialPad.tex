@@ -1,0 +1,195 @@
+\hypertarget{classDialPad}{
+\section{DialPad Class Reference}
+\label{classDialPad}\index{DialPad@{DialPad}}
+}
+Dial pad for touch tone transmission.  
+
+
+{\tt \#include $<$gui.h$>$}
+
+Collaboration diagram for DialPad:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=400pt]{classDialPad__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{classDialPad_4f25385be59567e595bad984693ec01f}{DialPad} (\hyperlink{classMainFrame}{MainFrame} $\ast$pwin, \hyperlink{classView}{View} $\ast$view)
+\begin{CompactList}\small\item\em Constructor. \item\end{CompactList}\item 
+void \hyperlink{classDialPad_d3bc3a3c043049ef4d396768dfade82f}{OnClose} (wxCloseEvent \&event)
+\begin{CompactList}\small\item\em Responds to system close events. \item\end{CompactList}\item 
+void \hyperlink{classDialPad_5b55819a3a90ff5abf9e1c6f7c36126c}{OnPressOne} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Sends a touch tone action to model upon click of associated button. \item\end{CompactList}\item 
+void \hyperlink{classDialPad_dbf2a305725f08af6237df2c50eb92b6}{OnPressTwo} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Sends a touch tone action to model upon click of associated button. \item\end{CompactList}\item 
+void \hyperlink{classDialPad_32214f7d206c448a7f25ceabaa32bdcb}{OnPressThree} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Sends a touch tone action to model upon click of associated button. \item\end{CompactList}\item 
+void \hyperlink{classDialPad_3ba175a7000657d2a79ccbb858b5803f}{OnPressFour} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Sends a touch tone action to model upon click of associated button. \item\end{CompactList}\item 
+void \hyperlink{classDialPad_1117cbca8f1075f55097b8a2c3859d7f}{OnPressFive} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Sends a touch tone action to model upon click of associated button. \item\end{CompactList}\item 
+void \hyperlink{classDialPad_d6212054f7d5ff5a167376265b377bc7}{OnPressSix} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Sends a touch tone action to model upon click of associated button. \item\end{CompactList}\item 
+void \hyperlink{classDialPad_fdfbc9b26eabdd85d512a21aaf9bf883}{OnPressSeven} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Sends a touch tone action to model upon click of associated button. \item\end{CompactList}\item 
+void \hyperlink{classDialPad_a12bc9af8ce8a3fdad15fa55f70ea5c0}{OnPressEight} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Sends a touch tone action to model upon click of associated button. \item\end{CompactList}\item 
+void \hyperlink{classDialPad_fd908470bb6b43597ba2169bfd6e0271}{OnPressNine} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Sends a touch tone action to model upon click of associated button. \item\end{CompactList}\item 
+void \hyperlink{classDialPad_69cd65cf785135fdfa246882965b77ec}{OnPressStar} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Sends a touch tone action to model upon click of associated button. \item\end{CompactList}\item 
+void \hyperlink{classDialPad_4e71463b25b3004ea30cfc64c298a03c}{OnPressZero} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Sends a touch tone action to model upon click of associated button. \item\end{CompactList}\item 
+void \hyperlink{classDialPad_19c18972706083103c18228c64a0acbb}{OnPressPound} (wxCommandEvent \&event)
+\begin{CompactList}\small\item\em Sends a touch tone action to model upon click of associated button. \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+Dial pad for touch tone transmission. 
+
+Sends fixed-duration touch tones when buttons are released, rather sending a touch tone continuously while the button is depressed. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classDialPad_4f25385be59567e595bad984693ec01f}{
+\index{DialPad@{DialPad}!DialPad@{DialPad}}
+\index{DialPad@{DialPad}!DialPad@{DialPad}}
+\subsubsection[{DialPad}]{\setlength{\rightskip}{0pt plus 5cm}DialPad::DialPad ({\bf MainFrame} $\ast$ {\em pwin}, \/  {\bf View} $\ast$ {\em view})}}
+\label{classDialPad_4f25385be59567e595bad984693ec01f}
+
+
+Constructor. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em pwin}]parent window. \item[{\em view}]for access to \hyperlink{classView_cb2535000de204a5e4202c6ecce64666}{View\#DoAction(Action $\ast$)}. \end{description}
+\end{Desc}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classDialPad_d3bc3a3c043049ef4d396768dfade82f}{
+\index{DialPad@{DialPad}!OnClose@{OnClose}}
+\index{OnClose@{OnClose}!DialPad@{DialPad}}
+\subsubsection[{OnClose}]{\setlength{\rightskip}{0pt plus 5cm}void DialPad::OnClose (wxCloseEvent \& {\em event})}}
+\label{classDialPad_d3bc3a3c043049ef4d396768dfade82f}
+
+
+Responds to system close events. 
+
+Notifies pwin. Exclusively for use by wxWidgets event dispatcher. \hypertarget{classDialPad_a12bc9af8ce8a3fdad15fa55f70ea5c0}{
+\index{DialPad@{DialPad}!OnPressEight@{OnPressEight}}
+\index{OnPressEight@{OnPressEight}!DialPad@{DialPad}}
+\subsubsection[{OnPressEight}]{\setlength{\rightskip}{0pt plus 5cm}void DialPad::OnPressEight (wxCommandEvent \& {\em event})}}
+\label{classDialPad_a12bc9af8ce8a3fdad15fa55f70ea5c0}
+
+
+Sends a touch tone action to model upon click of associated button. 
+
+Exclusively for use by wxWidgets event dispatcher. \hypertarget{classDialPad_1117cbca8f1075f55097b8a2c3859d7f}{
+\index{DialPad@{DialPad}!OnPressFive@{OnPressFive}}
+\index{OnPressFive@{OnPressFive}!DialPad@{DialPad}}
+\subsubsection[{OnPressFive}]{\setlength{\rightskip}{0pt plus 5cm}void DialPad::OnPressFive (wxCommandEvent \& {\em event})}}
+\label{classDialPad_1117cbca8f1075f55097b8a2c3859d7f}
+
+
+Sends a touch tone action to model upon click of associated button. 
+
+Exclusively for use by wxWidgets event dispatcher. \hypertarget{classDialPad_3ba175a7000657d2a79ccbb858b5803f}{
+\index{DialPad@{DialPad}!OnPressFour@{OnPressFour}}
+\index{OnPressFour@{OnPressFour}!DialPad@{DialPad}}
+\subsubsection[{OnPressFour}]{\setlength{\rightskip}{0pt plus 5cm}void DialPad::OnPressFour (wxCommandEvent \& {\em event})}}
+\label{classDialPad_3ba175a7000657d2a79ccbb858b5803f}
+
+
+Sends a touch tone action to model upon click of associated button. 
+
+Exclusively for use by wxWidgets event dispatcher. \hypertarget{classDialPad_fd908470bb6b43597ba2169bfd6e0271}{
+\index{DialPad@{DialPad}!OnPressNine@{OnPressNine}}
+\index{OnPressNine@{OnPressNine}!DialPad@{DialPad}}
+\subsubsection[{OnPressNine}]{\setlength{\rightskip}{0pt plus 5cm}void DialPad::OnPressNine (wxCommandEvent \& {\em event})}}
+\label{classDialPad_fd908470bb6b43597ba2169bfd6e0271}
+
+
+Sends a touch tone action to model upon click of associated button. 
+
+Exclusively for use by wxWidgets event dispatcher. \hypertarget{classDialPad_5b55819a3a90ff5abf9e1c6f7c36126c}{
+\index{DialPad@{DialPad}!OnPressOne@{OnPressOne}}
+\index{OnPressOne@{OnPressOne}!DialPad@{DialPad}}
+\subsubsection[{OnPressOne}]{\setlength{\rightskip}{0pt plus 5cm}void DialPad::OnPressOne (wxCommandEvent \& {\em event})}}
+\label{classDialPad_5b55819a3a90ff5abf9e1c6f7c36126c}
+
+
+Sends a touch tone action to model upon click of associated button. 
+
+Exclusively for use by wxWidgets event dispatcher. \hypertarget{classDialPad_19c18972706083103c18228c64a0acbb}{
+\index{DialPad@{DialPad}!OnPressPound@{OnPressPound}}
+\index{OnPressPound@{OnPressPound}!DialPad@{DialPad}}
+\subsubsection[{OnPressPound}]{\setlength{\rightskip}{0pt plus 5cm}void DialPad::OnPressPound (wxCommandEvent \& {\em event})}}
+\label{classDialPad_19c18972706083103c18228c64a0acbb}
+
+
+Sends a touch tone action to model upon click of associated button. 
+
+Exclusively for use by wxWidgets event dispatcher. \hypertarget{classDialPad_fdfbc9b26eabdd85d512a21aaf9bf883}{
+\index{DialPad@{DialPad}!OnPressSeven@{OnPressSeven}}
+\index{OnPressSeven@{OnPressSeven}!DialPad@{DialPad}}
+\subsubsection[{OnPressSeven}]{\setlength{\rightskip}{0pt plus 5cm}void DialPad::OnPressSeven (wxCommandEvent \& {\em event})}}
+\label{classDialPad_fdfbc9b26eabdd85d512a21aaf9bf883}
+
+
+Sends a touch tone action to model upon click of associated button. 
+
+Exclusively for use by wxWidgets event dispatcher. \hypertarget{classDialPad_d6212054f7d5ff5a167376265b377bc7}{
+\index{DialPad@{DialPad}!OnPressSix@{OnPressSix}}
+\index{OnPressSix@{OnPressSix}!DialPad@{DialPad}}
+\subsubsection[{OnPressSix}]{\setlength{\rightskip}{0pt plus 5cm}void DialPad::OnPressSix (wxCommandEvent \& {\em event})}}
+\label{classDialPad_d6212054f7d5ff5a167376265b377bc7}
+
+
+Sends a touch tone action to model upon click of associated button. 
+
+Exclusively for use by wxWidgets event dispatcher. Sends a touch tone action to model upon click of associated button. Exclusively for use by wxWidgets event dispatcher. \hypertarget{classDialPad_69cd65cf785135fdfa246882965b77ec}{
+\index{DialPad@{DialPad}!OnPressStar@{OnPressStar}}
+\index{OnPressStar@{OnPressStar}!DialPad@{DialPad}}
+\subsubsection[{OnPressStar}]{\setlength{\rightskip}{0pt plus 5cm}void DialPad::OnPressStar (wxCommandEvent \& {\em event})}}
+\label{classDialPad_69cd65cf785135fdfa246882965b77ec}
+
+
+Sends a touch tone action to model upon click of associated button. 
+
+Exclusively for use by wxWidgets event dispatcher. \hypertarget{classDialPad_32214f7d206c448a7f25ceabaa32bdcb}{
+\index{DialPad@{DialPad}!OnPressThree@{OnPressThree}}
+\index{OnPressThree@{OnPressThree}!DialPad@{DialPad}}
+\subsubsection[{OnPressThree}]{\setlength{\rightskip}{0pt plus 5cm}void DialPad::OnPressThree (wxCommandEvent \& {\em event})}}
+\label{classDialPad_32214f7d206c448a7f25ceabaa32bdcb}
+
+
+Sends a touch tone action to model upon click of associated button. 
+
+Exclusively for use by wxWidgets event dispatcher. \hypertarget{classDialPad_dbf2a305725f08af6237df2c50eb92b6}{
+\index{DialPad@{DialPad}!OnPressTwo@{OnPressTwo}}
+\index{OnPressTwo@{OnPressTwo}!DialPad@{DialPad}}
+\subsubsection[{OnPressTwo}]{\setlength{\rightskip}{0pt plus 5cm}void DialPad::OnPressTwo (wxCommandEvent \& {\em event})}}
+\label{classDialPad_dbf2a305725f08af6237df2c50eb92b6}
+
+
+Sends a touch tone action to model upon click of associated button. 
+
+Exclusively for use by wxWidgets event dispatcher. \hypertarget{classDialPad_4e71463b25b3004ea30cfc64c298a03c}{
+\index{DialPad@{DialPad}!OnPressZero@{OnPressZero}}
+\index{OnPressZero@{OnPressZero}!DialPad@{DialPad}}
+\subsubsection[{OnPressZero}]{\setlength{\rightskip}{0pt plus 5cm}void DialPad::OnPressZero (wxCommandEvent \& {\em event})}}
+\label{classDialPad_4e71463b25b3004ea30cfc64c298a03c}
+
+
+Sends a touch tone action to model upon click of associated button. 
+
+Exclusively for use by wxWidgets event dispatcher. 
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+\hyperlink{gui_8h}{gui.h}\item 
+\hyperlink{gui_8cpp}{gui.cpp}\end{CompactItemize}

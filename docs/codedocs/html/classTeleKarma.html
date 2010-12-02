@@ -22,117 +22,46 @@
   </div>
 </div>
 <div class="contents">
-<h1>TeleKarma Class Reference</h1><!-- doxytag: class="TeleKarma" --><code>#include &lt;<a class="el" href="telekarma_8h-source.html">telekarma.h</a>&gt;</code>
+<h1>TeleKarma Class Reference</h1><!-- doxytag: class="TeleKarma" --><!-- doxytag: inherits="Controller" --><code>#include &lt;<a class="el" href="telekarma_8h-source.html">telekarma.h</a>&gt;</code>
 <p>
+<div class="dynheader">
+Inheritance diagram for TeleKarma:</div>
+<div class="dynsection">
+<p><center><img src="classTeleKarma__inherit__graph.png" border="0" usemap="#TeleKarma__inherit__map" alt="Inheritance graph"></center>
+<map name="TeleKarma__inherit__map">
+<area shape="rect" id="node2" href="classController.html" title="Controller" alt="" coords="9,6,89,34"></map>
+<center><font size="2">[<a href="graph_legend.html">legend</a>]</font></center></div>
 <div class="dynheader">
 Collaboration diagram for TeleKarma:</div>
 <div class="dynsection">
 <p><center><img src="classTeleKarma__coll__graph.png" border="0" usemap="#TeleKarma__coll__map" alt="Collaboration graph"></center>
 <map name="TeleKarma__coll__map">
-<area shape="rect" id="node6" href="classStateHandler.html" title="{StateHandler\n|# tk\l|+ StateHandler()\l+ ~StateHandler()\l+ Enter()\l+ In()\l+ Exit()\l&#45; StateHandler()\l&#45; operator=()\l}" alt="" coords="28,1710,156,1887"><area shape="rect" id="node2" href="classTelephonyIfc.html" title="This class is the interface between telekarama and the Opal telephony library." alt="" coords="5,201,179,970"></map>
+<area shape="rect" id="node2" href="classController.html" title="Controller" alt="" coords="125,209,205,237"><area shape="rect" id="node4" href="classModel.html" title="Model" alt="" coords="133,115,192,143"><area shape="rect" id="node6" href="classModelListener.html" title="ModelListener" alt="" coords="5,6,109,34"><area shape="rect" id="node8" href="classAction.html" title="Action" alt="" coords="133,6,192,34"><area shape="rect" id="node10" href="classState.html" title="State" alt="" coords="216,6,269,34"><area shape="rect" id="node12" href="classTelephonyIfc.html" title="This class is the interface between telekarama and the Opal telephony library." alt="" coords="231,209,329,237"><area shape="rect" id="node14" href="classTkPCSSEndPoint.html" title="TkPCSSEndPoint" alt="" coords="216,115,344,143"></map>
 <center><font size="2">[<a href="graph_legend.html">legend</a>]</font></center></div>
 
 <p>
 <a href="classTeleKarma-members.html">List of all members.</a><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#e51315e12cf9e918a0eacce8333e298e">TeleKarma</a> ()</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#ffedc7e09446314b687922735cd7818f">TeleKarma</a> (<a class="el" href="classModel.html">Model</a> *<a class="el" href="classController.html#6f6ea54052742d3940adfcfce885bae9">model</a>)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Constructor.  <a href="#e51315e12cf9e918a0eacce8333e298e"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#5486e84d7320be3da1139e9d48d02401">~TeleKarma</a> ()</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Destructor.  <a href="#5486e84d7320be3da1139e9d48d02401"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Constructor.  <a href="#ffedc7e09446314b687922735cd7818f"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#addd554bf6335422cc896c894005a031">Main</a> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#22107597af9789cf4162ac2bb32f0482">EnterState</a> (int stateId)</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Called by state handler to transition to a new state.  <a href="#22107597af9789cf4162ac2bb32f0482"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#94f24d2895a64c49d1d5daf9a5a40c7e">Initialize</a> (const PString &amp;stun, const PString &amp;user)</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Instantiates the <a class="el" href="classTelephonyIfc.html">TelephonyIfc</a>.  <a href="#94f24d2895a64c49d1d5daf9a5a40c7e"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">PString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#394f0108ecd1628e510c79a5f84a8d7d">GetSTUNType</a> ()</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Returns a description of the STUN server type.  <a href="#394f0108ecd1628e510c79a5f84a8d7d"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#94c53557510b5373b400128ded8cb7a6">Register</a> (const PString &amp;registrar, const PString &amp;user, const PString &amp;password)</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Registers the user with an SIP registrar.  <a href="#94c53557510b5373b400128ded8cb7a6"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#2fe3ca9129b35b8543a1ecdb88740e3d">Dial</a> (const PString &amp;destination)</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Dials an SIP phone number.  <a href="#2fe3ca9129b35b8543a1ecdb88740e3d"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#318d959306b0c1e5a39c531be100387c">Disconnect</a> ()</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Disconnects a phone call.  <a href="#318d959306b0c1e5a39c531be100387c"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#ac8cc89975dcba9feefeb0f79684836e">IsRegistered</a> ()</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Returns true if the user is registered with an SIP service.  <a href="#ac8cc89975dcba9feefeb0f79684836e"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#4c060e114d5e1d4f7ec2b4532a843443">IsDialing</a> ()</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Returns true if a call is in the process of being dialed.  <a href="#4c060e114d5e1d4f7ec2b4532a843443"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#d971a263dc085039322afa915a6ff350">IsConnected</a> ()</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Returns true if a call is connected.  <a href="#d971a263dc085039322afa915a6ff350"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">PString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#be2a73dfd1cdae97ef435325ab74c7db">DisconnectReason</a> ()</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Returns a user-friendly description of the reason why the most recent call in the current session was disconnected.  <a href="#be2a73dfd1cdae97ef435325ab74c7db"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#4b4ffc065dbc11f5b0afa9ba30c9620d">IsPlayingWAV</a> (bool onLine=true, bool onSpeakers=false)</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Indicates whether a WAV is or has been played since the current call began.  <a href="#4b4ffc065dbc11f5b0afa9ba30c9620d"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#ca737d1deeb1da27f12d84f8c4b6819b">PlayWAV</a> (const PString &amp;src, int repeat=0, int delay=0)</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Plays a WAV file over the current call.  <a href="#ca737d1deeb1da27f12d84f8c4b6819b"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#ecc8d8bd546be13afb320151a0c5014b">SetMicVolume</a> (unsigned int volume)</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Inoperative.  <a href="#ecc8d8bd546be13afb320151a0c5014b"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#3b434ca4effe173e19b9334da432a79f">SetSpeakerVolume</a> (unsigned int volume)</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Inoperative.  <a href="#3b434ca4effe173e19b9334da432a79f"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#e7fa2e0e51af227908ddf46de42732f2">StartIVR</a> (const PString &amp;fname)</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Called upon entry of standard hold and detect human hold modes.  <a href="#e7fa2e0e51af227908ddf46de42732f2"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#9b93b7a0b3af465d07a5facaa445344f">StopIVR</a> ()</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Called upon termination of standard hold and detect human hold modes.  <a href="#9b93b7a0b3af465d07a5facaa445344f"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="9f928ce40bb1f6663772e07022783b7a"></a><!-- doxytag: member="TeleKarma::StopWAV" ref="9f928ce40bb1f6663772e07022783b7a" args="()" -->
-void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#9f928ce40bb1f6663772e07022783b7a">StopWAV</a> ()</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Invokes <a class="el" href="">TelephonyIfc#StopWav()</a>. <br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#e5de07b5de99a85c3703be973e7230df">ToggleRecording</a> ()</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Inverts the recording state.  <a href="#e5de07b5de99a85c3703be973e7230df"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#724b39dce3dd92f25a7de9e4a39ccfa7">StartRecording</a> ()</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Begins recording of the call.  <a href="#724b39dce3dd92f25a7de9e4a39ccfa7"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#2799e28d5e0736a0149c5a212b24e6c0">ToneReceived</a> (char key, bool clear=true)</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Indicates whether the touch tone associated with the given character has been received since the last time the touch tone queue was cleared, and optionally clears the touch tone queue.  <a href="#2799e28d5e0736a0149c5a212b24e6c0"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#5d1ced337173e7260efdb3f13fe54bf9">ClearTones</a> ()</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clears the contents of the touch tone queue.  <a href="#5d1ced337173e7260efdb3f13fe54bf9"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#85b9f9bf83876f3fa9cc326a7124f6d5">SendTone</a> (char key)</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Sends the DTMF tone associated with the given key to the remote party.  <a href="#85b9f9bf83876f3fa9cc326a7124f6d5"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">char&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#5dd175d49c7a2f9f36ff9c3c7c34d230">GetChar</a> ()</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Obtains a single character of input from the console.  <a href="#5dd175d49c7a2f9f36ff9c3c7c34d230"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#8f93d5531f5914eb77d7f0fe341e20cf">Backspace</a> (int n)</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Prints the given number of backspaces to the console.  <a href="#8f93d5531f5914eb77d7f0fe341e20cf"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTeleKarma.html#523695bc8f4ab8c3f6cb950c53efc026">Space</a> (int n)</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Prints the given number of spaces to the console.  <a href="#523695bc8f4ab8c3f6cb950c53efc026"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 The <a class="el" href="classTeleKarma.html">TeleKarma</a> class provides the "main" function for the <a class="el" href="classTeleKarma.html">TeleKarma</a> application and provides the interface through which state handler objects access information and take action. <p>
-The Main function, which is invoked by PTLib tools from main.cpp, sets up state handler objects, sets the initial state, and enters a loop that invokes the <a class="el" href="classStateHandler.html#cee16f855e7354d21abafa47acd1046c">StateHandler#In()</a> method and sleeps for <a class="el" href="">SLEEP_DURATION</a> milliseconds. <p>
+The Main function, which is invoked by PTLib tools from <a class="el" href="main_8cpp.html">main.cpp</a>, sets up state handler objects, sets the initial state, and enters a loop that invokes the <a class="el" href="">StateHandler#In()</a> method and sleeps for <a class="el" href="telekarma_8h.html#4af2a8a383f07fec0d9f78f2db1c987a">SLEEP_DURATION</a> milliseconds. <p>
 All other methods support state handler methods, which for the sake of modularity have access to this class, but are not provided direct access to the telephony interface or other resources.  <hr><h2>Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" name="e51315e12cf9e918a0eacce8333e298e"></a><!-- doxytag: member="TeleKarma::TeleKarma" ref="e51315e12cf9e918a0eacce8333e298e" args="()" -->
+<a class="anchor" name="ffedc7e09446314b687922735cd7818f"></a><!-- doxytag: member="TeleKarma::TeleKarma" ref="ffedc7e09446314b687922735cd7818f" args="(Model *model)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">TeleKarma::TeleKarma           </td>
           <td>(</td>
-          <td class="paramname">          </td>
+          <td class="paramtype"><a class="el" href="classModel.html">Model</a> *&nbsp;</td>
+          <td class="paramname"> <em>model</em>          </td>
           <td>&nbsp;)&nbsp;</td>
           <td></td>
         </tr>
@@ -143,15 +72,21 @@ All other methods support state handler methods, which for the sake of modularit
 <p>
 Constructor. 
 <p>
-Initializes fields. 
+Initializes fields. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>model</em>&nbsp;</td><td></td></tr>
+  </table>
+</dl>
+
 </div>
 </div><p>
-<a class="anchor" name="5486e84d7320be3da1139e9d48d02401"></a><!-- doxytag: member="TeleKarma::~TeleKarma" ref="5486e84d7320be3da1139e9d48d02401" args="()" -->
+<hr><h2>Member Function Documentation</h2>
+<a class="anchor" name="addd554bf6335422cc896c894005a031"></a><!-- doxytag: member="TeleKarma::Main" ref="addd554bf6335422cc896c894005a031" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">TeleKarma::~TeleKarma           </td>
+          <td class="memname">void TeleKarma::Main           </td>
           <td>(</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
@@ -162,691 +97,16 @@ Initializes fields.
 <div class="memdoc">
 
 <p>
-Destructor. 
-<p>
-Heap memory cleanup and delay of <a class="el" href="">EXIT_DELAY</a> milliseconds before returning. 
-</div>
-</div><p>
-<hr><h2>Member Function Documentation</h2>
-<a class="anchor" name="8f93d5531f5914eb77d7f0fe341e20cf"></a><!-- doxytag: member="TeleKarma::Backspace" ref="8f93d5531f5914eb77d7f0fe341e20cf" args="(int n)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void TeleKarma::Backspace           </td>
-          <td>(</td>
-          <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>n</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Prints the given number of backspaces to the console. 
-<p>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>n</em>&nbsp;</td><td>the number of backspaces to print </td></tr>
-  </table>
-</dl>
-
-</div>
-</div><p>
-<a class="anchor" name="5d1ced337173e7260efdb3f13fe54bf9"></a><!-- doxytag: member="TeleKarma::ClearTones" ref="5d1ced337173e7260efdb3f13fe54bf9" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void TeleKarma::ClearTones           </td>
-          <td>(</td>
-          <td class="paramname">          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Clears the contents of the touch tone queue. 
-<p>
-Resets the array of received tones.<p>
-Prevents historical touch tones from corrupting current input detection. 
-</div>
-</div><p>
-<a class="anchor" name="2fe3ca9129b35b8543a1ecdb88740e3d"></a><!-- doxytag: member="TeleKarma::Dial" ref="2fe3ca9129b35b8543a1ecdb88740e3d" args="(const PString &amp;destination)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void TeleKarma::Dial           </td>
-          <td>(</td>
-          <td class="paramtype">const PString &amp;&nbsp;</td>
-          <td class="paramname"> <em>sipAddr</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Dials an SIP phone number. 
-<p>
-Dial the indicated SIP address.<p>
-This method is non-blocking. Initiation of the call takes place in a separate thread. The caller is responsible for determing call state using <a class="el" href="classTeleKarma.html#4c060e114d5e1d4f7ec2b4532a843443">IsDialing()</a> and <a class="el" href="classTeleKarma.html#d971a263dc085039322afa915a6ff350">IsConnected()</a>. <dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>destination</em>&nbsp;</td><td>an SIP-formatted address, including sip: prefix</td></tr>
-  </table>
-</dl>
-Format sipAddr as sip:user. 
-</div>
-</div><p>
-<a class="anchor" name="318d959306b0c1e5a39c531be100387c"></a><!-- doxytag: member="TeleKarma::Disconnect" ref="318d959306b0c1e5a39c531be100387c" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void TeleKarma::Disconnect           </td>
-          <td>(</td>
-          <td class="paramname">          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Disconnects a phone call. 
-<p>
-Disconnect the current call.<p>
-This method is non-blocking. Disconnection is carried out in a separate thread. The caller is responsible for determing call state using <a class="el" href="classTeleKarma.html#d971a263dc085039322afa915a6ff350">IsConnected()</a>.
-</div>
-</div><p>
-<a class="anchor" name="be2a73dfd1cdae97ef435325ab74c7db"></a><!-- doxytag: member="TeleKarma::DisconnectReason" ref="be2a73dfd1cdae97ef435325ab74c7db" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">PString TeleKarma::DisconnectReason           </td>
-          <td>(</td>
-          <td class="paramname">          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Returns a user-friendly description of the reason why the most recent call in the current session was disconnected. 
-<p>
-<dl class="return" compact><dt><b>Returns:</b></dt><dd>a description of the reason for the most recent call disconnection. </dd></dl>
-
-</div>
-</div><p>
-<a class="anchor" name="22107597af9789cf4162ac2bb32f0482"></a><!-- doxytag: member="TeleKarma::EnterState" ref="22107597af9789cf4162ac2bb32f0482" args="(int stateId)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void TeleKarma::EnterState           </td>
-          <td>(</td>
-          <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>stateId</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Called by state handler to transition to a new state. 
-<p>
-Exit the current state (if any) and enter a new specified state.<p>
-Calls the current state handler's <a class="el" href="classStateHandler.html#5ce0f2cb3d4a9f5aca137d47eac75c1e">StateHandler#Exit()</a> method, then replaces the current state handler with an instance of the new state handler and calls that object's <a class="el" href="classStateHandler.html#c08036e743cf5172d6931cf3b6d321c6">StateHandler#Enter()</a> method. <dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>stateId</em>&nbsp;</td><td>one of the state identifiers from <a class="el" href="state_8h-source.html">state.h</a>. </td></tr>
-  </table>
-</dl>
-
-</div>
-</div><p>
-<a class="anchor" name="5dd175d49c7a2f9f36ff9c3c7c34d230"></a><!-- doxytag: member="TeleKarma::GetChar" ref="5dd175d49c7a2f9f36ff9c3c7c34d230" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char TeleKarma::GetChar           </td>
-          <td>(</td>
-          <td class="paramname">          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Obtains a single character of input from the console. 
-<p>
-Obtain one character of keyboard input if present.<p>
-Non-blocking. If there is no input available on the console, returns NULL. Consumes the input. <dl class="return" compact><dt><b>Returns:</b></dt><dd>one character of input from console or NULL.</dd></dl>
-Convert to lowercase and return. If no input, return the NULL character. Guaranteed not to block. 
-</div>
-</div><p>
-<a class="anchor" name="394f0108ecd1628e510c79a5f84a8d7d"></a><!-- doxytag: member="TeleKarma::GetSTUNType" ref="394f0108ecd1628e510c79a5f84a8d7d" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">PString TeleKarma::GetSTUNType           </td>
-          <td>(</td>
-          <td class="paramname">          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Returns a description of the STUN server type. 
-<p>
-Output STUN type identification message.<p>
-Not meaningful until <a class="el" href="classTeleKarma.html#94f24d2895a64c49d1d5daf9a5a40c7e">Initialize(const PString &amp;, const PString &amp;)</a> has been called. <dl class="return" compact><dt><b>Returns:</b></dt><dd>a description of the STUN server type.</dd></dl>
-
-</div>
-</div><p>
-<a class="anchor" name="94f24d2895a64c49d1d5daf9a5a40c7e"></a><!-- doxytag: member="TeleKarma::Initialize" ref="94f24d2895a64c49d1d5daf9a5a40c7e" args="(const PString &amp;stun, const PString &amp;user)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void TeleKarma::Initialize           </td>
-          <td>(</td>
-          <td class="paramtype">const PString &amp;&nbsp;</td>
-          <td class="paramname"> <em>stun</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const PString &amp;&nbsp;</td>
-          <td class="paramname"> <em>user</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Instantiates the <a class="el" href="classTelephonyIfc.html">TelephonyIfc</a>. 
-<p>
-Initialize the telephony API.<p>
-Expected to be called from a state handler object. Must be called prior to calling <a class="el" href="">Register(const PString &amp;, const PString &amp;, const Pstring &amp;)</a>. This is a blocking method. <dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>stun</em>&nbsp;</td><td>STUN server address (may be set to empty) </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>user</em>&nbsp;</td><td>required username</td></tr>
-  </table>
-</dl>
-Blocks. 
-</div>
-</div><p>
-<a class="anchor" name="d971a263dc085039322afa915a6ff350"></a><!-- doxytag: member="TeleKarma::IsConnected" ref="d971a263dc085039322afa915a6ff350" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool TeleKarma::IsConnected           </td>
-          <td>(</td>
-          <td class="paramname">          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Returns true if a call is connected. 
-<p>
-<dl class="return" compact><dt><b>Returns:</b></dt><dd>true if a call is connected, false if not connected or dialing. </dd></dl>
-
-</div>
-</div><p>
-<a class="anchor" name="4c060e114d5e1d4f7ec2b4532a843443"></a><!-- doxytag: member="TeleKarma::IsDialing" ref="4c060e114d5e1d4f7ec2b4532a843443" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool TeleKarma::IsDialing           </td>
-          <td>(</td>
-          <td class="paramname">          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Returns true if a call is in the process of being dialed. 
-<p>
-This method will return false once <a class="el" href="classTeleKarma.html#d971a263dc085039322afa915a6ff350">IsConnected()</a> begins returning true. <dl class="return" compact><dt><b>Returns:</b></dt><dd>true if a call is in the process of being dialed. </dd></dl>
-
-</div>
-</div><p>
-<a class="anchor" name="4b4ffc065dbc11f5b0afa9ba30c9620d"></a><!-- doxytag: member="TeleKarma::IsPlayingWAV" ref="4b4ffc065dbc11f5b0afa9ba30c9620d" args="(bool onLine=true, bool onSpeakers=false)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool TeleKarma::IsPlayingWAV           </td>
-          <td>(</td>
-          <td class="paramtype">bool&nbsp;</td>
-          <td class="paramname"> <em>onLine</em> = <code>true</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&nbsp;</td>
-          <td class="paramname"> <em>onSpeakers</em> = <code>false</code></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Indicates whether a WAV is or has been played since the current call began. 
-<p>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>onLine</em>&nbsp;</td><td>true by default; false not supported. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>onSpeakers</em>&nbsp;</td><td>ignored. </td></tr>
-  </table>
-</dl>
-<dl class="return" compact><dt><b>Returns:</b></dt><dd>true if the current call has had a WAV played on it. </dd></dl>
-
-</div>
-</div><p>
-<a class="anchor" name="ac8cc89975dcba9feefeb0f79684836e"></a><!-- doxytag: member="TeleKarma::IsRegistered" ref="ac8cc89975dcba9feefeb0f79684836e" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool TeleKarma::IsRegistered           </td>
-          <td>(</td>
-          <td class="paramname">          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Returns true if the user is registered with an SIP service. 
-<p>
-Determine whether user is registered with SIP service.<p>
-This method reflects actual registration state. <dl class="return" compact><dt><b>Returns:</b></dt><dd>true if the user is registered with their SIP registrar, false otherwise. </dd></dl>
-
-</div>
-</div><p>
-<a class="anchor" name="addd554bf6335422cc896c894005a031"></a><!-- doxytag: member="TeleKarma::Main" ref="addd554bf6335422cc896c894005a031" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void TeleKarma::Main           </td>
-          <td>(</td>
-          <td class="paramname">          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
 Main program logic. Verifies existance of required subfolders, sets up log files, instantiate state handler objects, sets the initial state handler and enters main control loop. <p>
-Main control loop simply calls the <a class="el" href="classStateHandler.html#cee16f855e7354d21abafa47acd1046c">StateHandler#In()</a> method, then sleeps, then repeats, until the state handler is set to an instance of <a class="el" href="classExitStateHandler.html">ExitStateHandler</a>. States call the <a class="el" href="classTeleKarma.html#22107597af9789cf4162ac2bb32f0482">EnterState(int)</a> method to change TeleKarma's state.  
-</div>
-</div><p>
-<a class="anchor" name="ca737d1deeb1da27f12d84f8c4b6819b"></a><!-- doxytag: member="TeleKarma::PlayWAV" ref="ca737d1deeb1da27f12d84f8c4b6819b" args="(const PString &amp;src, int repeat=0, int delay=0)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void TeleKarma::PlayWAV           </td>
-          <td>(</td>
-          <td class="paramtype">const PString &amp;&nbsp;</td>
-          <td class="paramname"> <em>filename</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>repeat</em> = <code>0</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>delay</em> = <code>0</code></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Plays a WAV file over the current call. 
-<p>
-Play a WAV file over phone connection.<p>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>src</em>&nbsp;</td><td>path (relative to telekarma.exe folder) and filename of wav to play. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>repeat</em>&nbsp;</td><td>number of times to play the WAV. Defaults to zero. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>delay</em>&nbsp;</td><td>how long (in milliseconds) to wait between repeats. defaults to zero.</td></tr>
-  </table>
-</dl>
-
-</div>
-</div><p>
-<a class="anchor" name="94c53557510b5373b400128ded8cb7a6"></a><!-- doxytag: member="TeleKarma::Register" ref="94c53557510b5373b400128ded8cb7a6" args="(const PString &amp;registrar, const PString &amp;user, const PString &amp;password)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void TeleKarma::Register           </td>
-          <td>(</td>
-          <td class="paramtype">const PString &amp;&nbsp;</td>
-          <td class="paramname"> <em>registrar</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const PString &amp;&nbsp;</td>
-          <td class="paramname"> <em>user</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const PString &amp;&nbsp;</td>
-          <td class="paramname"> <em>password</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Registers the user with an SIP registrar. 
-<p>
-Initiate registration with a SIP service provider.<p>
-This method is non-blocking. Registration process continues in another thread. Caller must use <a class="el" href="classTeleKarma.html#ac8cc89975dcba9feefeb0f79684836e">IsRegistered()</a> to verify success. Registration can take time. <dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>registrar</em>&nbsp;</td><td>an SIP registrar </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>user</em>&nbsp;</td><td>user name registered with the registrar </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>password</em>&nbsp;</td><td>user's password</td></tr>
-  </table>
-</dl>
-This method is non-blocking. 
-</div>
-</div><p>
-<a class="anchor" name="85b9f9bf83876f3fa9cc326a7124f6d5"></a><!-- doxytag: member="TeleKarma::SendTone" ref="85b9f9bf83876f3fa9cc326a7124f6d5" args="(char key)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void TeleKarma::SendTone           </td>
-          <td>(</td>
-          <td class="paramtype">char&nbsp;</td>
-          <td class="paramname"> <em>key</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Sends the DTMF tone associated with the given key to the remote party. 
-<p>
-Play a DTMF tone over phone connection.<p>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>key</em>&nbsp;</td><td>the label of the key associated with a touch tone</td></tr>
-  </table>
-</dl>
-
-</div>
-</div><p>
-<a class="anchor" name="ecc8d8bd546be13afb320151a0c5014b"></a><!-- doxytag: member="TeleKarma::SetMicVolume" ref="ecc8d8bd546be13afb320151a0c5014b" args="(unsigned int volume)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void TeleKarma::SetMicVolume           </td>
-          <td>(</td>
-          <td class="paramtype">unsigned int&nbsp;</td>
-          <td class="paramname"> <em>volume</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Inoperative. 
-<p>
-Reserved for future development. 
-</div>
-</div><p>
-<a class="anchor" name="3b434ca4effe173e19b9334da432a79f"></a><!-- doxytag: member="TeleKarma::SetSpeakerVolume" ref="3b434ca4effe173e19b9334da432a79f" args="(unsigned int volume)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void TeleKarma::SetSpeakerVolume           </td>
-          <td>(</td>
-          <td class="paramtype">unsigned int&nbsp;</td>
-          <td class="paramname"> <em>volume</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Inoperative. 
-<p>
-Reserved for future development. 
-</div>
-</div><p>
-<a class="anchor" name="523695bc8f4ab8c3f6cb950c53efc026"></a><!-- doxytag: member="TeleKarma::Space" ref="523695bc8f4ab8c3f6cb950c53efc026" args="(int n)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void TeleKarma::Space           </td>
-          <td>(</td>
-          <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>n</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Prints the given number of spaces to the console. 
-<p>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>n</em>&nbsp;</td><td>the number of spaces to print </td></tr>
-  </table>
-</dl>
-
-</div>
-</div><p>
-<a class="anchor" name="e7fa2e0e51af227908ddf46de42732f2"></a><!-- doxytag: member="TeleKarma::StartIVR" ref="e7fa2e0e51af227908ddf46de42732f2" args="(const PString &amp;fname)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void TeleKarma::StartIVR           </td>
-          <td>(</td>
-          <td class="paramtype">const PString &amp;&nbsp;</td>
-          <td class="paramname"> <em>fname</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Called upon entry of standard hold and detect human hold modes. 
-<p>
-Disables the microphone, plays a notice of recording, begins recording, and calls <a class="el" href="">PlayWav(const PString &amp;, int, int)</a>. <dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>fname</em>&nbsp;</td><td>path (relative to telekarma.exe folder) and filename of wav to play. </td></tr>
-  </table>
-</dl>
-
-</div>
-</div><p>
-<a class="anchor" name="724b39dce3dd92f25a7de9e4a39ccfa7"></a><!-- doxytag: member="TeleKarma::StartRecording" ref="724b39dce3dd92f25a7de9e4a39ccfa7" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void TeleKarma::StartRecording           </td>
-          <td>(</td>
-          <td class="paramname">          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Begins recording of the call. 
-<p>
-Recordings are generated in WAV format and dumped in a timestamped file in the recordings subdirectory of the folder that holds the telekarma executable. 
-</div>
-</div><p>
-<a class="anchor" name="9b93b7a0b3af465d07a5facaa445344f"></a><!-- doxytag: member="TeleKarma::StopIVR" ref="9b93b7a0b3af465d07a5facaa445344f" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void TeleKarma::StopIVR           </td>
-          <td>(</td>
-          <td class="paramname">          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Called upon termination of standard hold and detect human hold modes. 
-<p>
-Enables the microphone and calls <a class="el" href="">StopWav()</a>. 
-</div>
-</div><p>
-<a class="anchor" name="e5de07b5de99a85c3703be973e7230df"></a><!-- doxytag: member="TeleKarma::ToggleRecording" ref="e5de07b5de99a85c3703be973e7230df" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void TeleKarma::ToggleRecording           </td>
-          <td>(</td>
-          <td class="paramname">          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Inverts the recording state. 
-<p>
-If recording, recording is stopped. If no recording, recording is initiated. Provided for debugging purposes only. 
-</div>
-</div><p>
-<a class="anchor" name="2799e28d5e0736a0149c5a212b24e6c0"></a><!-- doxytag: member="TeleKarma::ToneReceived" ref="2799e28d5e0736a0149c5a212b24e6c0" args="(char key, bool clear=true)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool TeleKarma::ToneReceived           </td>
-          <td>(</td>
-          <td class="paramtype">char&nbsp;</td>
-          <td class="paramname"> <em>key</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&nbsp;</td>
-          <td class="paramname"> <em>clear</em> = <code>true</code></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Indicates whether the touch tone associated with the given character has been received since the last time the touch tone queue was cleared, and optionally clears the touch tone queue. 
-<p>
-Determine whether a DTMF tone has been recieved and optionally reset the array of received tones.<p>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>key</em>&nbsp;</td><td>the label of the key associated with a touch tone </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>clear</em>&nbsp;</td><td>true (default) to clear the touch tone queue. </td></tr>
-  </table>
-</dl>
+Main control loop simply calls the <a class="el" href="">StateHandler#In()</a> method, then sleeps, then repeats, until the state handler is set to an instance of <a class="el" href="">ExitStateHandler</a>. States call the <a class="el" href="">EnterState(int)</a> method to change TeleKarma's state.  
+<p>Implements <a class="el" href="classController.html#efeb521047c5b5d1c3f97290d015cacf">Controller</a>.</p>
 
 </div>
 </div><p>
 <hr>The documentation for this class was generated from the following files:<ul>
-<li><a class="el" href="telekarma_8h-source.html">telekarma.h</a><li>telekarma.cpp</ul>
+<li><a class="el" href="telekarma_8h-source.html">telekarma.h</a><li><a class="el" href="telekarma_8cpp.html">telekarma.cpp</a></ul>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Mon Oct 25 21:10:28 2010 by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Dec 1 20:39:00 2010 by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.8 </small></address>
 </body>

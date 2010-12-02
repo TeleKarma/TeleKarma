@@ -16,9 +16,10 @@
   <div class="tabs">
     <ul>
       <li><a href="files.html"><span>File&nbsp;List</span></a></li>
+      <li><a href="globals.html"><span>File&nbsp;Members</span></a></li>
     </ul>
   </div>
-<h1>pcss.h</h1><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/*</span>
+<h1>pcss.h</h1><a href="pcss_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/*</span>
 <a name="l00002"></a>00002 <span class="comment"> *</span>
 <a name="l00003"></a>00003 <span class="comment"> * pcss.h</span>
 <a name="l00004"></a>00004 <span class="comment"> *</span>
@@ -35,15 +36,15 @@
 <a name="l00015"></a>00015 <span class="keyword">class </span><a class="code" href="classTelephonyIfc.html" title="This class is the interface between telekarama and the Opal telephony library.">TelephonyIfc</a>;
 <a name="l00016"></a>00016 
 <a name="l00017"></a>00017 
-<a name="l00018"></a>00018 <span class="keyword">class </span>TkPCSSEndPoint : <span class="keyword">public</span> OpalPCSSEndPoint {
+<a name="l00018"></a><a class="code" href="classTkPCSSEndPoint.html">00018</a> <span class="keyword">class </span><a class="code" href="classTkPCSSEndPoint.html">TkPCSSEndPoint</a> : <span class="keyword">public</span> OpalPCSSEndPoint {
 <a name="l00019"></a>00019 
-<a name="l00020"></a>00020   PCLASSINFO(TkPCSSEndPoint, OpalPCSSEndPoint);
+<a name="l00020"></a>00020   PCLASSINFO(<a class="code" href="classTkPCSSEndPoint.html">TkPCSSEndPoint</a>, OpalPCSSEndPoint);
 <a name="l00021"></a>00021 
 <a name="l00022"></a>00022   <span class="keyword">public</span>:
-<a name="l00023"></a>00023     TkPCSSEndPoint(<a class="code" href="classTelephonyIfc.html" title="This class is the interface between telekarama and the Opal telephony library.">TelephonyIfc</a> &amp; manager);
+<a name="l00023"></a>00023     <a class="code" href="classTkPCSSEndPoint.html#dcb03eb64065d741b07370bc9b36e1c7">TkPCSSEndPoint</a>(<a class="code" href="classTelephonyIfc.html" title="This class is the interface between telekarama and the Opal telephony library.">TelephonyIfc</a> &amp; manager);
 <a name="l00024"></a>00024 
-<a name="l00025"></a>00025     <span class="keyword">virtual</span> PBoolean OnShowIncoming(<span class="keyword">const</span> OpalPCSSConnection &amp; connection);
-<a name="l00026"></a>00026     <span class="keyword">virtual</span> PBoolean OnShowOutgoing(<span class="keyword">const</span> OpalPCSSConnection &amp; connection);
+<a name="l00025"></a>00025     <span class="keyword">virtual</span> PBoolean <a class="code" href="classTkPCSSEndPoint.html#70abe85f45efc4919b5291b2566b04bf">OnShowIncoming</a>(<span class="keyword">const</span> OpalPCSSConnection &amp; connection);
+<a name="l00026"></a>00026     <span class="keyword">virtual</span> PBoolean <a class="code" href="classTkPCSSEndPoint.html#3ba10c4cad067f03cbaeeb0586963b60">OnShowOutgoing</a>(<span class="keyword">const</span> OpalPCSSConnection &amp; connection);
 <a name="l00027"></a>00027 
 <a name="l00028"></a>00028         <span class="comment">//These are no longer used, but may be useful as a reference for later development.</span>
 <a name="l00029"></a>00029     <span class="comment">//PBoolean SetSoundDevice(PArgList &amp; args, const char * optionName, PSoundChannel::Directions dir);</span>
@@ -56,7 +57,7 @@
 <a name="l00036"></a>00036 <span class="preprocessor"></span>
 <a name="l00037"></a>00037 <span class="comment">// End of File ///////////////////////////////////////////////////////////////</span>
 </pre></div></div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Mon Oct 25 21:10:24 2010 by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Dec 1 20:38:58 2010 by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.8 </small></address>
 </body>
