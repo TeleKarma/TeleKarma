@@ -180,21 +180,16 @@ PBoolean TelephonyIfc::IsConnected()
 /** Disconnect the call currently in progress */
 void TelephonyIfc::Disconnect()
 {
-	PSafePtr<OpalCall> call = FindCallWithLock(callToken);
-	if (call != NULL) {
-		if (IsRecording()) StopRecording();
-		call->Clear();
-	}
-	PSafePtr<OpalCall> ivr  = FindCallWithLock(wavToken);
-	if (ivr != NULL) {
-		if (IsRecording()) StopRecording();
-		ivr->Clear();
-	}
-	PSafePtr<OpalCall> pc   = FindCallWithLock(pcToken);
-	if (pc != NULL) {
-		if(IsRecording()) StopRecording();
-		pc->Clear();
-	}
+	ClearCall(callToken);
+	callToken.MakeEmpty();
+	ClearCall(pcToken);
+	pcToken.MakeEmpty();
+	ClearCall(wavToken);
+	wavToken.MakeEmpty();
+	ClearCall(recordToken);
+	recordToken.MakeEmpty();
+	ClearCall(speakerToken);
+	speakerToken.MakeEmpty();
 }
 
 
