@@ -13,10 +13,14 @@ class CLIContext;
 class PSemaphore;
 class TeleKarma;
 
+/* CLI View implementation. */
 class CLIView : public PCLIStandard,  public View {
 
 	PCLASSINFO(CLIView, PCLIStandard);
 
+	/**
+	 * Parent class for all of the CLIView input handlers.
+	 */
 	class InputHandler {
 		public:
 			InputHandler(CLIView & cli, PString defaultValue = PString::Empty());
@@ -64,20 +68,6 @@ class CLIView : public PCLIStandard,  public View {
 			void WaitForInput();
 	};
 
-	class SMSDestInputHandler : public InputHandler {
-		public:
-			SMSDestInputHandler(CLIView & cli, PString defaultValue = PString::Empty());
-			void ReceiveInput(PString input);
-			void WaitForInput();
-	};
-
-	class SMSMessageInputHandler : public InputHandler {
-		public:
-			SMSMessageInputHandler(CLIView & cli, PString defaultValue = PString::Empty());
-			void ReceiveInput(PString input);
-			void WaitForInput();
-	};
-
 	class Command
 	{
 		public:
@@ -114,7 +104,6 @@ class CLIView : public PCLIStandard,  public View {
 		void Dial(PString & dest);
 		void PlaySound(const PString & fileName);
 		void SendTone(char tone);
-		bool SendSMS(PString dest, PString message);
 
 		void SetState(State * newState);
 		State * GetStateWithLock();
@@ -128,7 +117,6 @@ class CLIView : public PCLIStandard,  public View {
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Retrieve);
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Disconnect);
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, Quit);
-		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, SendSMS);
 		PDECLARE_NOTIFIER(PCLI::Arguments, CLIView, NoAction);
 
 		InputHandler * defaultInputHandler;
@@ -137,8 +125,6 @@ class CLIView : public PCLIStandard,  public View {
 		UserInputHandler * userInputHandler;
 		PasswordInputHandler * passwordInputHandler;
 		DestInputHandler * destInputHandler;
-		SMSDestInputHandler * smsDestInputHandler;
-		SMSMessageInputHandler * smsMessageInputHandler;
 		InputHandler * currentInputHandler;
 
 		Command dialCommand;
@@ -160,8 +146,6 @@ class CLIView : public PCLIStandard,  public View {
 	friend class UserInputHandler;
 	friend class PasswordInputHandler;
 	friend class DestInputHandler;
-	friend class SMSDestInputHandler;
-	friend class SMSMessageInputHandler;
 };
 
 #endif //_CLIVIEW_H_
