@@ -68,7 +68,8 @@ class TelephonyIfc : public OpalManager {
 		PBoolean IsRecording();
 
 		/**
-		 * Begin recording the current call
+		 * Begin recording the current call.  Only audio coming from
+		 * the remote party will be recorded.
 		 * @param fname Path to the file where the recording will be
 		 * saved.
 		 */
@@ -170,7 +171,12 @@ class TelephonyIfc : public OpalManager {
 		 */
 		void ClearTones();
 
+		/**
+		 * Play a WAV file of the computer's speaker.
+		 * @param path Path to WAV file
+		 */
 		PBoolean PlayWAVSpeaker(const PString & path);
+
 		/**
 		 * Transmit a WAV file to the remote party.
 		 * @note You can only play one WAV file at a time.
@@ -185,6 +191,10 @@ class TelephonyIfc : public OpalManager {
 		 */
 		void StopWAV();
 
+		/**
+		 * @return PTrue if a WAV file is playing over the call.
+		 * @return PFalse if no WAV file is being played.
+		 */
 		PBoolean IsPlayingWav();
 
 		/**
@@ -226,7 +236,10 @@ class TelephonyIfc : public OpalManager {
 		/** Call token for the connection from telekarma to the
 		 * recording device */
 		PString recordToken;
+		/** Call token for a WAV file that is playing over the speaker.
+		 */
 		PString speakerToken;
+		/** Registration token */
 		PString aor;
 		/** PTrue if telekarma is dialing a remote party otherwise
 		 * PFalse*/
@@ -246,8 +259,10 @@ class TelephonyIfc : public OpalManager {
 		void OnAudioFileSent();
 
 		/**
-		 * IsPlayingWAV() will work correctly if the WAV is played with
-		 * this function.
+		 * Create an VXML string for playing the WAV file specified by path
+		 * only once.
+		 * @param path Path to the WAV file
+		 * @return A VXML string with instructions to play the file once.
 		 */
 		PString CreatePlayOnceIVR(const PString & path);
 };
