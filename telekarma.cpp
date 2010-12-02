@@ -60,6 +60,13 @@ void TeleKarma::Main() {
 
 State * TeleKarma::SetState(State * s)
 {
+	/* This could possibly be handled better, but tracking down all the places
+	 * in the code where this needs to be done and making thos changes is too
+	 * risky.
+	 */
+	if (s->id == STATE_DISCONNECTED) {
+		phone->Disconnect();
+	}
 	model->SetState(s);
 	return s;
 }
@@ -356,7 +363,6 @@ State * TeleKarma::Dial(Action * a, State * s)
 		// set model data before changing state to DIALING
 		model->SetDestination(da->dest);
 		result = SetState(new State(STATE_DIALING, s->turn+1));
-		phone->TurnOnMicrophone();
 		// XXX enable the speaker - implementation to go
 		phone->Dial(da->dest);
 	}
@@ -489,12 +495,6 @@ State * TeleKarma::Disconnect(Action * a, State * s)
 		result = SetState(new State(STATE_UNINITIALIZED, result->turn+1));
 	} else {
 		phone->Disconnect();
-		if (IsHoldingState(s)) {
-			phone->StopWAV();
-			if (phone->IsRecording()) phone->StopRecording();
-			phone->TurnOnMicrophone();
-			// XXX enable the speaker - implementation to go
-		}
 	}
 	return result;
 }
@@ -507,12 +507,7 @@ State * TeleKarma::PlaySound(Action * a, State * s)
 	if (psa == NULL) {
 		result = SetState(new State(result->id, result->turn, STATUS_FAILED, "Unable to play WAV file"));
 	} else {
-#ifdef WIN32
-		PlaySound(TEXT(psa->fname), NULL, psa->fname);
-#else
 		phone->PlayWAVSpeaker(psa->fname);
-#endif
-
 		result = SetState(new State(result->id, result->turn, STATUS_UNSPECIFIED, "Playing WAV file"));
 	}
 	return result;
